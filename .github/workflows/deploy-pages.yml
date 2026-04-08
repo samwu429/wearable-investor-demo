@@ -1,3 +1,6 @@
+# 必须用「GitHub Actions」作为 Pages 源；若用「从分支部署 / 根目录」会发布源码 index.html，
+# 浏览器会去加载 /src/main.tsx → 白屏。
+
 name: Deploy to GitHub Pages
 
 on:
@@ -27,6 +30,21 @@ jobs:
       - run: npm run build
         env:
           GH_PAGES: '1'
+      - name: Verify production index (not dev /src/main.tsx)
+        run: |
+          if grep -q 'src/main.tsx' dist/index.html; then
+            echo 'ERROR: dist/index.html still references Vite dev entry. Build is broken.'
+            cat dist/index.html
+            exit 1
+          fi
+          if ! grep -q "${{ github.event.repository.name }}/assets/" dist/index.html; then
+            echo 'ERROR: expected hashed assets under repo base path'
+            cat dist/index.html
+            exit 1
+          fi
+          test -f dist/404.html || (echo 'missing 404.html'; exit 1)
+          test -f dist/.nojekyll || (echo 'missing .nojekyll'; exit 1)
+          echo 'OK: dist looks like a Vite production build.'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist

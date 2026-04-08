@@ -2,6 +2,11 @@
 
 无硬件的 **手表 + 眼镜** 双 Part 交互演示，用于向投资人同步叙事与产品气质。技术实现为纯前端静态站点，可托管在 **GitHub Pages**。
 
+## 网页一片白？
+
+几乎都是因为 GitHub Pages 选成了「从分支发布仓库根目录」，浏览器会去加载 `/src/main.tsx`（开发入口），无法运行。  
+**请先读 [DEPLOY.md](./DEPLOY.md)**，把 Pages 源改成 **GitHub Actions**，等 workflow 跑绿后再打开站点。
+
 ## 在线访问（部署后）
 
 将仓库在 GitHub 打开 **Settings → Pages → GitHub Actions** 后，地址一般为：
