@@ -45,6 +45,19 @@ GH_PAGES=1 npm run build
 - 静态站点若在前端直接调用云端大模型，**密钥会暴露给所有访客**，因此本演示 **不集成** 需密钥的在线 AI。  
 - 若未来需要「对话式路演助手」，请使用 **服务端或 Edge Function** 保管密钥，或让访问者登录后使用其自有密钥。
 
+## 推送到 GitHub（本机未装 Git 到 PATH 时，可用 Git Bash 或完整路径）
+
+在仓库根目录执行（将 `samwu429` 换成你的用户名；若仓库名不同，请改 `vite.config.ts` 里的 `repo`）：
+
+```bash
+git branch -M main
+git remote add origin https://github.com/samwu429/wearable-investor-demo.git
+git push -u origin main
+```
+
+然后在 GitHub 仓库：**Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。  
+首次推送后打开 **Actions** 页，等待 **Deploy to GitHub Pages** 跑绿，即可访问站点。
+
 ## 许可证
 
 MIT（可按需修改）
