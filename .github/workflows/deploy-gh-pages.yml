@@ -1,0 +1,55 @@
+# 将 Vite 构建结果 dist/ 推送到 gh-pages 分支。
+# 你必须在 Settings → Pages 里选择：Deploy from a branch → gh-pages → / (root)
+# 不要用 main 分支的根目录，否则会继续白屏（会发布含 /src/main.tsx 的源码 index.html）。
+
+name: Build and deploy to gh-pages branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Production build (subpath for GitHub Pages project site)
+        run: npm run build
+        env:
+          GH_PAGES: '1'
+
+      - name: Verify dist is not dev index.html
+        run: |
+          if grep -q 'src/main.tsx' dist/index.html; then
+            echo 'ERROR: dist still references dev entry'
+            cat dist/index.html
+            exit 1
+          fi
+          grep -q "${{ github.event.repository.name }}/assets/" dist/index.html || (echo 'ERROR: missing hashed assets path'; cat dist/index.html; exit 1)
+          test -f dist/404.html
+          test -f dist/.nojekyll
+          echo 'dist OK'
+
+      - name: Push dist to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # 每次用单一提交覆盖 gh-pages，避免历史里堆大量构建产物
+          force_orphan: true

@@ -4,8 +4,8 @@
 
 ## 网页一片白？
 
-几乎都是因为 GitHub Pages 选成了「从分支发布仓库根目录」，浏览器会去加载 `/src/main.tsx`（开发入口），无法运行。  
-**请先读 [DEPLOY.md](./DEPLOY.md)**，把 Pages 源改成 **GitHub Actions**，等 workflow 跑绿后再打开站点。
+几乎都是因为 Pages 在发布 **`main` 分支根目录**（里面有指向 `/src/main.tsx` 的开发用 `index.html`）。  
+**请读 [DEPLOY.md](./DEPLOY.md)**：把 Pages 改为 **`gh-pages` 分支 + /(root)**。CI 会自动把构建好的 `dist/` 推到 `gh-pages`。
 
 ## 在线访问（部署后）
 
@@ -60,8 +60,8 @@ git remote add origin https://github.com/samwu429/wearable-investor-demo.git
 git push -u origin main
 ```
 
-然后在 GitHub 仓库：**Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。  
-首次推送后打开 **Actions** 页，等待 **Deploy to GitHub Pages** 跑绿，即可访问站点。
+然后在 GitHub：**Settings → Pages** → Source 选 **Deploy from a branch** → 分支选 **`gh-pages`** → 文件夹 **`/(root)`**。  
+等 **Actions** 里 **Build and deploy to gh-pages branch** 跑绿后再访问站点。
 
 ## 许可证
 
