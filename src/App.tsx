@@ -5,7 +5,7 @@ import { WatchDemo } from './pages/WatchDemo'
 import { GlassesDemo } from './pages/GlassesDemo'
 
 function basenameFromViteBase(): string | undefined {
-  const b = import.meta.env.BASE
+  const b = import.meta.env.BASE_URL
   if (b === '/') return undefined
   return b.endsWith('/') ? b.slice(0, -1) : b
 }
