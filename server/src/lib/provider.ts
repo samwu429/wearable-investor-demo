@@ -1,4 +1,5 @@
 import { config } from './config.js'
+import { PublicError } from './errors.js'
 
 type GenerateTextInput = {
   prompt: string
@@ -38,7 +39,10 @@ class OpenAIProvider implements AIProvider {
 
     if (!response.ok) {
       const payload = await response.text()
-      throw new Error(`OpenAI request failed (${response.status}): ${payload.slice(0, 240)}`)
+      throw new PublicError(
+        `OpenAI API error (${response.status}): ${payload.slice(0, 240)}`,
+        response.status >= 500 ? 502 : 400,
+      )
     }
 
     const json = (await response.json()) as {
@@ -48,7 +52,7 @@ class OpenAIProvider implements AIProvider {
 
     const text = json.choices?.[0]?.message?.content?.trim()
     if (!text) {
-      throw new Error('OpenAI response did not include text content')
+      throw new PublicError('OpenAI response did not include text content', 502)
     }
 
     return {
@@ -87,7 +91,10 @@ class GeminiProvider implements AIProvider {
 
     if (!response.ok) {
       const payload = await response.text()
-      throw new Error(`Gemini request failed (${response.status}): ${payload.slice(0, 240)}`)
+      throw new PublicError(
+        `Gemini API error (${response.status}): ${payload.slice(0, 240)}`,
+        response.status >= 500 ? 502 : 400,
+      )
     }
 
     const json = (await response.json()) as {
@@ -97,7 +104,10 @@ class GeminiProvider implements AIProvider {
     const text = json.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim()
 
     if (!text) {
-      throw new Error('Gemini response did not include text content')
+      throw new PublicError(
+        'Gemini did not return text content. Check model availability, safety policy, and API key permissions.',
+        502,
+      )
     }
 
     return {

@@ -30,13 +30,17 @@ await app.register(rateLimit, {
 app.setErrorHandler((error, request, reply) => {
   request.log.error({ err: error }, 'request failed')
   const requestId = request.id
-  const maybeError = error as { statusCode?: number; message?: string }
+  const maybeError = error as { statusCode?: number; message?: string; name?: string }
   const statusCode = maybeError.statusCode ?? 500
-  const message = statusCode < 500 ? (maybeError.message ?? 'Request error') : 'Internal server error'
+  const isPublicError = maybeError.name === 'PublicError'
+  const message =
+    statusCode < 500 || isPublicError
+      ? (maybeError.message ?? 'Request error')
+      : 'Internal server error'
   reply.code(statusCode).send({
     success: false,
     error: {
-      code: statusCode < 500 ? 'REQUEST_ERROR' : 'INTERNAL_ERROR',
+      code: statusCode < 500 || isPublicError ? 'REQUEST_ERROR' : 'INTERNAL_ERROR',
       message,
       requestId,
     },
