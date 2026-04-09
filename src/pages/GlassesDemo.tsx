@@ -7,12 +7,22 @@ import {
   type InstantAppPreview,
   type InstantMapUi,
 } from '../lib/mockInstantApp'
+import { useI18n } from '../i18n/I18nContext'
+import { interpolate } from '../i18n/messages'
 
 const WALK_IMAGE = `${import.meta.env.BASE_URL}glasses-walking-eye.jpg`
 const WALK_PHOTO_PAGE = 'https://unsplash.com/photos/W7M6dlO7M_Y'
 
+/** 中英关键词：界面语言与提问语言可不一致 */
 function looksLikeLegalQuery(q: string) {
-  return /第\s*\d+|条款|违约|合同|NDA|保密|终止|解释|风险|建议|附件|管辖/.test(q)
+  if (/第\s*\d+|条款|违约|合同|NDA|保密|终止|解释|风险|建议|附件|管辖/.test(q)) return true
+  if (
+    /\b(section|article)\s*\d+|\bclause(s)?\b|\bcontract\b|\bNDA\b|confidential|termination|liability|\brisk(s)?\b|breach|jurisdiction|indemnif/i.test(
+      q,
+    )
+  )
+    return true
+  return false
 }
 
 function HudCorners() {
@@ -41,6 +51,7 @@ function SoftCenterGlow() {
 }
 
 function TuiWindowControls({ onClose }: { onClose: () => void }) {
+  const { t } = useI18n()
   return (
     <div className="font-jit-mono flex items-center gap-1 text-[10px] tracking-tight" aria-hidden>
       <span className="rounded border border-stone-600/80 bg-stone-950 px-1.5 py-0.5 text-stone-500">─</span>
@@ -49,7 +60,7 @@ function TuiWindowControls({ onClose }: { onClose: () => void }) {
         type="button"
         onClick={onClose}
         className="rounded border border-rose-900/40 bg-stone-950 px-2 py-0.5 font-jit-mono text-rose-300/90 transition hover:border-rose-500/50 hover:bg-rose-950/30"
-        aria-label="关闭窗口"
+        aria-label={t('glasses.closeWindow')}
       >
         ×
       </button>
@@ -86,6 +97,7 @@ function JitWindowChrome({
   /** hud：暗色磷光终端；paper：法务浅色稿纸 */
   variant?: 'hud' | 'paper'
 }) {
+  const { t } = useI18n()
   const shell = variant === 'paper' ? 'jit-field jit-field--paper rounded-lg' : 'jit-field rounded-lg'
   return (
     <motion.div
@@ -176,12 +188,12 @@ function JitWindowChrome({
                   : 'mt-1.5 border-t border-dotted border-stone-600/50 pt-1.5 text-[9px] text-stone-600'
               }
             >
-              TRUSTFIELD · OPTICAL_JIT · demo build
+              {t('glasses.windowFooterHud')}
             </p>
           </div>
         ) : variant === 'paper' ? (
           <div className="shrink-0 border-t border-stone-300/80 bg-[#ebe6dc] px-4 py-2 font-jit-mono text-[9px] text-stone-500">
-            TRUSTFIELD · CLAUSE_VIEW · demo build
+            {t('glasses.windowFooterClause')}
           </div>
         ) : null}
       </div>
@@ -190,6 +202,7 @@ function JitWindowChrome({
 }
 
 function BigMapCanvas({ data }: { data: InstantMapUi }) {
+  const { t } = useI18n()
   const rid = useId().replace(/:/g, '')
   const gid = `jit-grid-${rid}`
   const vid = `jit-vig-${rid}`
@@ -220,7 +233,7 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
         <circle cx="340" cy="56" r="6" fill="rgba(251,191,36,0.25)" stroke="rgba(251,191,36,0.8)" strokeWidth="1.5" />
       </svg>
       <div className="absolute left-3 top-3 max-w-[min(100%,280px)] border border-teal-500/25 bg-stone-950/75 px-2.5 py-1.5 font-jit-mono text-[10px] leading-snug text-teal-100/90 shadow-[0_0_24px_rgba(45,212,191,0.08)] backdrop-blur-sm">
-        <span className="text-amber-300/90">MAP </span>
+        <span className="text-amber-300/90">{t('glasses.mapBadge')}</span>
         {data.headline}
       </div>
     </div>
@@ -228,31 +241,33 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
 }
 
 function JitMapPage({ preview }: { preview: InstantAppPreview }) {
+  const { t } = useI18n()
   const m = preview.mapUi!
   return (
     <div className="relative z-[1] flex h-full min-h-[320px] flex-col md:flex-row">
       <BigMapCanvas data={m} />
       <aside className="flex w-full shrink-0 flex-col gap-0 border-t border-amber-500/15 bg-[#141311] p-0 md:w-[300px] md:border-l md:border-t-0">
         <div className="border-b border-stone-700/80 px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.2em] text-amber-200/50">
-          ┃ route_spec
+          {t('glasses.routeSpec')}
         </div>
         <div className="space-y-3 p-4">
           <p className="font-jit-mono text-[11px] text-teal-400/80">
-            {'>'} {m.fromLabel} <span className="text-amber-400/70">→</span> {m.toLabel}
+            {'>'} {m.fromLabel}{' '}
+            <span className="text-amber-400/70">{t('glasses.routeArrow')}</span> {m.toLabel}
           </p>
           <div className="space-y-1.5 border border-stone-700/60 bg-[#0f0e0c] p-3 font-jit-mono text-[11px] text-stone-400">
             <p>
-              <span className="text-stone-600">mode</span>{' '}
+              <span className="text-stone-600">{t('glasses.mode')}</span>{' '}
               <span className="text-[#ebe8e2]">{m.travelMode}</span>
             </p>
             <p>
-              <span className="text-stone-600">eta</span>{' '}
+              <span className="text-stone-600">{t('glasses.eta')}</span>{' '}
               <span className="tabular-nums text-amber-200/90">{m.minutes}</span>
-              <span className="text-stone-500"> min</span>
+              <span className="text-stone-500"> {t('glasses.min')}</span>
             </p>
           </div>
           <div className="border border-dashed border-amber-500/20 bg-stone-950/40 p-3 text-[11px] leading-relaxed text-stone-500">
-            <p className="mb-1 font-jit-mono text-[9px] uppercase tracking-wider text-stone-600">intent_echo</p>
+            <p className="mb-1 font-jit-mono text-[9px] uppercase tracking-wider text-stone-600">{t('glasses.intentEchoBlock')}</p>
             <p className="text-stone-400">{preview.userIntentEcho}</p>
           </div>
         </div>
@@ -262,6 +277,7 @@ function JitMapPage({ preview }: { preview: InstantAppPreview }) {
 }
 
 function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
+  const { t } = useI18n()
   const c = preview.chatUi!
   return (
     <div className="relative z-[1] flex h-full min-h-[360px] flex-col bg-[#11100e]">
@@ -273,7 +289,7 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
           <p className="truncate font-jit-mono text-xs font-medium tracking-wide text-[#ebe8e2]">{c.peerName}</p>
           <p className="truncate font-jit-mono text-[10px] text-teal-500/70">{c.peerStatus}</p>
         </div>
-        <span className="hidden font-jit-mono text-[9px] text-stone-600 sm:inline">CHAN_MSG</span>
+        <span className="hidden font-jit-mono text-[9px] text-stone-600 sm:inline">{t('glasses.chatChan')}</span>
       </header>
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-[#0a0908] px-3 py-4">
         {c.bubbles.map((b, i) => (
@@ -286,7 +302,7 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
               }
             >
               <span className={b.role === 'me' ? 'text-teal-500/80' : 'text-amber-500/70'}>
-                {b.role === 'me' ? 'you> ' : 'peer> '}
+                {b.role === 'me' ? t('glasses.chatYou') : t('glasses.chatPeer')}
               </span>
               {b.text}
             </div>
@@ -297,8 +313,8 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
         <div className="flex items-center gap-2 border border-stone-700/60 bg-[#141311] px-3 py-2 font-jit-mono text-[11px] text-stone-500">
           <span className="text-teal-500/80">{'>'}</span>
           <span className="jit-cursor-blink text-amber-200/90">▍</span>
-          <span className="ml-2 text-stone-600">compose…</span>
-          <span className="ml-auto text-[9px] text-stone-600">demo · no send</span>
+          <span className="ml-2 text-stone-600">{t('glasses.compose')}</span>
+          <span className="ml-auto text-[9px] text-stone-600">{t('glasses.demoNoSend')}</span>
         </div>
       </div>
     </div>
@@ -306,13 +322,14 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
 }
 
 function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
+  const { t } = useI18n()
   const c = preview.chatUi!
   const m = preview.mapUi!
   return (
     <div className="relative z-[1] grid min-h-[400px] grid-cols-1 divide-y divide-amber-500/10 md:grid-cols-2 md:divide-x md:divide-y-0">
       <div className="flex min-h-[280px] flex-col bg-[#11100e] md:min-h-0">
         <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
-          ┃ pane_a · message
+          {t('glasses.paneMessage')}
         </div>
         <header className="flex items-center gap-3 border-b border-stone-700/60 px-3 py-2">
           <div className="flex h-8 w-8 items-center justify-center border border-amber-500/25 bg-amber-950/30 font-jit-mono text-[10px] font-bold text-amber-200">
@@ -334,7 +351,7 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
                 }
               >
                 <span className={b.role === 'me' ? 'text-teal-500/75' : 'text-amber-500/65'}>
-                  {b.role === 'me' ? 'you> ' : 'peer> '}
+                  {b.role === 'me' ? t('glasses.chatYou') : t('glasses.chatPeer')}
                 </span>
                 {b.text}
               </div>
@@ -344,13 +361,13 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
       </div>
       <div className="flex min-h-[280px] flex-col md:min-h-0">
         <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
-          ┃ pane_b · nav_radar
+          {t('glasses.paneNav')}
         </div>
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           <BigMapCanvas data={m} />
           <aside className="flex w-full shrink-0 flex-col justify-center gap-2 border-t border-amber-500/10 bg-[#141311] p-3 font-jit-mono text-[11px] text-stone-400 md:w-[188px] md:border-l md:border-t-0">
             <p className="text-amber-200/80">
-              {m.fromLabel} <span className="text-teal-500/60">→</span> {m.toLabel}
+              {m.fromLabel} <span className="text-teal-500/60">{t('glasses.routeArrow')}</span> {m.toLabel}
             </p>
             <p>
               {m.travelMode} · <span className="tabular-nums text-stone-200">{m.minutes}</span>m
@@ -369,12 +386,13 @@ const toneClass: Record<string, string> = {
 }
 
 function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
+  const { t } = useI18n()
   const screens = preview.screens ?? []
   const modules = preview.modules ?? []
   return (
     <div className="relative z-[1] flex min-h-[380px] flex-col md:flex-row">
       <nav className="flex shrink-0 gap-1 border-b border-stone-700/80 bg-[#0c0b0a] p-2 font-jit-mono md:w-52 md:flex-col md:border-b-0 md:border-r md:border-stone-700/80">
-        <p className="hidden px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-stone-600 md:block">stack_nav</p>
+        <p className="hidden px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-stone-600 md:block">{t('glasses.stackNav')}</p>
         {screens.length ? (
           screens.map((s, i) => (
             <button
@@ -386,7 +404,7 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
             </button>
           ))
         ) : (
-          <span className="px-2 py-2 text-[10px] text-stone-600">[ ] root</span>
+          <span className="px-2 py-2 text-[10px] text-stone-600">{t('glasses.stackRoot')}</span>
         )}
       </nav>
       <main className="min-w-0 flex-1 bg-[#11100e] p-4">
@@ -415,11 +433,12 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
 }
 
 function LegalDocPage({ text }: { text: string }) {
+  const { t } = useI18n()
   return (
     <article className="relative z-[1] min-h-[360px] px-5 py-8 text-stone-900 md:px-10">
       <div className="mb-6 border-b border-dashed border-stone-400/50 pb-4">
         <h1 className="font-jit-mono text-sm font-semibold uppercase tracking-[0.25em] text-teal-800">clause_jit</h1>
-        <p className="mt-2 font-jit-mono text-[11px] text-stone-600">// 单页说明 · 演示稿 · 不构成法律意见</p>
+        <p className="mt-2 font-jit-mono text-[11px] text-stone-600">{t('glasses.legalDocDisclaimer')}</p>
       </div>
       <div className="font-jit-mono text-[12px] leading-[1.75] tracking-tight text-stone-800 md:text-[13px]">
         <div className="whitespace-pre-wrap">{text}</div>
@@ -450,6 +469,8 @@ type PanelState =
   | { kind: 'legal'; text: string }
 
 export function GlassesDemo() {
+  const { t, locale } = useI18n()
+  const timeLocale = locale === 'zh' ? 'zh-CN' : 'en-US'
   const [now, setNow] = useState(() => new Date())
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
@@ -473,7 +494,7 @@ export function GlassesDemo() {
 
     try {
       if (looksLikeLegalQuery(q)) {
-        const padded = q.length >= 8 ? q : `${q}\n请结合上述问题给出简要要点与风险提示（演示）。`
+        const padded = q.length >= 8 ? q : `${q}\n${t('glasses.legalPromptPad')}`
         const result = await generateInsight({ prompt: padded })
         setPanel({ kind: 'legal', text: result.text })
         return
@@ -487,30 +508,26 @@ export function GlassesDemo() {
         setPanel({ kind: 'jit', preview, source: 'fallback' })
         const msg =
           e instanceof ApiError
-            ? `已用本地规则生成界面（${e.message}）`
-            : '已用本地规则生成界面'
+            ? interpolate(t('glasses.toastFallbackWithErr'), { msg: e.message })
+            : t('glasses.toastFallback')
         setToast(msg)
       }
     } catch (e) {
-      const msg = e instanceof ApiError ? e.message : '请求失败，请稍后重试。'
+      const msg = e instanceof ApiError ? e.message : t('glasses.toastNetwork')
       setToast(msg)
       setPanel({ kind: 'idle' })
     } finally {
       setBusy(false)
     }
-  }, [busy, input])
+  }, [busy, input, t])
 
-  const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  const timeStr = now.toLocaleTimeString(timeLocale, { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
   const showOverlay = panel.kind === 'loading' || panel.kind === 'jit' || panel.kind === 'legal'
 
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-[min(100%,1680px)] flex-1 flex-col px-3 pb-4 pt-3 md:px-8 md:pb-6 md:pt-4">
-      <p className="mb-2 max-w-3xl shrink-0 text-xs leading-relaxed text-mist md:mb-3 md:text-sm">
-        Part 2 · <span className="font-medium text-ink">行人视角 + JIT 整页弹出</span>
-        ：不保留对话记录；你说一句，系统理解意图后弹出「像电脑窗口一样」的界面。聊天类意图呈现的是
-        <span className="font-medium text-ink">即时聊天 App 画面</span>，不是和助理来回聊。
-      </p>
+      <p className="mb-2 max-w-3xl shrink-0 text-xs leading-relaxed text-mist md:mb-3 md:text-sm">{t('glasses.intro')}</p>
 
       <div className="glasses-frame-bezel glasses-frame-bezel--walk flex min-h-0 flex-1 flex-col p-2 md:p-3">
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_12px_48px_rgba(28,25,23,0.18)] ring-1 ring-stone-900/10">
@@ -521,7 +538,7 @@ export function GlassesDemo() {
               backgroundPosition: 'center 48%',
             }}
             role="img"
-            aria-label="模拟走路时透过镜片看到的前方街景（行人眼高、静态照片）"
+            aria-label={t('glasses.streetAria')}
           />
           <div className="absolute inset-0 bg-amber-950/[0.07] mix-blend-overlay" aria-hidden />
           <div
@@ -540,13 +557,13 @@ export function GlassesDemo() {
           <div className="relative z-10 flex min-h-0 flex-1 flex-col">
             <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 bg-stone-950/35 px-4 py-2.5 backdrop-blur-2xl md:px-6 md:py-3">
               <div className="min-w-0 pt-0.5">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-amber-100/55">on foot · jit</p>
+                <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-amber-100/55">{t('glasses.hudEyebrow')}</p>
                 <p className="mt-1 truncate text-sm font-medium tracking-tight text-stone-50 drop-shadow-sm md:text-base">
-                  口述一句 → 整页界面
+                  {t('glasses.hudTitle')}
                 </p>
               </div>
               <div className="shrink-0 rounded-xl border border-amber-200/20 bg-stone-950/40 px-3 py-2 text-right shadow-sm backdrop-blur-md md:px-4">
-                <p className="text-[9px] font-medium uppercase tracking-wider text-stone-500">本地时间</p>
+                <p className="text-[9px] font-medium uppercase tracking-wider text-stone-500">{t('glasses.localTime')}</p>
                 <p className="font-display text-2xl font-bold tabular-nums tracking-tight text-amber-50 drop-shadow-md md:text-3xl lg:text-4xl">
                   {timeStr}
                 </p>
@@ -559,7 +576,7 @@ export function GlassesDemo() {
                   <motion.button
                     key="backdrop"
                     type="button"
-                    aria-label="点击关闭当前界面"
+                    aria-label={t('glasses.backdropClose')}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -572,7 +589,9 @@ export function GlassesDemo() {
               {panel.kind === 'idle' && (
                 <div className="flex h-full flex-col items-center justify-center px-6 text-center">
                   <p className="max-w-sm text-sm text-stone-200/90 drop-shadow-md">
-                    下方输入一句需求。界面会像电脑窗口从视野里弹出，<span className="text-amber-100">不累计聊天记录</span>。
+                    {t('glasses.idleHintBefore')}
+                    <span className="text-amber-100">{t('glasses.idleHintEm')}</span>
+                    {t('glasses.idleHintAfter')}
                   </p>
                 </div>
               )}
@@ -588,9 +607,9 @@ export function GlassesDemo() {
                   >
                     <div className="jit-field pointer-events-auto max-w-md rounded-lg px-6 py-5 text-left shadow-2xl">
                       <div className="jit-field-inner relative">
-                        <p className="font-jit-mono text-[10px] uppercase tracking-[0.35em] text-teal-400/80">trustfield</p>
-                        <p className="mt-2 font-jit-mono text-sm font-medium text-[#ebe8e2]">parsing_utterance…</p>
-                        <p className="mt-2 font-jit-mono text-[11px] text-stone-500">生成光学 JIT 栅格界面</p>
+                        <p className="font-jit-mono text-[10px] uppercase tracking-[0.35em] text-teal-400/80">{t('glasses.loadingBrand')}</p>
+                        <p className="mt-2 font-jit-mono text-sm font-medium text-[#ebe8e2]">{t('glasses.loadingTitle')}</p>
+                        <p className="mt-2 font-jit-mono text-[11px] text-stone-500">{t('glasses.loadingSub')}</p>
                         <p className="mt-4 font-jit-mono text-xs text-amber-200/80">
                           <span className="text-teal-500/70">{'>'}</span>{' '}
                           <span className="jit-cursor-blink">▍</span>
@@ -611,8 +630,8 @@ export function GlassesDemo() {
                     {panel.kind === 'legal' ? (
                       <JitWindowChrome
                         variant="paper"
-                        title="CLAUSE_VIEW · 法务 JIT"
-                        subtitle="非对话模式 · 单页说明"
+                        title={t('glasses.legalWindowTitle')}
+                        subtitle={t('glasses.legalSubtitle')}
                         onClose={closePanel}
                         footer={null}
                       >
@@ -633,7 +652,7 @@ export function GlassesDemo() {
                         }
                       >
                         <div className="relative z-[1] border-b border-amber-500/15 bg-[#0f0e0c] px-4 py-2.5 font-jit-mono text-[11px] leading-relaxed text-stone-500">
-                          <span className="text-teal-500/70">intent_echo </span>
+                          <span className="text-teal-500/70">{t('glasses.intentEchoPrefix')}</span>
                           <span className="text-stone-400">{panel.preview.userIntentEcho}</span>
                         </div>
                         <JitBody preview={panel.preview} />
@@ -658,7 +677,7 @@ export function GlassesDemo() {
                 }}
               >
                 <label className="sr-only" htmlFor="glasses-input">
-                  口述需求
+                  {t('glasses.inputLabel')}
                 </label>
                 <input
                   id="glasses-input"
@@ -666,7 +685,7 @@ export function GlassesDemo() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   disabled={busy}
-                  placeholder="说一句：导航去××、给××发消息、做个库存看板、问第7.2条风险…"
+                  placeholder={t('glasses.inputPlaceholder')}
                   className="min-h-[48px] w-full flex-1 rounded-2xl border border-stone-500/35 bg-stone-950/35 px-4 py-2.5 text-base text-stone-100 placeholder:text-stone-500 outline-none ring-offset-2 ring-offset-transparent backdrop-blur-md focus:border-amber-400/55 focus:ring-2 focus:ring-amber-400/25 disabled:opacity-50 md:min-h-[52px] md:text-lg"
                 />
                 <button
@@ -674,13 +693,13 @@ export function GlassesDemo() {
                   disabled={busy || input.trim().length < 2}
                   className="shrink-0 rounded-2xl bg-amber-500 px-8 py-2.5 text-base font-semibold text-stone-950 shadow-lg shadow-amber-900/25 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-50 sm:px-10"
                 >
-                  {busy ? '生成中' : '生成界面'}
+                  {busy ? t('glasses.submitting') : t('glasses.submit')}
                 </button>
               </form>
               <p className="mt-2.5 flex flex-wrap items-center justify-end gap-x-1 text-[10px] text-stone-500">
-                <span>背景</span>
+                <span>{t('glasses.photoCreditBg')}</span>
                 <span className="text-stone-600">·</span>
-                <span>行人眼高街景</span>
+                <span>{t('glasses.photoCreditScene')}</span>
                 <span className="text-stone-600">·</span>
                 <a
                   href={WALK_PHOTO_PAGE}
@@ -688,7 +707,7 @@ export function GlassesDemo() {
                   rel="noreferrer noopener"
                   className="text-amber-200/80 underline decoration-amber-200/30 underline-offset-2 hover:text-amber-100"
                 >
-                  Unsplash（Claudio Schwarz）
+                  {t('glasses.photoCreditLink')}
                 </a>
               </p>
             </footer>
