@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useState, type ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ApiError } from '../lib/apiClient'
 import { generateInsight, generateJitUiFromPrompt } from '../lib/ai'
@@ -40,13 +40,33 @@ function SoftCenterGlow() {
   )
 }
 
-function TrafficLights() {
+function TuiWindowControls({ onClose }: { onClose: () => void }) {
   return (
-    <span className="flex gap-1.5" aria-hidden>
-      <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-      <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-      <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-    </span>
+    <div className="font-jit-mono flex items-center gap-1 text-[10px] tracking-tight" aria-hidden>
+      <span className="rounded border border-stone-600/80 bg-stone-950 px-1.5 py-0.5 text-stone-500">─</span>
+      <span className="rounded border border-stone-600/80 bg-stone-950 px-1.5 py-0.5 text-stone-500">□</span>
+      <button
+        type="button"
+        onClick={onClose}
+        className="rounded border border-rose-900/40 bg-stone-950 px-2 py-0.5 font-jit-mono text-rose-300/90 transition hover:border-rose-500/50 hover:bg-rose-950/30"
+        aria-label="关闭窗口"
+      >
+        ×
+      </button>
+    </div>
+  )
+}
+
+/** 内框角标：像 HUD 里的取景刻线，弱化纯终端感 */
+function JitInnerCorners({ className = '' }: { className?: string }) {
+  const b = 'pointer-events-none absolute border-teal-400/25'
+  return (
+    <div className={`pointer-events-none absolute inset-2 md:inset-3 ${className}`} aria-hidden>
+      <div className={`${b} left-0 top-0 h-5 w-5 rounded-tl border-l border-t`} />
+      <div className={`${b} right-0 top-0 h-5 w-5 rounded-tr border-r border-t`} />
+      <div className={`${b} bottom-0 left-0 h-5 w-5 rounded-bl border-b border-l`} />
+      <div className={`${b} bottom-0 right-0 h-5 w-5 rounded-br border-b border-r`} />
+    </div>
   )
 }
 
@@ -56,13 +76,17 @@ function JitWindowChrome({
   onClose,
   footer,
   children,
+  variant = 'hud',
 }: {
   title: string
   subtitle?: string
   onClose: () => void
   footer?: ReactNode
   children: ReactNode
+  /** hud：暗色磷光终端；paper：法务浅色稿纸 */
+  variant?: 'hud' | 'paper'
 }) {
+  const shell = variant === 'paper' ? 'jit-field jit-field--paper rounded-lg' : 'jit-field rounded-lg'
   return (
     <motion.div
       role="dialog"
@@ -72,55 +96,131 @@ function JitWindowChrome({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96, y: 12 }}
       transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-      className="flex max-h-[min(88vh,920px)] w-[min(96vw,1100px)] flex-col overflow-hidden rounded-xl border border-stone-600/80 bg-stone-900 shadow-[0_32px_120px_rgba(0,0,0,0.55)]"
+      className={`flex max-h-[min(88vh,920px)] w-[min(96vw,1100px)] flex-col overflow-hidden ${shell}`}
     >
-      <div className="flex h-11 shrink-0 items-center gap-3 border-b border-stone-700 bg-gradient-to-b from-stone-800 to-stone-850 px-3">
-        <TrafficLights />
-        <div className="min-w-0 flex-1 text-center">
-          <p className="truncate text-xs font-medium text-stone-200">{title}</p>
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-md px-2 py-1 text-lg leading-none text-stone-400 transition hover:bg-stone-700 hover:text-white"
-          aria-label="关闭窗口"
+      <div className="jit-field-inner flex max-h-full min-h-0 flex-col">
+        <div
+          className={
+            variant === 'paper'
+              ? 'flex h-12 shrink-0 items-center gap-3 border-b border-stone-300/80 bg-[#ebe6dc] px-3'
+              : 'flex h-12 shrink-0 items-center gap-3 border-b border-amber-500/15 bg-[#141311] px-3'
+          }
         >
-          ×
-        </button>
+          <div className="flex items-center gap-2">
+            <span className="font-jit-mono text-[10px] font-semibold tracking-[0.2em] text-teal-400/95">TF</span>
+            <span
+              className={
+                variant === 'paper'
+                  ? 'hidden text-[9px] font-medium uppercase tracking-[0.35em] text-stone-500 sm:inline'
+                  : 'hidden text-[9px] font-medium uppercase tracking-[0.35em] text-amber-200/40 sm:inline'
+              }
+            >
+              field_glass
+            </span>
+          </div>
+          <div className="min-w-0 flex-1 px-2 text-center">
+            <p
+              className={
+                variant === 'paper'
+                  ? 'truncate font-jit-mono text-[11px] font-medium tracking-wide text-stone-800'
+                  : 'truncate font-jit-mono text-[11px] font-medium tracking-wide text-[#ebe8e2]'
+              }
+            >
+              {title}
+            </p>
+            <div
+              className={
+                variant === 'paper'
+                  ? 'mx-auto mt-1 h-px max-w-[min(100%,280px)] bg-gradient-to-r from-transparent via-amber-700/25 to-transparent'
+                  : 'mx-auto mt-1 h-px max-w-[min(100%,280px)] bg-gradient-to-r from-transparent via-teal-400/25 to-transparent'
+              }
+            />
+          </div>
+          <TuiWindowControls onClose={onClose} />
+        </div>
+        {subtitle ? (
+          <p
+            className={
+              variant === 'paper'
+                ? 'shrink-0 border-b border-stone-300/60 bg-[#f0ebe3] px-4 py-2 font-jit-mono text-[10px] text-stone-600'
+                : 'shrink-0 border-b border-stone-700/80 bg-[#0f0e0c] px-4 py-2 font-jit-mono text-[10px] text-stone-500'
+            }
+          >
+            <span className={variant === 'paper' ? 'text-teal-700/80' : 'text-teal-400/70'}>{'// '}</span>
+            {subtitle}
+          </p>
+        ) : null}
+        <div
+          className={
+            variant === 'paper'
+              ? 'relative min-h-0 flex-1 overflow-y-auto bg-[#faf8f3]'
+              : 'relative min-h-0 flex-1 overflow-y-auto bg-[#11100e]'
+          }
+        >
+          {variant === 'hud' ? <JitInnerCorners /> : null}
+          {children}
+        </div>
+        {footer ? (
+          <div
+            className={
+              variant === 'paper'
+                ? 'shrink-0 border-t border-stone-300/80 bg-[#ebe6dc] px-4 py-2 font-jit-mono text-[10px] text-stone-600'
+                : 'shrink-0 border-t border-stone-700/90 bg-[#0c0b0a] px-4 py-2 font-jit-mono text-[10px] text-stone-500'
+            }
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2">{footer}</div>
+            <p
+              className={
+                variant === 'paper'
+                  ? 'mt-1.5 border-t border-dotted border-stone-400/40 pt-1.5 text-[9px] text-stone-500'
+                  : 'mt-1.5 border-t border-dotted border-stone-600/50 pt-1.5 text-[9px] text-stone-600'
+              }
+            >
+              TRUSTFIELD · OPTICAL_JIT · demo build
+            </p>
+          </div>
+        ) : variant === 'paper' ? (
+          <div className="shrink-0 border-t border-stone-300/80 bg-[#ebe6dc] px-4 py-2 font-jit-mono text-[9px] text-stone-500">
+            TRUSTFIELD · CLAUSE_VIEW · demo build
+          </div>
+        ) : null}
       </div>
-      {subtitle ? (
-        <p className="shrink-0 border-b border-stone-800 bg-stone-900 px-4 py-2 text-[11px] text-stone-500">{subtitle}</p>
-      ) : null}
-      <div className="min-h-0 flex-1 overflow-y-auto bg-stone-100">{children}</div>
-      {footer ? (
-        <div className="shrink-0 border-t border-stone-700 bg-stone-900 px-4 py-2 text-[10px] text-stone-500">{footer}</div>
-      ) : null}
     </motion.div>
   )
 }
 
 function BigMapCanvas({ data }: { data: InstantMapUi }) {
+  const rid = useId().replace(/:/g, '')
+  const gid = `jit-grid-${rid}`
+  const vid = `jit-vig-${rid}`
   return (
-    <div className="relative min-h-[220px] flex-1 bg-gradient-to-br from-sky-100 via-stone-100 to-amber-50 md:min-h-[280px]">
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden>
+    <div className="relative min-h-[220px] flex-1 bg-[#0a1210] md:min-h-[280px]">
+      <svg className="absolute inset-0 h-full w-full opacity-95" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden>
         <defs>
-          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(120,113,108,0.12)" strokeWidth="1" />
+          <pattern id={gid} width="16" height="16" patternUnits="userSpaceOnUse">
+            <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(94,234,212,0.06)" strokeWidth="1" />
           </pattern>
+          <radialGradient id={vid} cx="50%" cy="45%" r="70%">
+            <stop offset="0%" stopColor="rgba(20,35,32,0)" />
+            <stop offset="100%" stopColor="rgba(0,0,0,0.45)" />
+          </radialGradient>
         </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
+        <rect width="100%" height="100%" fill="#0c1614" />
+        <rect width="100%" height="100%" fill={`url(#${gid})`} />
+        <rect width="100%" height="100%" fill={`url(#${vid})`} />
         <path
           d="M 48 180 Q 160 40 340 56"
           fill="none"
-          stroke="rgba(217,119,6,0.95)"
-          strokeWidth="3"
+          stroke="rgba(251,191,36,0.85)"
+          strokeWidth="2.5"
           strokeLinecap="round"
-          strokeDasharray="8 6"
+          strokeDasharray="10 7"
         />
-        <circle cx="48" cy="180" r="7" fill="rgba(5,150,105,0.95)" />
-        <circle cx="340" cy="56" r="7" fill="rgba(220,38,38,0.9)" />
+        <circle cx="48" cy="180" r="6" fill="none" stroke="rgba(94,234,212,0.9)" strokeWidth="2" />
+        <circle cx="340" cy="56" r="6" fill="rgba(251,191,36,0.25)" stroke="rgba(251,191,36,0.8)" strokeWidth="1.5" />
       </svg>
-      <div className="absolute left-3 top-3 rounded-lg border border-stone-200/80 bg-white/90 px-3 py-1.5 text-[11px] font-medium text-stone-800 shadow-sm backdrop-blur-sm">
+      <div className="absolute left-3 top-3 max-w-[min(100%,280px)] border border-teal-500/25 bg-stone-950/75 px-2.5 py-1.5 font-jit-mono text-[10px] leading-snug text-teal-100/90 shadow-[0_0_24px_rgba(45,212,191,0.08)] backdrop-blur-sm">
+        <span className="text-amber-300/90">MAP </span>
         {data.headline}
       </div>
     </div>
@@ -130,19 +230,31 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
 function JitMapPage({ preview }: { preview: InstantAppPreview }) {
   const m = preview.mapUi!
   return (
-    <div className="flex h-full min-h-[320px] flex-col md:flex-row">
+    <div className="relative z-[1] flex h-full min-h-[320px] flex-col md:flex-row">
       <BigMapCanvas data={m} />
-      <aside className="flex w-full shrink-0 flex-col gap-3 border-t border-stone-200 bg-white p-4 md:w-[300px] md:border-l md:border-t-0">
-        <p className="text-xs font-semibold uppercase tracking-wider text-stone-400">路线</p>
-        <p className="text-lg font-semibold text-stone-900">
-          {m.fromLabel} → {m.toLabel}
-        </p>
-        <p className="text-sm text-stone-600">
-          {m.travelMode} · 约 <span className="font-mono font-semibold">{m.minutes}</span> 分钟
-        </p>
-        <div className="mt-auto space-y-2 rounded-lg border border-stone-200 bg-stone-50 p-3 text-xs text-stone-600">
-          <p className="font-medium text-stone-800">意图</p>
-          <p>{preview.userIntentEcho}</p>
+      <aside className="flex w-full shrink-0 flex-col gap-0 border-t border-amber-500/15 bg-[#141311] p-0 md:w-[300px] md:border-l md:border-t-0">
+        <div className="border-b border-stone-700/80 px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.2em] text-amber-200/50">
+          ┃ route_spec
+        </div>
+        <div className="space-y-3 p-4">
+          <p className="font-jit-mono text-[11px] text-teal-400/80">
+            {'>'} {m.fromLabel} <span className="text-amber-400/70">→</span> {m.toLabel}
+          </p>
+          <div className="space-y-1.5 border border-stone-700/60 bg-[#0f0e0c] p-3 font-jit-mono text-[11px] text-stone-400">
+            <p>
+              <span className="text-stone-600">mode</span>{' '}
+              <span className="text-[#ebe8e2]">{m.travelMode}</span>
+            </p>
+            <p>
+              <span className="text-stone-600">eta</span>{' '}
+              <span className="tabular-nums text-amber-200/90">{m.minutes}</span>
+              <span className="text-stone-500"> min</span>
+            </p>
+          </div>
+          <div className="border border-dashed border-amber-500/20 bg-stone-950/40 p-3 text-[11px] leading-relaxed text-stone-500">
+            <p className="mb-1 font-jit-mono text-[9px] uppercase tracking-wider text-stone-600">intent_echo</p>
+            <p className="text-stone-400">{preview.userIntentEcho}</p>
+          </div>
         </div>
       </aside>
     </div>
@@ -152,35 +264,41 @@ function JitMapPage({ preview }: { preview: InstantAppPreview }) {
 function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
   const c = preview.chatUi!
   return (
-    <div className="flex h-full min-h-[360px] flex-col bg-white">
-      <header className="flex items-center gap-3 border-b border-stone-200 bg-stone-50 px-4 py-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-sm font-bold text-white">
+    <div className="relative z-[1] flex h-full min-h-[360px] flex-col bg-[#11100e]">
+      <header className="flex items-center gap-3 border-b border-stone-700/80 bg-[#0c0b0a] px-4 py-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-amber-500/30 bg-amber-950/40 font-jit-mono text-xs font-bold text-amber-200">
           {c.peerName.slice(0, 1)}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate font-semibold text-stone-900">{c.peerName}</p>
-          <p className="truncate text-xs text-stone-500">{c.peerStatus}</p>
+          <p className="truncate font-jit-mono text-xs font-medium tracking-wide text-[#ebe8e2]">{c.peerName}</p>
+          <p className="truncate font-jit-mono text-[10px] text-teal-500/70">{c.peerStatus}</p>
         </div>
+        <span className="hidden font-jit-mono text-[9px] text-stone-600 sm:inline">CHAN_MSG</span>
       </header>
-      <div className="flex-1 space-y-3 overflow-y-auto bg-[#ecece8] px-4 py-4">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-[#0a0908] px-3 py-4">
         {c.bubbles.map((b, i) => (
           <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={
                 b.role === 'me'
-                  ? 'max-w-[85%] rounded-2xl rounded-br-md bg-sky-500 px-3 py-2 text-sm text-white shadow-sm'
-                  : 'max-w-[85%] rounded-2xl rounded-bl-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-800 shadow-sm'
+                  ? 'max-w-[88%] border border-teal-500/25 bg-teal-950/35 px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-teal-50'
+                  : 'max-w-[88%] border border-stone-600/50 bg-[#141311] px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-stone-300'
               }
             >
+              <span className={b.role === 'me' ? 'text-teal-500/80' : 'text-amber-500/70'}>
+                {b.role === 'me' ? 'you> ' : 'peer> '}
+              </span>
               {b.text}
             </div>
           </div>
         ))}
       </div>
-      <div className="border-t border-stone-200 bg-stone-100 px-3 py-2">
-        <div className="flex items-center gap-2 rounded-full border border-stone-300 bg-white px-3 py-2 text-xs text-stone-400">
-          输入消息…
-          <span className="ml-auto text-[10px] text-stone-400">演示 · 非真实发送</span>
+      <div className="border-t border-stone-700/80 bg-[#0c0b0a] px-3 py-2.5">
+        <div className="flex items-center gap-2 border border-stone-700/60 bg-[#141311] px-3 py-2 font-jit-mono text-[11px] text-stone-500">
+          <span className="text-teal-500/80">{'>'}</span>
+          <span className="jit-cursor-blink text-amber-200/90">▍</span>
+          <span className="ml-2 text-stone-600">compose…</span>
+          <span className="ml-auto text-[9px] text-stone-600">demo · no send</span>
         </div>
       </div>
     </div>
@@ -191,30 +309,33 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
   const c = preview.chatUi!
   const m = preview.mapUi!
   return (
-    <div className="grid min-h-[400px] grid-cols-1 divide-y divide-stone-200 md:grid-cols-2 md:divide-x md:divide-y-0">
-      <div className="flex min-h-[280px] flex-col bg-white md:min-h-0">
-        <div className="shrink-0 border-b border-stone-200 bg-stone-50 px-3 py-2 text-xs font-semibold text-stone-600">
-          聊天 App
+    <div className="relative z-[1] grid min-h-[400px] grid-cols-1 divide-y divide-amber-500/10 md:grid-cols-2 md:divide-x md:divide-y-0">
+      <div className="flex min-h-[280px] flex-col bg-[#11100e] md:min-h-0">
+        <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
+          ┃ pane_a · message
         </div>
-        <header className="flex items-center gap-3 border-b border-stone-200 px-3 py-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-xs font-bold text-white">
+        <header className="flex items-center gap-3 border-b border-stone-700/60 px-3 py-2">
+          <div className="flex h-8 w-8 items-center justify-center border border-amber-500/25 bg-amber-950/30 font-jit-mono text-[10px] font-bold text-amber-200">
             {c.peerName.slice(0, 1)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-stone-900">{c.peerName}</p>
-            <p className="truncate text-[10px] text-stone-500">{c.peerStatus}</p>
+            <p className="truncate font-jit-mono text-[11px] text-[#ebe8e2]">{c.peerName}</p>
+            <p className="truncate font-jit-mono text-[9px] text-teal-500/65">{c.peerStatus}</p>
           </div>
         </header>
-        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-[#ecece8] px-3 py-3">
+        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-[#0a0908] px-3 py-3">
           {c.bubbles.map((b, i) => (
             <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={
                   b.role === 'me'
-                    ? 'max-w-[90%] rounded-2xl rounded-br-md bg-sky-500 px-2.5 py-1.5 text-xs text-white'
-                    : 'max-w-[90%] rounded-2xl rounded-bl-md border border-stone-200 bg-white px-2.5 py-1.5 text-xs text-stone-800'
+                    ? 'max-w-[90%] border border-teal-500/20 bg-teal-950/30 px-2.5 py-1.5 font-jit-mono text-[11px] text-teal-50'
+                    : 'max-w-[90%] border border-stone-600/45 bg-[#141311] px-2.5 py-1.5 font-jit-mono text-[11px] text-stone-300'
                 }
               >
+                <span className={b.role === 'me' ? 'text-teal-500/75' : 'text-amber-500/65'}>
+                  {b.role === 'me' ? 'you> ' : 'peer> '}
+                </span>
                 {b.text}
               </div>
             </div>
@@ -222,17 +343,17 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
         </div>
       </div>
       <div className="flex min-h-[280px] flex-col md:min-h-0">
-        <div className="shrink-0 border-b border-stone-200 bg-stone-50 px-3 py-2 text-xs font-semibold text-stone-600">
-          导航
+        <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
+          ┃ pane_b · nav_radar
         </div>
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           <BigMapCanvas data={m} />
-          <aside className="flex w-full shrink-0 flex-col justify-center gap-2 border-t border-stone-200 bg-white p-3 text-xs md:w-[200px] md:border-l md:border-t-0">
-            <p className="font-semibold text-stone-900">
-              {m.fromLabel} → {m.toLabel}
+          <aside className="flex w-full shrink-0 flex-col justify-center gap-2 border-t border-amber-500/10 bg-[#141311] p-3 font-jit-mono text-[11px] text-stone-400 md:w-[188px] md:border-l md:border-t-0">
+            <p className="text-amber-200/80">
+              {m.fromLabel} <span className="text-teal-500/60">→</span> {m.toLabel}
             </p>
-            <p className="text-stone-600">
-              {m.travelMode} · 约 {m.minutes} 分钟
+            <p>
+              {m.travelMode} · <span className="tabular-nums text-stone-200">{m.minutes}</span>m
             </p>
           </aside>
         </div>
@@ -242,43 +363,49 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
 }
 
 const toneClass: Record<string, string> = {
-  gold: 'bg-amber-100 text-amber-900 border-amber-200',
-  mint: 'bg-emerald-100 text-emerald-900 border-emerald-200',
-  rose: 'bg-rose-100 text-rose-900 border-rose-200',
+  gold: 'border-amber-500/35 bg-amber-950/40 text-amber-100',
+  mint: 'border-teal-500/35 bg-teal-950/35 text-teal-50',
+  rose: 'border-rose-500/35 bg-rose-950/35 text-rose-100',
 }
 
 function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
   const screens = preview.screens ?? []
   const modules = preview.modules ?? []
   return (
-    <div className="flex min-h-[380px] flex-col md:flex-row">
-      <nav className="flex shrink-0 gap-1 border-b border-stone-200 bg-stone-900 p-2 md:w-48 md:flex-col md:border-b-0 md:border-r">
+    <div className="relative z-[1] flex min-h-[380px] flex-col md:flex-row">
+      <nav className="flex shrink-0 gap-1 border-b border-stone-700/80 bg-[#0c0b0a] p-2 font-jit-mono md:w-52 md:flex-col md:border-b-0 md:border-r md:border-stone-700/80">
+        <p className="hidden px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-stone-600 md:block">stack_nav</p>
         {screens.length ? (
-          screens.map((s) => (
+          screens.map((s, i) => (
             <button
               key={s.label}
               type="button"
-              className={`rounded-lg border px-3 py-2 text-left text-xs font-medium md:text-sm ${toneClass[s.tone] ?? 'border-stone-600 bg-stone-800 text-stone-200'}`}
+              className={`border px-3 py-2 text-left text-[11px] md:text-xs ${toneClass[s.tone] ?? 'border-stone-700 bg-stone-900 text-stone-300'}`}
             >
-              {s.label}
+              <span className="text-stone-600">[{i + 1}]</span> {s.label}
             </button>
           ))
         ) : (
-          <span className="px-2 py-2 text-xs text-stone-500">导航</span>
+          <span className="px-2 py-2 text-[10px] text-stone-600">[ ] root</span>
         )}
       </nav>
-      <main className="min-w-0 flex-1 bg-stone-50 p-4">
-        <p className="mb-4 text-sm text-stone-600">{preview.tagline}</p>
+      <main className="min-w-0 flex-1 bg-[#11100e] p-4">
+        <p className="mb-4 border-l-2 border-teal-500/40 pl-3 font-jit-mono text-[11px] leading-relaxed text-stone-500">
+          {preview.tagline}
+        </p>
         <ul className="grid gap-3 sm:grid-cols-2">
           {modules.map((m) => (
-            <li key={m.name} className="rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
-              <p className="font-semibold text-stone-900">{m.name}</p>
-              <p className="mt-1 text-sm text-stone-600">{m.desc}</p>
+            <li
+              key={m.name}
+              className="border border-stone-700/60 bg-[#0f0e0c] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+            >
+              <p className="font-jit-mono text-[11px] font-medium uppercase tracking-wide text-amber-200/85">{m.name}</p>
+              <p className="mt-2 font-jit-mono text-[11px] leading-relaxed text-stone-500">{m.desc}</p>
             </li>
           ))}
         </ul>
         {preview.codeSnippet ? (
-          <pre className="mt-4 overflow-x-auto rounded-lg border border-stone-200 bg-stone-900 p-3 text-[10px] leading-relaxed text-emerald-200">
+          <pre className="mt-4 overflow-x-auto border border-teal-900/40 bg-[#050807] p-3 font-jit-mono text-[10px] leading-relaxed text-teal-200/90">
             {preview.codeSnippet}
           </pre>
         ) : null}
@@ -289,11 +416,13 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
 
 function LegalDocPage({ text }: { text: string }) {
   return (
-    <article className="min-h-[360px] bg-white px-6 py-8 text-stone-900 md:px-12">
-      <h1 className="font-display text-xl font-bold text-stone-900 md:text-2xl">条款 / 法务 JIT</h1>
-      <p className="mt-2 text-xs text-stone-500">以下为模型根据你当前问题生成的说明稿（演示，不构成法律意见）。</p>
-      <div className="prose prose-stone mt-6 max-w-none whitespace-pre-wrap text-sm leading-relaxed md:text-base">
-        {text}
+    <article className="relative z-[1] min-h-[360px] px-5 py-8 text-stone-900 md:px-10">
+      <div className="mb-6 border-b border-dashed border-stone-400/50 pb-4">
+        <h1 className="font-jit-mono text-sm font-semibold uppercase tracking-[0.25em] text-teal-800">clause_jit</h1>
+        <p className="mt-2 font-jit-mono text-[11px] text-stone-600">// 单页说明 · 演示稿 · 不构成法律意见</p>
+      </div>
+      <div className="font-jit-mono text-[12px] leading-[1.75] tracking-tight text-stone-800 md:text-[13px]">
+        <div className="whitespace-pre-wrap">{text}</div>
       </div>
     </article>
   )
@@ -457,9 +586,16 @@ export function GlassesDemo() {
                     exit={{ opacity: 0, scale: 0.98 }}
                     className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center p-4"
                   >
-                    <div className="pointer-events-auto rounded-xl border border-white/15 bg-stone-950/85 px-8 py-6 text-center shadow-2xl backdrop-blur-xl">
-                      <p className="text-sm font-medium text-stone-100">正在理解你说的…</p>
-                      <p className="mt-1 text-xs text-stone-400">生成整页 JIT 界面（由模型解析意图）</p>
+                    <div className="jit-field pointer-events-auto max-w-md rounded-lg px-6 py-5 text-left shadow-2xl">
+                      <div className="jit-field-inner relative">
+                        <p className="font-jit-mono text-[10px] uppercase tracking-[0.35em] text-teal-400/80">trustfield</p>
+                        <p className="mt-2 font-jit-mono text-sm font-medium text-[#ebe8e2]">parsing_utterance…</p>
+                        <p className="mt-2 font-jit-mono text-[11px] text-stone-500">生成光学 JIT 栅格界面</p>
+                        <p className="mt-4 font-jit-mono text-xs text-amber-200/80">
+                          <span className="text-teal-500/70">{'>'}</span>{' '}
+                          <span className="jit-cursor-blink">▍</span>
+                        </p>
+                      </div>
                     </div>
                   </motion.div>
                 ) : null}
@@ -474,7 +610,8 @@ export function GlassesDemo() {
                   >
                     {panel.kind === 'legal' ? (
                       <JitWindowChrome
-                        title="法务 JIT · 文档视图"
+                        variant="paper"
+                        title="CLAUSE_VIEW · 法务 JIT"
                         subtitle="非对话模式 · 单页说明"
                         onClose={closePanel}
                         footer={null}
@@ -487,17 +624,17 @@ export function GlassesDemo() {
                         subtitle={panel.preview.tagline}
                         onClose={closePanel}
                         footer={
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span>{panel.preview.etaLine}</span>
-                            <span className={panel.source === 'ai' ? 'text-emerald-400/90' : 'text-amber-300/90'}>
-                              {panel.source === 'ai' ? '由模型理解意图生成' : '本地规则兜底生成'}
+                          <div className="flex flex-wrap items-center justify-between gap-2 text-stone-500">
+                            <span className="text-stone-500">{panel.preview.etaLine}</span>
+                            <span className={panel.source === 'ai' ? 'text-teal-400/90' : 'text-amber-400/90'}>
+                              {panel.source === 'ai' ? '[SRC: model]' : '[SRC: fallback]'}
                             </span>
                           </div>
                         }
                       >
-                        <div className="border-b border-stone-200 bg-amber-50/80 px-4 py-2 text-xs text-stone-700">
-                          <span className="font-semibold text-stone-900">意图复述：</span>
-                          {panel.preview.userIntentEcho}
+                        <div className="relative z-[1] border-b border-amber-500/15 bg-[#0f0e0c] px-4 py-2.5 font-jit-mono text-[11px] leading-relaxed text-stone-500">
+                          <span className="text-teal-500/70">intent_echo </span>
+                          <span className="text-stone-400">{panel.preview.userIntentEcho}</span>
                         </div>
                         <JitBody preview={panel.preview} />
                       </JitWindowChrome>
