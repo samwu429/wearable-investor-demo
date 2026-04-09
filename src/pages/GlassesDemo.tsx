@@ -9,28 +9,43 @@ import {
   type InstantMapUi,
 } from '../lib/mockInstantApp'
 
+const STREET_IMAGE = `${import.meta.env.BASE_URL}glasses-street.jpg`
+const STREET_PHOTO_LINK = 'https://unsplash.com/photos/fce0801e5785'
+
 function looksLikeLegalQuery(q: string) {
   return /第\s*\d+|条款|违约|合同|NDA|保密|终止|解释|风险|建议|附件|管辖/.test(q)
 }
 
+function HudCorners() {
+  const c = 'pointer-events-none absolute border-white/40'
+  return (
+    <div className="pointer-events-none absolute inset-3 md:inset-5" aria-hidden>
+      <div className={`${c} left-0 top-0 h-9 w-9 rounded-tl-lg border-l-2 border-t-2`} />
+      <div className={`${c} right-0 top-0 h-9 w-9 rounded-tr-lg border-r-2 border-t-2`} />
+      <div className={`${c} bottom-0 left-0 h-9 w-9 rounded-bl-lg border-b-2 border-l-2`} />
+      <div className={`${c} bottom-0 right-0 h-9 w-9 rounded-br-lg border-b-2 border-r-2`} />
+    </div>
+  )
+}
+
 function InlineMap({ data }: { data: InstantMapUi }) {
   return (
-    <div className="glasses-chat-card mt-2 overflow-hidden !p-0">
-      <div className="border-b border-stone-600 px-2 py-0.5 text-[10px] text-stone-300">
-        <span className="text-amber-200">地图</span> {data.headline}
+    <div className="mt-2 overflow-hidden rounded-md border border-white/15 bg-black/55 !p-0 shadow-lg backdrop-blur-md">
+      <div className="border-b border-white/10 px-2 py-1 text-[10px] text-white/90">
+        <span className="font-semibold text-teal-300">地图</span> {data.headline}
       </div>
       <svg className="h-20 w-full" viewBox="0 0 320 160" preserveAspectRatio="xMidYMid meet" aria-hidden>
         <path
           d="M 40 130 Q 120 24 280 40"
           fill="none"
-          stroke="rgba(110,231,183,0.85)"
+          stroke="rgba(110,231,183,0.9)"
           strokeWidth="2"
           strokeDasharray="5 4"
         />
-        <rect x="31" y="121" width="14" height="14" fill="none" stroke="rgba(153,246,228,0.9)" strokeWidth="2" />
+        <rect x="31" y="121" width="14" height="14" fill="none" stroke="rgba(153,246,228,0.95)" strokeWidth="2" />
         <rect x="273" y="31" width="14" height="14" fill="none" stroke="rgba(252,165,165,0.95)" strokeWidth="2" />
       </svg>
-      <div className="border-t border-stone-600 px-2 py-0.5 text-[9px] text-stone-400">
+      <div className="border-t border-white/10 px-2 py-1 text-[9px] text-white/75">
         {data.fromLabel} → {data.toLabel} · {data.travelMode} ~{data.minutes}min
       </div>
     </div>
@@ -39,14 +54,14 @@ function InlineMap({ data }: { data: InstantMapUi }) {
 
 function InlineChatSnippet({ data }: { data: InstantChatUi }) {
   return (
-    <div className="glasses-chat-card mt-2 !p-0">
-      <div className="border-b border-stone-600 px-2 py-0.5 text-[9px] text-stone-400">
-        与 <span className="text-stone-100">{data.peerName}</span> · {data.peerStatus}
+    <div className="mt-2 overflow-hidden rounded-md border border-white/15 bg-black/55 !p-0 shadow-lg backdrop-blur-md">
+      <div className="border-b border-white/10 px-2 py-1 text-[9px] text-white/70">
+        与 <span className="font-medium text-white">{data.peerName}</span> · {data.peerStatus}
       </div>
-      <div className="max-h-24 space-y-0.5 overflow-y-auto px-2 py-1">
+      <div className="max-h-24 space-y-0.5 overflow-y-auto px-2 py-1.5">
         {data.bubbles.slice(0, 5).map((b, i) => (
-          <p key={i} className="text-[9px] text-stone-200">
-            <span className={b.role === 'me' ? 'text-teal-300' : 'text-stone-500'}>
+          <p key={i} className="text-[9px] text-white/90">
+            <span className={b.role === 'me' ? 'font-medium text-teal-300' : 'text-white/50'}>
               {b.role === 'me' ? '你: ' : '对方: '}
             </span>
             {b.text}
@@ -60,9 +75,9 @@ function InlineChatSnippet({ data }: { data: InstantChatUi }) {
 function InlineScaffold({ preview }: { preview: InstantAppPreview }) {
   if (!preview.modules?.length) return null
   return (
-    <div className="glasses-chat-card mt-2 space-y-0.5 p-1.5">
-      <p className="text-[9px] text-amber-200">界面草稿</p>
-      <ul className="text-[9px] text-stone-300">
+    <div className="mt-2 space-y-1 rounded-md border border-white/15 bg-black/50 p-2 shadow-lg backdrop-blur-md">
+      <p className="text-[9px] font-semibold text-amber-200">界面草稿</p>
+      <ul className="text-[9px] text-white/80">
         {preview.modules.slice(0, 4).map((m) => (
           <li key={m.name}>
             · {m.name} — {m.desc}
@@ -75,12 +90,12 @@ function InlineScaffold({ preview }: { preview: InstantAppPreview }) {
 
 function InlinePreview({ preview }: { preview: InstantAppPreview }) {
   return (
-    <div className="mt-1.5 border-l-2 border-gold pl-2">
-      <p className="text-[10px] font-medium text-stone-700">{preview.productName}</p>
+    <div className="mt-2 border-l-2 border-teal-400/80 pl-2">
+      <p className="text-[11px] font-semibold text-stone-800">{preview.productName}</p>
       {preview.uiMode === 'chat' && preview.chatUi && <InlineChatSnippet data={preview.chatUi} />}
       {preview.uiMode === 'map' && preview.mapUi && <InlineMap data={preview.mapUi} />}
       {preview.uiMode === 'split' && preview.chatUi && preview.mapUi && (
-        <div className="grid gap-1.5 md:grid-cols-2">
+        <div className="grid gap-2 md:grid-cols-2">
           <InlineChatSnippet data={preview.chatUi} />
           <InlineMap data={preview.mapUi} />
         </div>
@@ -109,7 +124,7 @@ export function GlassesDemo() {
       id: 'welcome',
       role: 'assistant',
       text:
-        '人眼会把视野合成一片：这里也是一整块——上面是时间，下面是同一场对话。去 App 化就是一句话要啥出啥；需要聊天、地图或条款解释，都在这条线程里完成。',
+        '当前为城市街景透视 + HUD 叠显（网页模拟光学透视）。去 App 化：一句话生成聊天/地图/界面草稿，或问合同条款。投资人可看「真实世界 + 轻界面」的叙事张力。',
     },
   ])
 
@@ -148,7 +163,7 @@ export function GlassesDemo() {
         await new Promise((r) => setTimeout(r, 500))
         const preview = generateInstantAppPreview(q)
         patchMsg(aid, {
-          text: `按你的话排了一版草稿（仍在对话里，没有单独 App）。`,
+          text: `已按你的意图生成界面草稿（叠在视野里，无独立 App）。`,
           preview,
           loading: false,
         })
@@ -171,88 +186,120 @@ export function GlassesDemo() {
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-[min(100%,1680px)] flex-1 flex-col px-3 pb-4 pt-3 md:px-8 md:pb-6 md:pt-4">
       <p className="mb-2 shrink-0 text-xs text-mist md:mb-3 md:text-sm">
-        Part 2 · 单片视野：时间与对话同一视场；整块区域铺满导航与页脚之间的空间，模拟宽画幅眼镜。
+        Part 2 · 光学透视示意：实景街景 + 磨砂 HUD。整块区域铺满导航与页脚之间，便于投屏路演。
       </p>
 
       <div className="glasses-frame-bezel flex min-h-0 flex-1 flex-col p-2 md:p-3">
-        <div className="glasses-lens-field flex min-h-0 flex-1 flex-col overflow-hidden">
-          {/* 同一视场：说明 + 时间 */}
-          <header className="flex shrink-0 flex-wrap items-end justify-between gap-4 border-b border-stone-300/80 bg-white/50 px-4 py-3 md:px-6 md:py-4">
-            <div>
-              <p className="text-xs font-medium text-mist md:text-sm">眼镜 HUD · 演示</p>
-              <p className="text-sm text-ink md:text-base">一句话 → 草稿或条款解释</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[11px] text-mist md:text-xs">时间</p>
-              <p className="font-display text-3xl font-semibold tabular-nums text-ink md:text-4xl lg:text-5xl">{timeStr}</p>
-            </div>
-          </header>
-
+        {/* 镜片：街景底 + 叠层 UI */}
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_8px_40px_rgba(0,0,0,0.2)] ring-1 ring-black/10">
+          {/* 实景层 */}
           <div
-            ref={listRef}
-            className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3 md:space-y-4 md:px-6 md:py-4"
-            role="log"
-            aria-label="对话记录"
-          >
-            <AnimatePresence initial={false}>
-              {messages.map((m) => (
-                <motion.div
-                  key={m.id}
-                  layout
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={
-                      m.role === 'user'
-                        ? 'max-w-[min(92%,720px)] rounded-md border border-stone-700 bg-stone-800 px-3 py-2 text-sm text-stone-50 md:px-4 md:py-2.5 md:text-base'
-                        : 'max-w-[min(96%,min(1400px,92vw))] rounded-md border border-stone-300 bg-[#fffcf7] px-3 py-2 text-sm leading-relaxed text-ink md:px-5 md:py-3 md:text-base'
-                    }
-                  >
-                    {m.loading ? (
-                      <span className="text-stone-400">…</span>
-                    ) : (
-                      <>
-                        <p className="whitespace-pre-wrap">{m.text}</p>
-                        {m.preview && <InlinePreview preview={m.preview} />}
-                      </>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+            className="absolute inset-0 scale-[1.03] bg-cover bg-[center_35%]"
+            style={{ backgroundImage: `url(${STREET_IMAGE})` }}
+            role="img"
+            aria-label="模拟透过镜片看到的街景（静态照片）"
+          />
+          {/* 压暗与下沿易读区：模拟真实 HUD 在明亮环境下的对比 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/65" aria-hidden />
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.2)_100%)]"
+            aria-hidden
+          />
 
-          <footer className="shrink-0 border-t border-stone-300/80 bg-white/40 px-4 py-3 md:px-6 md:py-4">
-            <form
-              className="flex w-full flex-col gap-2 sm:flex-row sm:items-stretch"
-              onSubmit={(e) => {
-                e.preventDefault()
-                void send()
-              }}
+          <HudCorners />
+
+          <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+            <header className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-white/15 bg-black/25 px-4 py-3 backdrop-blur-2xl md:px-6 md:py-4">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">JIT · 透视 HUD</p>
+                <p className="mt-0.5 text-sm font-medium text-white drop-shadow-md md:text-base">一句话 → 草稿 / 条款</p>
+              </div>
+              <div className="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-right backdrop-blur-md">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-white/50">时间</p>
+                <p className="font-display text-3xl font-bold tabular-nums tracking-tight text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+                  {timeStr}
+                </p>
+              </div>
+            </header>
+
+            <div
+              ref={listRef}
+              className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4 md:space-y-4 md:px-6 md:py-5"
+              role="log"
+              aria-label="对话记录"
             >
-              <label className="sr-only" htmlFor="glasses-input">
-                一句话需求
-              </label>
-              <input
-                id="glasses-input"
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                disabled={busy}
-                placeholder="一句话：发消息、导航、做工具、问条款…"
-                className="min-h-[48px] w-full flex-1 rounded-md border border-stone-400 bg-white px-4 py-2.5 text-base text-ink placeholder:text-stone-500 outline-none focus:border-gold focus:ring-1 focus:ring-gold/40 disabled:opacity-60 md:min-h-[52px] md:text-lg"
-              />
-              <button
-                type="submit"
-                disabled={busy || input.trim().length < 2}
-                className="shrink-0 rounded-md border border-gold-dim bg-gold px-8 py-2.5 text-base font-semibold text-white transition hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-50 sm:px-10"
+              <AnimatePresence initial={false}>
+                {messages.map((m) => (
+                  <motion.div
+                    key={m.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={
+                        m.role === 'user'
+                          ? 'max-w-[min(92%,720px)] rounded-2xl border border-white/15 bg-teal-950/80 px-4 py-2.5 text-sm text-white shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl md:text-base'
+                          : 'max-w-[min(96%,min(1400px,92vw))] rounded-2xl border border-white/40 bg-white/90 px-4 py-3 text-sm leading-relaxed text-stone-900 shadow-[0_12px_48px_rgba(0,0,0,0.25)] backdrop-blur-xl md:px-5 md:py-3.5 md:text-base'
+                      }
+                    >
+                      {m.loading ? (
+                        <span className="text-white/50">…</span>
+                      ) : (
+                        <>
+                          <p className="whitespace-pre-wrap">{m.text}</p>
+                          {m.preview && <InlinePreview preview={m.preview} />}
+                        </>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            <footer className="shrink-0 border-t border-white/15 bg-black/35 px-4 py-3 backdrop-blur-2xl md:px-6 md:py-4">
+              <form
+                className="flex w-full flex-col gap-2 sm:flex-row sm:items-stretch"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  void send()
+                }}
               >
-                {busy ? '处理中' : '发送'}
-              </button>
-            </form>
-          </footer>
+                <label className="sr-only" htmlFor="glasses-input">
+                  一句话需求
+                </label>
+                <input
+                  id="glasses-input"
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={busy}
+                  placeholder="一句话：发消息、导航、做工具、问条款…"
+                  className="min-h-[48px] w-full flex-1 rounded-xl border border-white/25 bg-white/15 px-4 py-2.5 text-base text-white placeholder:text-white/45 outline-none ring-offset-2 ring-offset-transparent backdrop-blur-md focus:border-teal-400/70 focus:ring-2 focus:ring-teal-400/40 disabled:opacity-50 md:min-h-[52px] md:text-lg"
+                />
+                <button
+                  type="submit"
+                  disabled={busy || input.trim().length < 2}
+                  className="shrink-0 rounded-xl bg-teal-500 px-8 py-2.5 text-base font-semibold text-white shadow-lg shadow-teal-900/30 transition hover:bg-teal-400 disabled:cursor-not-allowed disabled:opacity-50 sm:px-10"
+                >
+                  {busy ? '处理中' : '发送'}
+                </button>
+              </form>
+              <p className="mt-2 text-right text-[10px] text-white/35">
+                街景照片{' '}
+                <a
+                  href={STREET_PHOTO_LINK}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="underline decoration-white/30 underline-offset-2 hover:text-white/60"
+                >
+                  Unsplash
+                </a>
+                ，仅演示背景
+              </p>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
