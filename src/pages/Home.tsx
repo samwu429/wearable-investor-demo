@@ -77,7 +77,7 @@ export function Home() {
         <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">演示怎么讲（30 秒版）</h2>
         <ol className="mt-6 list-decimal space-y-3 pl-5 text-mist marker:text-gold">
           <li>先打开「手表演示」，走一遍 PEH 握手：光刺激 → 瞳孔 → 心血管相位 → SE 签名。</li>
-          <li>再打开「眼镜演示」，看 JIT 合同浮窗与信任圈：谁被认证、谁是未知。</li>
+          <li>再打开「眼镜演示」：只有时间与一句话对话，界面由对话即时生成——去 App 化叙事。</li>
           <li>强调：这是无硬件的交互样机，用于对齐叙事；工程实现与威胁模型另附材料。</li>
         </ol>
       </motion.section>
