@@ -44,13 +44,15 @@ body {
     0 12px 36px rgba(15, 23, 42, 0.06);
 }
 
+/* 镜架：宽条、大圆角，接近护目镜/镜框轮廓 */
 .glasses-frame-bezel {
-  border-radius: 10px;
-  background: linear-gradient(148deg, #f8fafc 0%, #ffffff 38%, #e0f2fe 75%, #bae6fd 100%);
+  border-radius: 28px;
+  background: linear-gradient(168deg, #f1f5f9 0%, #ffffff 35%, #e0f2fe 70%, #cbd5e1 100%);
   box-shadow:
-    inset 0 1px 3px rgba(255, 255, 255, 1),
-    0 0 0 1px rgba(14, 165, 233, 0.2),
-    0 18px 44px rgba(15, 23, 42, 0.08);
+    inset 0 2px 6px rgba(255, 255, 255, 0.95),
+    inset 0 -4px 12px rgba(15, 23, 42, 0.04),
+    0 0 0 1px rgba(148, 163, 184, 0.35),
+    0 24px 48px rgba(15, 23, 42, 0.1);
 }
 
 /* 智能眼镜镜片：更透，便于看路；仅极轻 tint */
