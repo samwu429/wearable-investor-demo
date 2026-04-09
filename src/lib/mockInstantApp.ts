@@ -71,6 +71,8 @@ function extractPeer(intent: string): string {
 function extractUserMessage(intent: string): string {
   const food = intent.match(/我想吃([^，。！？]+)/)
   if (food?.[1]) return `我想吃${food[1].trim()}`
+  const tell = intent.match(/告诉(?:给)?[^，。！？\s]{1,12}[,，]?\s*(.+)$/)
+  if (tell?.[1] && tell[1].length > 1 && tell[1].length < 120) return tell[1].trim()
   const tail = intent.match(/(?:说|发|聊)(?:消息)?[，：:]?\s*(.+)$/)
   if (tail?.[1] && tail[1].length > 1 && tail[1].length < 80) return tail[1].trim()
   if (/我想/.test(intent)) {
@@ -80,11 +82,9 @@ function extractUserMessage(intent: string): string {
   return intent.length > 60 ? `${intent.slice(0, 57)}…` : intent
 }
 
-function replyForChat(intent: string, peer: string): string {
-  if (/糖醋|吃|饭|菜/.test(intent) && /妈妈|妈/.test(peer)) return '收到啦，晚上给你做～路上注意安全 ❤'
-  if (/图书馆|到了|在哪/.test(intent)) return '好，到了跟我说一声。'
-  return `好的，${peer}已看到你的消息（演示回复）`
-}
+/** 离线降级：不编造像真回复的对话，避免误导（成功路径由模型生成 bubbles） */
+const OFFLINE_THEM_PLACEHOLDER =
+  '【离线示意】未连接云端模型，无法生成对方回复。仅根据你的输入展示了发送侧文案。'
 
 function travelModeFromIntent(intent: string): InstantMapUi['travelMode'] {
   if (/骑|单车/.test(intent)) return '骑行'
@@ -96,19 +96,18 @@ function travelModeFromIntent(intent: string): InstantMapUi['travelMode'] {
 function buildChatPreview(intent: string): InstantAppPreview {
   const peer = extractPeer(intent)
   const line = extractUserMessage(intent)
-  const reply = replyForChat(intent, peer)
   return {
     uiMode: 'chat',
     productName: `私信 · ${peer}`,
-    tagline: '根据口述即时渲染的聊天界面（演示）',
+    tagline: '离线布局预览 · 对方话术需由云端模型生成',
     userIntentEcho: intent,
-    etaLine: '以下为拟真 UI 草图，无真实消息发送',
+    etaLine: '无真实发送；对方气泡为占位，非 AI 生成',
     chatUi: {
       peerName: peer,
-      peerStatus: '在线 · 已验证联系人',
+      peerStatus: '离线预览 · 非实时会话',
       bubbles: [
         { role: 'me', text: line },
-        { role: 'them', text: reply },
+        { role: 'them', text: OFFLINE_THEM_PLACEHOLDER },
       ],
     },
   }
