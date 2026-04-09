@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto'
 import { config } from './lib/config.js'
 import { healthRoutes } from './routes/health.js'
 import { aiRoutes } from './routes/ai.js'
+import { jitUiRoutes } from './routes/jitUi.js'
 
 const app = Fastify({
   logger: true,
@@ -49,5 +50,6 @@ app.setErrorHandler((error, request, reply) => {
 
 await app.register(healthRoutes)
 await app.register(aiRoutes)
+await app.register(jitUiRoutes)
 
 await app.listen({ port: config.PORT, host: '0.0.0.0' })

@@ -4,6 +4,8 @@ import { PublicError } from './errors.js'
 type GenerateTextInput = {
   prompt: string
   systemPrompt?: string
+  /** 尽量让模型只输出可解析的 JSON（OpenAI: response_format；Gemini: responseMimeType） */
+  jsonObject?: boolean
 }
 
 export type GenerateTextOutput = {
@@ -33,7 +35,8 @@ class OpenAIProvider implements AIProvider {
           { role: 'system', content: input.systemPrompt ?? defaultSystemPrompt },
           { role: 'user', content: input.prompt },
         ],
-        temperature: 0.4,
+        temperature: 0.35,
+        ...(input.jsonObject ? { response_format: { type: 'json_object' as const } } : {}),
       }),
     })
 
@@ -105,7 +108,8 @@ class GeminiProvider implements AIProvider {
           },
         ],
         generationConfig: {
-          temperature: 0.4,
+          temperature: 0.35,
+          ...(input.jsonObject ? { responseMimeType: 'application/json' } : {}),
         },
       }),
     })
