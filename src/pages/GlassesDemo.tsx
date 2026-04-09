@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ApiError, API_BASE_URL } from '../lib/apiClient'
+import { generateInsight } from '../lib/ai'
 
 type Person = { id: string; name: string; verified: boolean; x: string; y: string }
 
@@ -13,6 +15,11 @@ export function GlassesDemo() {
   const [jitVisible, setJitVisible] = useState(true)
   const [highlight, setHighlight] = useState(false)
   const [signed, setSigned] = useState(false)
+  const [prompt, setPrompt] = useState('请用投资人能听懂的话，解释第7.2条延期违约条款的风险与建议。')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiResult, setAiResult] = useState('')
+  const [aiMeta, setAiMeta] = useState('')
+  const [aiError, setAiError] = useState('')
 
   const pupilPath = useMemo(() => {
     const pts: string[] = []
@@ -157,6 +164,64 @@ export function GlassesDemo() {
 
         {/* Side panel */}
         <div className="space-y-6">
+          <div className="rounded-2xl border border-white/10 bg-night/70 p-4">
+            <p className="text-xs font-semibold text-gold">真实 AI 解释（Render API）</p>
+            <p className="mt-2 text-[11px] text-mist">
+              输入需要解释的合同/风险语句，调用后端 API 获取实时说明。前端不保存任何 AI 密钥。
+            </p>
+            <textarea
+              value={prompt}
+              onChange={(event) => setPrompt(event.target.value)}
+              rows={4}
+              className="mt-3 w-full rounded-xl border border-white/10 bg-void/70 px-3 py-2 text-xs text-white outline-none ring-gold/50 placeholder:text-mist/60 focus:ring-1"
+              placeholder="输入你希望 AI 解释的条款"
+            />
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                disabled={aiLoading || prompt.trim().length < 8}
+                onClick={async () => {
+                  setAiLoading(true)
+                  setAiError('')
+                  try {
+                    const result = await generateInsight({ prompt: prompt.trim() })
+                    setAiResult(result.text)
+                    setAiMeta(`${result.provider} · ${result.model}`)
+                  } catch (error) {
+                    if (error instanceof ApiError) {
+                      setAiError(error.message)
+                    } else {
+                      setAiError('请求失败，请稍后重试。')
+                    }
+                  } finally {
+                    setAiLoading(false)
+                  }
+                }}
+                className="rounded-full bg-gold px-4 py-2 text-xs font-semibold text-night hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {aiLoading ? '解释中...' : '实时解释'}
+              </button>
+              <button
+                type="button"
+                disabled={!aiResult}
+                onClick={async () => {
+                  await navigator.clipboard.writeText(aiResult)
+                }}
+                className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white ring-1 ring-white/15 hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                复制结果
+              </button>
+            </div>
+            <p className="mt-2 text-[11px] text-mist">API: {API_BASE_URL}/v1/ai/generate</p>
+            {aiMeta && <p className="mt-1 text-[11px] text-mint">模型: {aiMeta}</p>}
+            {aiError && <p className="mt-2 rounded-lg bg-rose/10 p-2 text-xs text-rose">{aiError}</p>}
+            {aiResult && (
+              <div className="mt-3 rounded-xl border border-white/10 bg-void/80 p-3 text-xs leading-relaxed text-white">
+                {aiResult}
+              </div>
+            )}
+          </div>
+
           <div className="rounded-2xl border border-white/10 bg-night/70 p-4">
             <p className="text-xs font-semibold text-gold">瞳孔采样示意</p>
             <svg viewBox="0 0 280 56" className="mt-2 h-16 w-full" aria-hidden>

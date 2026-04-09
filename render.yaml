@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: wearable-investor-demo-api
+    runtime: node
+    plan: starter
+    rootDir: server
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: AI_PROVIDER
+        value: gemini
+      - key: AI_MODEL
+        value: gemini-1.5-flash
+      - key: ALLOWED_ORIGINS
+        value: https://samwu429.github.io
+      - key: API_RATE_LIMIT_PER_MIN
+        value: 30
+      - key: AI_API_KEY
+        sync: false

@@ -1,6 +1,9 @@
 # Wearable Trust Field — 投资人线上演示
 
-无硬件的 **手表 + 眼镜** 双 Part 交互演示，用于向投资人同步叙事与产品气质。技术实现为纯前端静态站点，可托管在 **GitHub Pages**。
+无硬件的 **手表 + 眼镜** 双 Part 交互演示，用于向投资人同步叙事与产品气质。当前仓库已升级为：
+
+- 前端静态站点（GitHub Pages）
+- 后端 AI API（Render）
 
 ## 网页一片白？
 
@@ -15,7 +18,7 @@
 
 若你改名了仓库，请同步修改 `vite.config.ts` 里的 `repo` 常量，并在 GitHub Actions 里使用 `GH_PAGES=1` 构建。
 
-## 本地运行
+## 本地运行（前端）
 
 ```bash
 npm install
@@ -38,11 +41,49 @@ $env:GH_PAGES='1'; npm run build
 GH_PAGES=1 npm run build
 ```
 
+## 后端 API（Render / 本地）
+
+后端代码在 `server/`，提供健康检查和 AI 文本生成接口（密钥仅存在服务端）。
+
+```bash
+cd server
+npm install
+cp .env.example .env
+npm run dev
+```
+
+默认本地地址：`http://localhost:3001`
+
+### 前端连接后端
+
+前端读取 `VITE_API_BASE_URL`：
+
+```bash
+# 根目录 .env.local
+VITE_API_BASE_URL=http://localhost:3001
+```
+
+若未设置：
+- 本地开发默认走 `http://localhost:3001`
+- GitHub Pages 默认走 `https://wearable-investor-demo-api.onrender.com`
+
+## Render 部署（后端）
+
+仓库已包含 `render.yaml`（Blueprint）。在 Render 中连接该 GitHub 仓库后可直接创建服务，需手动填入：
+
+- `AI_API_KEY`（必填，勿提交到仓库）
+- 如需可修改 `ALLOWED_ORIGINS`、`AI_PROVIDER`、`AI_MODEL`
+
+建议把前端仓库变量 `VITE_API_BASE_URL` 设置为你的 Render API 地址，以便 GitHub Actions 构建时注入。
+
 ## 项目结构
 
 - `/` 概览与叙事入口  
 - `/watch` 手表演示：PEH 握手步骤、Hub/SLM/SE 状态、事件日志  
 - `/glasses` 眼镜演示：JIT 合同浮窗、信任圈标识、瞳孔波形示意  
+- `/server` Fastify API：`/health` 与 `/v1/ai/generate`
+
+接口规范见 [API.md](./API.md)。
 
 ## 安全说明（重要）
 

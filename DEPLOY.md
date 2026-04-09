@@ -78,3 +78,18 @@ const repo = '你的仓库名'
 ```
 
 推送后等 Actions 再部署一次。
+
+---
+
+## 真实 AI API（Render）接入检查
+
+若你已启用后端服务，还需确认前端构建时注入了 API 地址：
+
+1. GitHub 仓库 → **Settings → Secrets and variables → Actions → Variables**
+2. 新增变量：`VITE_API_BASE_URL`
+3. 值设为你的 Render 地址（例如 `https://wearable-investor-demo-api.onrender.com`）
+4. 推送任意提交触发重新部署
+
+发布后在浏览器 Network 里应能看到：
+
+- `POST https://...onrender.com/v1/ai/generate`（200 或明确业务错误）
