@@ -650,7 +650,7 @@ export function GlassesDemo() {
                           <div className="flex flex-wrap items-center justify-between gap-2 text-stone-500">
                             <span className="text-stone-500">{panel.preview.etaLine}</span>
                             <span className={panel.source === 'ai' ? 'text-teal-400/90' : 'text-amber-400/90'}>
-                              {panel.source === 'ai' ? '[SRC: model]' : '[SRC: fallback]'}
+                              {panel.source === 'ai' ? t('glasses.jitSourceCloud') : t('glasses.jitSourceLocal')}
                             </span>
                           </div>
                         }

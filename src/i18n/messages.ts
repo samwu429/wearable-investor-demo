@@ -77,6 +77,8 @@ export type Messages = {
     toastFallbackWithErr: string
     toastFallback: string
     toastNetwork: string
+    jitSourceCloud: string
+    jitSourceLocal: string
     legalPromptPad: string
     closeWindow: string
     mapBadge: string
@@ -196,9 +198,11 @@ const zh: Messages = {
     photoCreditBg: '背景',
     photoCreditScene: '车把第一人称公路',
     photoCreditLink: 'Unsplash（Will Truettner）',
-    toastFallbackWithErr: '已用本地规则生成界面（{msg}）',
-    toastFallback: '已用本地规则生成界面',
+    toastFallbackWithErr: '已请求云端 API，本次未成功返回；以下为本地示意界面（{msg}）',
+    toastFallback: '已请求云端 API，本次未成功返回；已展示本地示意界面',
     toastNetwork: '请求失败，请稍后重试。',
+    jitSourceCloud: '布局来源 · 云端 API',
+    jitSourceLocal: '布局来源 · 本地示意（云端本次未成功）',
     legalPromptPad: '请结合上述问题给出简要要点与风险提示（演示）。',
     closeWindow: '关闭窗口',
     mapBadge: 'MAP ',
@@ -326,9 +330,11 @@ const en: Messages = {
     photoCreditBg: 'Background',
     photoCreditScene: 'Handlebar POV on the road (photo)',
     photoCreditLink: 'Unsplash (Will Truettner)',
-    toastFallbackWithErr: 'Rendered with local rules ({msg})',
-    toastFallback: 'Rendered with local rules',
+    toastFallbackWithErr: 'Cloud API was called but did not succeed; showing local demo layout ({msg})',
+    toastFallback: 'Cloud API was called but did not succeed; showing local demo layout',
     toastNetwork: 'Request failed. Please retry.',
+    jitSourceCloud: 'Source · cloud API',
+    jitSourceLocal: 'Source · local demo (cloud did not succeed this time)',
     legalPromptPad: 'Please answer with a brief summary and risk notes (demo).',
     closeWindow: 'Close window',
     mapBadge: 'MAP ',
