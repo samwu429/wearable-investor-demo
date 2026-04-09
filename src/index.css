@@ -67,11 +67,11 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Consolas', monospace;
 }
 
-/* 默认 HUD：≈92% 实底 + 轻模糊，透光约 8% 保留一点点虚幻感 */
+/* 默认 HUD：磨砂玻璃 — 透光看清路面，靠 blur + 薄色底保可读 */
 .jit-field {
-  --jit-void: rgba(12, 11, 10, 0.92);
-  --jit-surface: rgba(17, 16, 14, 0.92);
-  --jit-elevated: rgba(26, 24, 21, 0.92);
+  --jit-void: rgba(12, 11, 10, 0.5);
+  --jit-surface: rgba(17, 16, 14, 0.45);
+  --jit-elevated: rgba(26, 24, 21, 0.52);
   --jit-rail: #24211c;
   --jit-line: rgba(251, 191, 36, 0.28);
   --jit-line-soft: rgba(245, 245, 244, 0.1);
@@ -82,8 +82,8 @@ body {
   position: relative;
   color: var(--jit-text);
   background: var(--jit-void);
-  backdrop-filter: blur(8px) saturate(1.06);
-  -webkit-backdrop-filter: blur(8px) saturate(1.06);
+  backdrop-filter: blur(20px) saturate(1.14);
+  -webkit-backdrop-filter: blur(20px) saturate(1.14);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
@@ -104,7 +104,7 @@ body {
     rgba(255, 255, 255, 0.014) 2px,
     rgba(255, 255, 255, 0.014) 3px
   );
-  opacity: 0.35;
+  opacity: 0.22;
   z-index: 1;
 }
 
@@ -114,8 +114,8 @@ body {
 }
 
 .jit-field--paper {
-  --jit-void: rgba(243, 240, 232, 0.96);
-  --jit-surface: rgba(250, 248, 243, 0.94);
+  --jit-void: rgba(243, 240, 232, 0.88);
+  --jit-surface: rgba(250, 248, 243, 0.82);
   --jit-elevated: #ffffff;
   --jit-rail: #e7e2d9;
   --jit-line: rgba(180, 83, 9, 0.35);
@@ -125,8 +125,8 @@ body {
   --jit-phosphor: #0d9488;
   --jit-signal: #b45309;
   background: var(--jit-void);
-  backdrop-filter: blur(8px) saturate(1.04);
-  -webkit-backdrop-filter: blur(8px) saturate(1.04);
+  backdrop-filter: blur(16px) saturate(1.08);
+  -webkit-backdrop-filter: blur(16px) saturate(1.08);
   box-shadow:
     0 0 0 1px var(--jit-line-soft),
     inset 0 1px 0 rgba(255, 255, 255, 0.7),
