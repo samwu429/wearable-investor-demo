@@ -53,6 +53,15 @@ body {
     0 2px 8px rgba(28, 25, 23, 0.07);
 }
 
+/* 行人路上透视演示：略暖的镜框，和日光街景 HUD 成套 */
+.glasses-frame-bezel--walk {
+  background: linear-gradient(165deg, #e0dbd3 0%, #cfc7bb 55%, #c4bbb0 100%);
+  border-color: #b5ab9f;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 3px 14px rgba(28, 25, 23, 0.1);
+}
+
 /* 单片视野：略透，仍以浅色为主，和路面区分开即可 */
 .glasses-lens-field {
   border-radius: 10px;
