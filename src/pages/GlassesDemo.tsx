@@ -101,16 +101,19 @@ function JitWindowChrome({
   const shell = variant === 'paper' ? 'jit-field jit-field--paper rounded-lg' : 'jit-field rounded-lg'
   return (
     <motion.div
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
       initial={{ opacity: 0, scale: 0.94, y: 16 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96, y: 12 }}
       transition={{ type: 'spring', stiffness: 380, damping: 28 }}
-      className={`flex max-h-[min(88vh,920px)] w-[min(96vw,1100px)] flex-col overflow-hidden ${shell}`}
+      className="flex max-h-[min(88vh,920px)] w-[min(96vw,1100px)] min-h-0 flex-col rounded-lg"
     >
-      <div className="jit-field-inner flex max-h-full min-h-0 flex-col">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className={`${shell} flex max-h-full min-h-0 w-full flex-1 flex-col overflow-hidden`}
+      >
+        <div className="jit-field-inner flex max-h-full min-h-0 flex-col">
         <div
           className={
             variant === 'paper'
@@ -196,6 +199,7 @@ function JitWindowChrome({
             {t('glasses.windowFooterClause')}
           </div>
         ) : null}
+        </div>
       </div>
     </motion.div>
   )
@@ -555,7 +559,7 @@ export function GlassesDemo() {
           <HudCorners />
 
           <div className="relative z-10 flex min-h-0 flex-1 flex-col">
-            <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 bg-stone-950/42 px-4 py-2.5 backdrop-blur-2xl md:px-6 md:py-3">
+            <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 bg-stone-950/32 px-4 py-2.5 backdrop-blur-md md:px-6 md:py-3">
               <div className="min-w-0 pt-0.5">
                 <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-amber-100/55">{t('glasses.hudEyebrow')}</p>
                 <p className="mt-1 truncate text-sm font-medium tracking-tight text-stone-50 drop-shadow-sm md:text-base">
@@ -663,7 +667,7 @@ export function GlassesDemo() {
               </AnimatePresence>
             </div>
 
-            <footer className="relative z-40 shrink-0 border-t border-white/10 bg-gradient-to-t from-stone-950/62 via-stone-950/40 to-stone-950/28 px-4 py-3 backdrop-blur-2xl md:px-6 md:py-4">
+            <footer className="relative z-40 shrink-0 border-t border-white/10 bg-gradient-to-t from-stone-950/55 via-stone-950/32 to-stone-950/18 px-4 py-3 backdrop-blur-lg md:px-6 md:py-4">
               {toast ? (
                 <p className="mb-2 text-center text-[11px] text-amber-200/90" role="status">
                   {toast}

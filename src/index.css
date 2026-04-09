@@ -80,6 +80,7 @@ body {
   --jit-phosphor: #5eead4;
   --jit-signal: #fbbf24;
   position: relative;
+  isolation: isolate;
   color: var(--jit-text);
   background: var(--jit-void);
   backdrop-filter: blur(20px) saturate(1.14);
