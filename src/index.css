@@ -4,16 +4,16 @@
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 
-  /* 天蓝 / 浅青主色（gold 仍作品牌主色别名，偏天蓝） */
-  --color-void: #e8f6fc;
+  /* 天蓝主色 + 更深正文色（站外对比） */
+  --color-void: #e0f2fe;
   --color-night: #ffffff;
-  --color-slate: #bae6fd;
-  --color-mist: #64748b;
-  --color-gold: #0ea5e9;
-  --color-gold-dim: #0284c7;
+  --color-slate: #7dd3fc;
+  --color-mist: #475569;
+  --color-gold: #0284c7;
+  --color-gold-dim: #0369a1;
   --color-mint: #059669;
   --color-rose: #e11d48;
-  --color-ink: #0c4a6e;
+  --color-ink: #0f172a;
 }
 
 html {
@@ -25,9 +25,9 @@ body {
   min-height: 100svh;
   font-family: var(--font-sans);
   background:
-    radial-gradient(1000px 520px at 8% -8%, rgba(125, 211, 252, 0.35), transparent 58%),
-    radial-gradient(800px 480px at 96% 12%, rgba(224, 242, 254, 0.9), transparent 45%),
-    linear-gradient(168deg, #f8fcff 0%, #e0f4fc 42%, #cff4fe 100%);
+    radial-gradient(900px 480px at 6% 0%, rgba(125, 211, 252, 0.45), transparent 55%),
+    radial-gradient(700px 400px at 100% 8%, rgba(224, 242, 254, 1), transparent 42%),
+    linear-gradient(168deg, #ffffff 0%, #e8f6fc 38%, #dbeafe 100%);
   color: var(--color-ink);
 }
 
@@ -35,43 +35,41 @@ body {
   min-height: 100svh;
 }
 
-/* 全站略方：金属浅面 */
 .metallic-surface {
   border-radius: 4px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 255, 0.96) 100%);
-  border: 1px solid rgba(186, 230, 253, 0.95);
+  background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+  border: 1px solid rgba(14, 165, 233, 0.22);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 -1px 0 rgba(14, 165, 233, 0.05),
-    0 1px 0 rgba(125, 211, 252, 0.5),
-    0 10px 32px rgba(14, 165, 233, 0.07);
+    0 1px 0 rgba(148, 163, 184, 0.2),
+    0 12px 36px rgba(15, 23, 42, 0.06);
 }
 
-/* 眼镜外框：略方、浅天蓝金属边 */
 .glasses-frame-bezel {
   border-radius: 10px;
-  background: linear-gradient(148deg, #f0f9ff 0%, #ffffff 40%, #e0f2fe 72%, #dbeafe 100%);
+  background: linear-gradient(148deg, #f8fafc 0%, #ffffff 38%, #e0f2fe 75%, #bae6fd 100%);
   box-shadow:
     inset 0 1px 3px rgba(255, 255, 255, 1),
-    inset 0 -2px 6px rgba(14, 165, 233, 0.06),
-    0 0 0 1px rgba(125, 211, 252, 0.55),
-    0 16px 40px rgba(56, 189, 248, 0.12);
+    0 0 0 1px rgba(14, 165, 233, 0.2),
+    0 18px 44px rgba(15, 23, 42, 0.08);
 }
 
-/* 镜片：偏透，方便「看路」；浅色天蓝底 */
+/* 镜片：略透但比文字层浅，和 TUI 暗面板拉开层次 */
 .glasses-lens-field {
   border-radius: 6px;
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.5) 0%, rgba(224, 242, 254, 0.45) 48%, rgba(186, 230, 253, 0.35) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -6px 20px rgba(14, 165, 233, 0.05);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(224, 242, 254, 0.55) 50%,
+    rgba(186, 230, 253, 0.42) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-/* 镜片内 TUI：等宽、线框、半透明暗底，叠在真实世界上可读 */
 .glasses-tui {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', 'Sarasa Mono SC', monospace;
   font-size: 0.6875rem;
-  line-height: 1.4;
+  line-height: 1.45;
   letter-spacing: 0.02em;
 }
 
@@ -81,17 +79,20 @@ body {
   }
 }
 
+/* TUI：不透得过浅，字用近白 + 青边，避免与镜片糊成一片 */
 .glasses-tui-panel {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', 'Sarasa Mono SC', monospace;
   font-size: 0.6875rem;
-  line-height: 1.4;
+  line-height: 1.45;
   letter-spacing: 0.02em;
-  border-radius: 2px;
-  border: 1px solid rgba(56, 189, 248, 0.5);
-  background: rgba(15, 23, 42, 0.48);
-  color: #e0f2fe;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.2);
+  border-radius: 3px;
+  border: 1px solid rgba(103, 232, 249, 0.65);
+  background: rgba(15, 23, 42, 0.88);
+  color: #f1f5f9;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.25);
 }
 
 @media (min-width: 768px) {
