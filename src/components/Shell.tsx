@@ -32,7 +32,7 @@ export function Shell() {
           </nav>
         </div>
       </header>
-      <main className="flex-1">
+      <main className="flex min-h-0 flex-1 flex-col">
         <Outlet />
       </main>
       <footer className="border-t border-stone-400/40 bg-[#ebe8e2] py-6 text-center text-xs text-mist">
