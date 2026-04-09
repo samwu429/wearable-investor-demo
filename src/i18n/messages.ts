@@ -173,9 +173,9 @@ const zh: Messages = {
   },
   glasses: {
     intro:
-      'Part 2 · 行人视角 + JIT 整页弹出：不保留对话记录；你说一句，系统理解意图后弹出「像电脑窗口一样」的界面。聊天类意图呈现的是即时聊天 App 画面，不是和助理来回聊。',
-    streetAria: '模拟走路时透过镜片看到的前方街景（行人眼高、静态照片）',
-    hudEyebrow: 'on foot · jit',
+      'Part 2 · 第一人称骑行视角 + JIT 整页弹出：背景为车把/公路前方的主观镜头（示意），带极慢漂移模拟在动。不保留对话记录；你说一句，系统理解意图后弹出整页界面。聊天类意图呈现的是即时聊天 App 画面，不是和助理来回聊。',
+    streetAria: '模拟透过镜片看到的第一人称骑行视野：车把、手臂与前方路面（照片示意，非实时画面）',
+    hudEyebrow: 'fpv · jit',
     hudTitle: '口述一句 → 整页界面',
     localTime: '本地时间',
     backdropClose: '点击关闭当前界面',
@@ -194,8 +194,8 @@ const zh: Messages = {
     submit: '生成界面',
     submitting: '生成中',
     photoCreditBg: '背景',
-    photoCreditScene: '行人眼高街景',
-    photoCreditLink: 'Unsplash（Claudio Schwarz）',
+    photoCreditScene: '车把第一人称公路',
+    photoCreditLink: 'Unsplash（Will Truettner）',
     toastFallbackWithErr: '已用本地规则生成界面（{msg}）',
     toastFallback: '已用本地规则生成界面',
     toastNetwork: '请求失败，请稍后重试。',
@@ -301,9 +301,10 @@ const en: Messages = {
   },
   glasses: {
     intro:
-      'Part 2 · Pedestrian POV + full-screen JIT: no chat history; one utterance is understood and a desktop-like surface pops in. Chat-like intents render as an instant messaging app view—not a back-and-forth with an assistant.',
-    streetAria: 'Street view at eye level through the lens (still photo, simulated)',
-    hudEyebrow: 'on foot · jit',
+      'Part 2 · First-person riding POV + full-screen JIT: background simulates handlebars, arms, and the road ahead (illustrative photo with a slow drift). No chat history; one utterance opens a full-page surface. Chat-like intents render as a messaging app view—not talking to an assistant.',
+    streetAria:
+      'Simulated lens view: first-person cycling—handlebars, arms, and road ahead (still photo, not live video)',
+    hudEyebrow: 'fpv · jit',
     hudTitle: 'One utterance → full page',
     localTime: 'Local time',
     backdropClose: 'Dismiss current surface',
@@ -323,8 +324,8 @@ const en: Messages = {
     submit: 'Build UI',
     submitting: 'Building…',
     photoCreditBg: 'Background',
-    photoCreditScene: 'Eye-level street (photo)',
-    photoCreditLink: 'Unsplash (Claudio Schwarz)',
+    photoCreditScene: 'Handlebar POV on the road (photo)',
+    photoCreditLink: 'Unsplash (Will Truettner)',
     toastFallbackWithErr: 'Rendered with local rules ({msg})',
     toastFallback: 'Rendered with local rules',
     toastNetwork: 'Request failed. Please retry.',

@@ -147,6 +147,28 @@ body {
   animation: jit-cursor-blink 1.1s step-end infinite;
 }
 
+/* 眼镜内景：第一人称骑行/车把视角，极慢漂移模拟头与路的相对运动 */
+@keyframes glasses-fpv-drift {
+  0%,
+  100% {
+    background-position: 50% 54%;
+  }
+  50% {
+    background-position: 50% 60%;
+  }
+}
+
+.glasses-fpv-drift {
+  animation: glasses-fpv-drift 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glasses-fpv-drift {
+    animation: none;
+    background-position: 50% 56%;
+  }
+}
+
 /* 单片视野：略透，仍以浅色为主，和路面区分开即可 */
 .glasses-lens-field {
   border-radius: 10px;

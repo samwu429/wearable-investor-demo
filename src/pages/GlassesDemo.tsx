@@ -10,8 +10,8 @@ import {
 import { useI18n } from '../i18n/I18nContext'
 import { interpolate } from '../i18n/messages'
 
-const WALK_IMAGE = `${import.meta.env.BASE_URL}glasses-walking-eye.jpg`
-const WALK_PHOTO_PAGE = 'https://unsplash.com/photos/W7M6dlO7M_Y'
+const FPV_IMAGE = `${import.meta.env.BASE_URL}glasses-fpv-cycling.jpg`
+const FPV_PHOTO_PAGE = 'https://unsplash.com/photos/pKDEdPTH7ow'
 
 /** 中英关键词：界面语言与提问语言可不一致 */
 function looksLikeLegalQuery(q: string) {
@@ -43,7 +43,7 @@ function SoftCenterGlow() {
       className="pointer-events-none absolute inset-0 z-[1]"
       style={{
         background:
-          'radial-gradient(ellipse 58% 48% at 50% 44%, rgba(255,255,255,0.06) 0%, transparent 62%)',
+          'radial-gradient(ellipse 62% 50% at 50% 38%, rgba(255,255,255,0.07) 0%, transparent 58%)',
       }}
       aria-hidden
     />
@@ -532,10 +532,9 @@ export function GlassesDemo() {
       <div className="glasses-frame-bezel glasses-frame-bezel--walk flex min-h-0 flex-1 flex-col p-2 md:p-3">
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_12px_48px_rgba(28,25,23,0.18)] ring-1 ring-stone-900/10">
           <div
-            className="absolute inset-0 scale-[1.04] bg-cover"
+            className="glasses-fpv-drift absolute inset-0 scale-[1.1] bg-cover bg-center"
             style={{
-              backgroundImage: `url(${WALK_IMAGE})`,
-              backgroundPosition: 'center 48%',
+              backgroundImage: `url(${FPV_IMAGE})`,
             }}
             role="img"
             aria-label={t('glasses.streetAria')}
@@ -545,8 +544,9 @@ export function GlassesDemo() {
             className="absolute inset-0 z-[1]"
             style={{
               background: [
-                'linear-gradient(180deg, rgba(12,10,8,0.52) 0%, rgba(12,10,8,0.06) 28%, rgba(12,10,8,0.02) 45%, rgba(12,10,8,0.12) 72%, rgba(12,10,8,0.62) 100%)',
-                'radial-gradient(ellipse 92% 88% at 50% 46%, rgba(0,0,0,0) 0%, rgba(12,10,8,0.2) 100%)',
+                /* 上：天光与远景略压暗；中：主视野（路面纵深）更透；下：车把区域略提对比 */
+                'linear-gradient(180deg, rgba(12,10,8,0.48) 0%, rgba(12,10,8,0.04) 26%, rgba(12,10,8,0) 42%, rgba(12,10,8,0.08) 68%, rgba(12,10,8,0.55) 100%)',
+                'radial-gradient(ellipse 95% 85% at 50% 40%, rgba(0,0,0,0) 0%, rgba(12,10,8,0.18) 100%)',
               ].join(', '),
             }}
             aria-hidden
@@ -702,7 +702,7 @@ export function GlassesDemo() {
                 <span>{t('glasses.photoCreditScene')}</span>
                 <span className="text-stone-600">·</span>
                 <a
-                  href={WALK_PHOTO_PAGE}
+                  href={FPV_PHOTO_PAGE}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="text-amber-200/80 underline decoration-amber-200/30 underline-offset-2 hover:text-amber-100"
