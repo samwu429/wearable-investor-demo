@@ -90,19 +90,18 @@ class GeminiProvider implements AIProvider {
   ): Promise<GenerateTextOutput | null> {
     const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(config.AI_API_KEY)}`
 
+    const mergedPrompt = `${input.systemPrompt ?? defaultSystemPrompt}\n\nUser request:\n${input.prompt}`
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: input.systemPrompt ?? defaultSystemPrompt }],
-        },
         contents: [
           {
             role: 'user',
-            parts: [{ text: input.prompt }],
+            parts: [{ text: mergedPrompt }],
           },
         ],
         generationConfig: {
