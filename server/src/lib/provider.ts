@@ -64,71 +64,107 @@ class OpenAIProvider implements AIProvider {
 }
 
 class GeminiProvider implements AIProvider {
-  async generateText(input: GenerateTextInput): Promise<GenerateTextOutput> {
-    const candidateModels = [config.AI_MODEL, 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-flash']
-    let lastPayload = ''
-    let lastStatus = 500
+  private async listModels(apiVersion: 'v1' | 'v1beta'): Promise<string[]> {
+    const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models?key=${encodeURIComponent(config.AI_API_KEY)}`
+    const response = await fetch(endpoint, { method: 'GET' })
+    if (!response.ok) {
+      return []
+    }
 
-    for (const model of candidateModels) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(config.AI_API_KEY)}`
+    const json = (await response.json()) as {
+      models?: Array<{ name?: string; supportedGenerationMethods?: string[] }>
+    }
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
+    return (
+      json.models
+        ?.filter((model) => (model.supportedGenerationMethods ?? []).includes('generateContent'))
+        .map((model) => (model.name ?? '').replace(/^models\//, ''))
+        .filter(Boolean) ?? []
+    )
+  }
+
+  private async generateWithModel(
+    apiVersion: 'v1' | 'v1beta',
+    model: string,
+    input: GenerateTextInput,
+  ): Promise<GenerateTextOutput | null> {
+    const endpoint = `https://generativelanguage.googleapis.com/${apiVersion}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(config.AI_API_KEY)}`
+
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: input.systemPrompt ?? defaultSystemPrompt }],
         },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: input.systemPrompt ?? defaultSystemPrompt }],
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: input.prompt }],
           },
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: input.prompt }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.4,
-          },
-        }),
-      })
+        ],
+        generationConfig: {
+          temperature: 0.4,
+        },
+      }),
+    })
 
-      if (!response.ok) {
-        lastStatus = response.status
-        lastPayload = await response.text()
-        // Model not found/unsupported, try next candidate.
-        if (response.status === 404) {
-          continue
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null
+      }
+      const payload = await response.text()
+      throw new PublicError(
+        `Gemini API error (${response.status}): ${payload.slice(0, 240)}`,
+        response.status >= 500 ? 502 : 400,
+      )
+    }
+
+    const json = (await response.json()) as {
+      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
+      modelVersion?: string
+    }
+    const text = json.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim()
+    if (!text) {
+      throw new PublicError(
+        'Gemini did not return text content. Check model availability, safety policy, and API key permissions.',
+        502,
+      )
+    }
+    return {
+      text,
+      model: json.modelVersion ?? model,
+      provider: 'gemini',
+    }
+  }
+
+  async generateText(input: GenerateTextInput): Promise<GenerateTextOutput> {
+    const fixedCandidates = [config.AI_MODEL, 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-flash']
+    const v1Models = await this.listModels('v1')
+    const v1betaModels = await this.listModels('v1beta')
+    const dynamicCandidates = [...v1Models, ...v1betaModels]
+    const candidateModels = Array.from(new Set([...fixedCandidates, ...dynamicCandidates]))
+
+    // Prefer likely fast models first when dynamically discovered.
+    candidateModels.sort((a, b) => {
+      const score = (name: string) => (name.includes('flash') ? 0 : 1)
+      return score(a) - score(b)
+    })
+
+    for (const apiVersion of ['v1', 'v1beta'] as const) {
+      for (const model of candidateModels) {
+        const result = await this.generateWithModel(apiVersion, model, input)
+        if (result) {
+          return result
         }
-        throw new PublicError(
-          `Gemini API error (${response.status}): ${lastPayload.slice(0, 240)}`,
-          response.status >= 500 ? 502 : 400,
-        )
-      }
-
-      const json = (await response.json()) as {
-        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
-        modelVersion?: string
-      }
-      const text = json.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('').trim()
-
-      if (!text) {
-        throw new PublicError(
-          'Gemini did not return text content. Check model availability, safety policy, and API key permissions.',
-          502,
-        )
-      }
-
-      return {
-        text,
-        model: json.modelVersion ?? model,
-        provider: 'gemini',
       }
     }
 
     throw new PublicError(
-      `Gemini model unavailable for this key. Tried: ${candidateModels.join(', ')}. Last error (${lastStatus}): ${lastPayload.slice(0, 180)}`,
-      lastStatus >= 500 ? 502 : 400,
+      `Gemini model unavailable for this key. Tried ${candidateModels.length} models across v1/v1beta. Please verify AI Studio key permissions or switch to AI_PROVIDER=openai.`,
+      400,
     )
   }
 }
