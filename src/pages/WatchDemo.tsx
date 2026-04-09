@@ -72,16 +72,11 @@ export function WatchDemo() {
 
       <div className="mt-12 flex flex-col items-center gap-12 lg:flex-row lg:items-start lg:justify-center">
         <div className="relative shrink-0">
-          <div
-            className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-sky-300/25 via-transparent to-mint/12 blur-2xl"
-            aria-hidden
-          />
-          {/* 外框：金属表壳（略方） */}
           <motion.div
-            className="relative flex h-[380px] w-[380px] items-center justify-center rounded-3xl border border-sky-200/90 bg-gradient-to-b from-sky-50 via-white to-sky-100/90 p-3 shadow-[inset_0_2px_6px_rgba(255,255,255,0.95),0_24px_48px_rgba(14,165,233,0.1),0_0_0_1px_rgba(125,211,252,0.45)] md:h-[420px] md:w-[420px]"
+            className="relative flex h-[380px] w-[380px] items-center justify-center rounded-3xl border border-stone-400 bg-[#f0ebe3] p-3 shadow-[inset_0_2px_8px_rgba(255,255,255,0.75)] md:h-[420px] md:w-[420px]"
             layout
           >
-            <div className="absolute inset-3 rounded-2xl border border-white/90 bg-gradient-to-b from-sky-50/80 to-white shadow-inner" />
+            <div className="absolute inset-3 rounded-2xl border border-stone-300 bg-[#faf8f5]" />
             <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400" aria-hidden>
               {Array.from({ length: 60 }).map((_, i) => {
                 const a = (i / 60) * Math.PI * 2 - Math.PI / 2
@@ -96,21 +91,20 @@ export function WatchDemo() {
                     y1={y1}
                     x2={x2}
                     y2={y2}
-                    stroke="rgba(14,165,233,0.4)"
+                    stroke="rgba(15,118,110,0.35)"
                     strokeWidth={i % 5 === 0 ? 2 : 1}
                   />
                 )
               })}
             </svg>
-            {/* 表盘：亮面 + 内凹 */}
-            <div className="relative z-10 flex h-[300px] w-[300px] flex-col items-center justify-between rounded-full border border-sky-200/80 bg-gradient-to-b from-white via-sky-50/90 to-sky-100/80 p-6 shadow-[inset_0_4px_20px_rgba(255,255,255,0.9),inset_0_-8px_24px_rgba(14,165,233,0.06)] md:h-[320px] md:w-[320px]">
+            <div className="relative z-10 flex h-[300px] w-[300px] flex-col items-center justify-between rounded-full border border-stone-300 bg-gradient-to-b from-white to-stone-100 p-6 shadow-inner md:h-[320px] md:w-[320px]">
               <div className="flex w-full items-start justify-between gap-2">
-                <span className="rounded-sm bg-white/95 px-2 py-0.5 text-[10px] text-mist ring-1 ring-sky-200/80 shadow-sm">
+                <span className="rounded-sm border border-stone-300 bg-white px-2 py-0.5 text-[10px] text-mist">
                   Hub · SLM
                 </span>
                 <span
-                  className={`rounded-sm px-2 py-0.5 text-[10px] ring-1 ${
-                    slmBusy ? 'bg-mint/15 text-mint ring-mint/35' : 'bg-white/95 text-mist ring-sky-200/80'
+                  className={`rounded-sm border px-2 py-0.5 text-[10px] ${
+                    slmBusy ? 'border-mint/40 bg-mint/10 text-mint' : 'border-stone-300 bg-white text-mist'
                   }`}
                 >
                   {slmBusy ? '编排中…' : '待机'}
@@ -127,7 +121,7 @@ export function WatchDemo() {
                     initial={{ scale: 0.85, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center gap-2 rounded-sm bg-mint/12 px-4 py-2 text-sm font-medium text-mint ring-1 ring-mint/35 shadow-sm"
+                    className="flex items-center gap-2 rounded-sm border border-mint/40 bg-mint/10 px-4 py-2 text-sm font-medium text-mint"
                   >
                     <span className="inline-block h-2 w-2 animate-pulse rounded-sm bg-mint" />
                     Human-Source 已验证
@@ -144,9 +138,9 @@ export function WatchDemo() {
                 )}
               </AnimatePresence>
               <div className="flex w-full items-center justify-between text-[10px] text-mist">
-                <span className="rounded-sm bg-white/95 px-2 py-1 ring-1 ring-sky-200/80 shadow-sm">SE 锁定</span>
-                <span className="rounded-sm bg-white/95 px-2 py-1 ring-1 ring-sky-200/80 shadow-sm">Lens 已连接</span>
-                <span className="rounded-sm bg-white/95 px-2 py-1 ring-1 ring-sky-200/80 shadow-sm">Signet 已连接</span>
+                <span className="rounded-sm border border-stone-300 bg-white px-2 py-1">SE 锁定</span>
+                <span className="rounded-sm border border-stone-300 bg-white px-2 py-1">Lens 已连接</span>
+                <span className="rounded-sm border border-stone-300 bg-white px-2 py-1">Signet 已连接</span>
               </div>
             </div>
           </motion.div>
@@ -159,7 +153,7 @@ export function WatchDemo() {
               type="button"
               onClick={runPeh}
               disabled={running}
-              className="rounded-sm bg-gradient-to-b from-sky-400 to-sky-500 px-6 py-3 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_6px_20px_rgba(14,165,233,0.28)] transition enabled:hover:from-sky-500 enabled:hover:to-sky-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-md border border-gold-dim bg-gold px-6 py-3 text-sm font-semibold text-white transition enabled:hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-50"
             >
               {running ? '握手进行中…' : '运行 PEH 握手'}
             </button>
@@ -167,7 +161,7 @@ export function WatchDemo() {
               type="button"
               onClick={reset}
               disabled={running}
-              className="metallic-surface rounded-sm px-6 py-3 text-sm font-medium text-ink transition hover:ring-2 hover:ring-sky-300/70 disabled:opacity-40"
+              className="metallic-surface rounded-md px-6 py-3 text-sm font-medium text-ink transition hover:border-stone-500 disabled:opacity-40"
             >
               重置
             </button>
@@ -180,21 +174,21 @@ export function WatchDemo() {
               return (
                 <li
                   key={s.id}
-                  className={`flex gap-4 rounded-sm border px-4 py-3 transition ${
+                  className={`flex gap-4 rounded-md border px-4 py-3 transition ${
                     active
-                      ? 'border-sky-300/90 bg-sky-50/95 shadow-sm ring-1 ring-sky-200/70'
+                      ? 'border-gold/50 bg-teal-50/80'
                       : done
-                        ? 'border-mint/35 bg-mint/5 ring-1 ring-mint/15'
-                        : 'border-sky-200/90 bg-white/80 ring-1 ring-sky-100'
+                        ? 'border-mint/30 bg-mint/5'
+                        : 'border-stone-300 bg-white/90'
                   }`}
                 >
                   <span
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-sm text-xs font-bold ${
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-xs font-bold ${
                       active
-                        ? 'bg-gradient-to-b from-sky-400 to-sky-500 text-white shadow-sm'
+                        ? 'bg-gold text-white'
                         : done
-                          ? 'bg-mint/20 text-mint ring-1 ring-mint/25'
-                          : 'bg-sky-50 text-mist ring-1 ring-sky-200/80'
+                          ? 'border border-mint/30 bg-mint/15 text-mint'
+                          : 'border border-stone-300 bg-stone-100 text-mist'
                     }`}
                   >
                     {i + 1}
@@ -208,7 +202,7 @@ export function WatchDemo() {
             })}
           </ol>
 
-          <div className="metallic-surface rounded-sm p-4 ring-1 ring-sky-200/80">
+          <div className="metallic-surface rounded-md p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-gold">事件日志</p>
             <ul className="mt-2 max-h-40 space-y-1 overflow-y-auto font-mono text-xs text-mist">
               {log.length === 0 ? <li>暂无</li> : log.map((l, i) => <li key={i}>{l}</li>)}

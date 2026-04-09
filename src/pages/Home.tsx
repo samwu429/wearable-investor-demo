@@ -17,13 +17,11 @@ export function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-gold">Investor walkthrough</p>
+        <p className="text-sm font-medium uppercase tracking-[0.18em] text-mist">Investor walkthrough</p>
         <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink md:text-5xl lg:text-6xl">
           分布式穿戴 + AIOS
           <br />
-          <span className="bg-gradient-to-r from-sky-500 via-sky-400 to-mint bg-clip-text text-transparent">
-            把「真实的人」锁进关键动作
-          </span>
+          <span className="text-gold">把「真实的人」锁进关键动作</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-mist md:text-xl">
           手表负责算力与安全域，眼镜负责视线与光刺激感知，戒指负责「最终确认」。下面两个演示页，可在没有样机的情况下，向投资人展示产品气质与核心流程。
@@ -31,13 +29,13 @@ export function Home() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             to="/watch"
-            className="inline-flex min-w-[200px] items-center justify-center rounded-sm bg-gradient-to-b from-sky-400 to-sky-500 px-8 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_6px_22px_rgba(14,165,233,0.3)] transition hover:from-sky-500 hover:to-sky-600"
+            className="inline-flex min-w-[200px] items-center justify-center rounded-md border border-gold-dim bg-gold px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-gold-dim"
           >
             Part 1 · 手表中枢
           </Link>
           <Link
             to="/glasses"
-            className="metallic-surface inline-flex min-w-[200px] items-center justify-center rounded-sm px-8 py-3.5 text-sm font-semibold text-ink transition hover:ring-2 hover:ring-sky-300/60"
+            className="metallic-surface inline-flex min-w-[200px] items-center justify-center rounded-md px-8 py-3.5 text-sm font-semibold text-ink transition hover:border-stone-500"
           >
             Part 2 · 眼镜 AR
           </Link>
@@ -59,25 +57,18 @@ export function Home() {
             d: '琐事静默自动化；支付、签约等高风险动作，必须由戒指给出带阻尼的物理确认。',
           },
         ].map((c) => (
-          <motion.article
-            key={c.t}
-            className="metallic-surface rounded-sm p-6 ring-1 ring-sky-200/70"
-            {...fade}
-          >
+          <motion.article key={c.t} className="metallic-surface rounded-md p-6" {...fade}>
             <h2 className="font-display text-xl font-semibold text-gold">{c.t}</h2>
             <p className="mt-3 text-sm leading-relaxed text-mist">{c.d}</p>
           </motion.article>
         ))}
       </section>
 
-      <motion.section
-        className="metallic-surface mt-20 rounded-sm p-8 ring-1 ring-sky-200/80 md:p-12"
-        {...fade}
-      >
+      <motion.section className="metallic-surface mt-20 rounded-md p-8 md:p-12" {...fade}>
         <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">演示怎么讲（30 秒版）</h2>
-        <ol className="mt-6 list-decimal space-y-3 pl-5 text-mist marker:text-gold">
+        <ol className="mt-6 list-decimal space-y-3 pl-5 text-mist marker:font-semibold marker:text-gold">
           <li>先打开「手表演示」，走一遍 PEH 握手：光刺激 → 瞳孔 → 心血管相位 → SE 签名。</li>
-          <li>再打开「眼镜演示」：只有时间与一句话对话，界面由对话即时生成——去 App 化叙事。</li>
+          <li>再打开「眼镜演示」：时间与对话在同一片视野里；用一句话生成草稿或问条款。</li>
           <li>强调：这是无硬件的交互样机，用于对齐叙事；工程实现与威胁模型另附材料。</li>
         </ol>
       </motion.section>

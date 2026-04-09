@@ -4,15 +4,16 @@
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
 
-  --color-void: #e0f2fe;
+  /* 纸感中性色 + 单一强调色（偏手作站点，非霓虹 AI 渐变） */
+  --color-void: #f5f3ef;
   --color-night: #ffffff;
-  --color-slate: #7dd3fc;
-  --color-mist: #475569;
-  --color-gold: #0284c7;
-  --color-gold-dim: #0369a1;
-  --color-mint: #059669;
-  --color-rose: #e11d48;
-  --color-ink: #0f172a;
+  --color-slate: #a8a29e;
+  --color-mist: #57534e;
+  --color-gold: #0f766e;
+  --color-gold-dim: #115e59;
+  --color-mint: #047857;
+  --color-rose: #b91c1c;
+  --color-ink: #1c1917;
 }
 
 html {
@@ -23,60 +24,52 @@ body {
   margin: 0;
   min-height: 100svh;
   font-family: var(--font-sans);
-  background:
-    radial-gradient(900px 480px at 6% 0%, rgba(125, 211, 252, 0.45), transparent 55%),
-    radial-gradient(700px 400px at 100% 8%, rgba(224, 242, 254, 1), transparent 42%),
-    linear-gradient(168deg, #ffffff 0%, #e8f6fc 38%, #dbeafe 100%);
   color: var(--color-ink);
+  /* 纯色底 + 极淡网点，像打印纸 / 笔记本，不要大块渐变 */
+  background-color: #e8e6e1;
+  background-image: radial-gradient(circle at 1px 1px, rgba(28, 25, 23, 0.055) 1px, transparent 0);
+  background-size: 22px 22px;
 }
 
 #root {
   min-height: 100svh;
 }
 
+/* 卡片：白、实线框、轻阴影 */
 .metallic-surface {
-  border-radius: 4px;
-  background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
-  border: 1px solid rgba(14, 165, 233, 0.22);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    0 1px 0 rgba(148, 163, 184, 0.2),
-    0 12px 36px rgba(15, 23, 42, 0.06);
-}
-
-/* 镜架：宽条、大圆角，接近护目镜/镜框轮廓 */
-.glasses-frame-bezel {
-  border-radius: 28px;
-  background: linear-gradient(168deg, #f1f5f9 0%, #ffffff 35%, #e0f2fe 70%, #cbd5e1 100%);
-  box-shadow:
-    inset 0 2px 6px rgba(255, 255, 255, 0.95),
-    inset 0 -4px 12px rgba(15, 23, 42, 0.04),
-    0 0 0 1px rgba(148, 163, 184, 0.35),
-    0 24px 48px rgba(15, 23, 42, 0.1);
-}
-
-/* 智能眼镜镜片：更透，便于看路；仅极轻 tint */
-.glasses-lens-field {
   border-radius: 6px;
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(224, 242, 254, 0.18) 45%,
-    rgba(186, 230, 253, 0.14) 100%
-  );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  background: #fdfcfa;
+  border: 1px solid #d4d0c8;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.06);
 }
 
-/* 对话里嵌套的小卡片：略深一点保证字可读，但整体保持轻 */
+/* 眼镜外框：像自己切的卡纸框，不要金属高光渐变 */
+.glasses-frame-bezel {
+  border-radius: 14px;
+  background: #ddd9d2;
+  border: 1px solid #c4bfb6;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 2px 8px rgba(28, 25, 23, 0.07);
+}
+
+/* 单片视野：略透，仍以浅色为主，和路面区分开即可 */
+.glasses-lens-field {
+  border-radius: 10px;
+  background: rgba(253, 252, 250, 0.92);
+  border: 1px solid #c9c4bc;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 对话里嵌套的示意块：工具感、不发光 */
 .glasses-chat-card {
   font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
   font-size: 0.7rem;
-  line-height: 1.4;
+  line-height: 1.45;
   border-radius: 4px;
-  border: 1px solid rgba(103, 232, 249, 0.45);
-  background: rgba(15, 23, 42, 0.72);
-  color: #f1f5f9;
-  backdrop-filter: blur(8px);
+  border: 1px solid #57534e;
+  background: #292524;
+  color: #e7e5e4;
 }
 
 @media (min-width: 768px) {
