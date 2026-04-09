@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ApiError, API_BASE_URL } from '../lib/apiClient'
 import { generateInsight } from '../lib/ai'
+import { generateInstantAppPreview, type InstantAppPreview } from '../lib/mockInstantApp'
 
 type Person = { id: string; name: string; verified: boolean; x: string; y: string }
 
@@ -80,6 +81,12 @@ export function GlassesDemo() {
   const [aiMeta, setAiMeta] = useState('')
   const [aiError, setAiError] = useState('')
 
+  const [instantIntent, setInstantIntent] = useState(
+    '我想做一个给门店店长用的库存小工具，能看滞销和补货建议。',
+  )
+  const [instantGenerating, setInstantGenerating] = useState(false)
+  const [instantPreview, setInstantPreview] = useState<InstantAppPreview | null>(null)
+
   const pupilPath = useMemo(() => {
     const pts: string[] = []
     for (let x = 0; x <= 280; x += 4) {
@@ -115,6 +122,23 @@ export function GlassesDemo() {
     setQueue((items) => items.map((it) => ({ ...it, pinned: it.id === id ? !it.pinned : false })))
   }
 
+  const runInstantAppDemo = () => {
+    const q = instantIntent.trim()
+    if (q.length < 6) return
+    setInstantGenerating(true)
+    setInstantPreview(null)
+    window.setTimeout(() => {
+      setInstantPreview(generateInstantAppPreview(q))
+      setInstantGenerating(false)
+    }, 1600)
+  }
+
+  const screenTone = (tone: InstantAppPreview['screens'][number]['tone']) => {
+    if (tone === 'mint') return 'border-mint/45 bg-mint/10 text-mint'
+    if (tone === 'rose') return 'border-rose/45 bg-rose/10 text-rose'
+    return 'border-gold/45 bg-gold/15 text-gold'
+  }
+
   return (
     <div className="mx-auto max-w-[min(100%,1400px)] px-4 py-8 md:px-6 md:py-10">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -124,7 +148,7 @@ export function GlassesDemo() {
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold text-white md:text-5xl">Part 2 · 即时披露（JIT）演示</h1>
           <p className="mt-3 max-w-2xl text-sm text-mist md:text-base">
-            主视区放大为路演焦点：合同要点、风险与 AI 解释都以 JIT 浮窗出现，模拟「看到什么、立刻推什么」的穿戴式体验。
+            主视区放大为路演焦点：合同要点、风险与 AI 解释都以 JIT 浮窗出现；并可演示「口述需求 → 即刻生成软件骨架」的叙事（前端模拟，无需真实后台）。
           </p>
         </div>
         <div className={jitCardClass(sensitivity)}>
@@ -144,6 +168,150 @@ export function GlassesDemo() {
             <span>克制</span>
             <span>标准</span>
             <span>路演</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Instant app from intent — investor demo (mock, no real codegen) */}
+      <div className={`mt-8 ${jitCardClass(sensitivity)} !p-5 md:!p-6`}>
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 口述即产品</p>
+            <h2 className="mt-2 font-display text-xl font-semibold text-white md:text-2xl">一句话描述你想做的软件</h2>
+            <p className="mt-2 text-xs text-mist md:text-sm">
+              演示叙事：用户说出意图后，系统在视野里<strong className="text-white">即时堆叠</strong>
+              产品名、模块、界面草图与脚手架代码——<strong className="text-gold">当前为前端模拟</strong>
+              ，不连接真实代码生成与部署。
+            </p>
+            <textarea
+              value={instantIntent}
+              onChange={(e) => setInstantIntent(e.target.value)}
+              rows={4}
+              className="mt-4 w-full rounded-xl border border-white/10 bg-void/70 px-3 py-2 text-sm text-white outline-none ring-gold/40 focus:ring-1"
+              placeholder="例如：我想做一个给律师用的合同比对小工具，能标红差异条款……"
+            />
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                disabled={instantGenerating || instantIntent.trim().length < 6}
+                onClick={runInstantAppDemo}
+                className="rounded-full bg-gold px-6 py-2.5 text-sm font-semibold text-night hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {instantGenerating ? '正在生成 JIT 预览…' : '即刻生成（演示）'}
+              </button>
+              {instantPreview && (
+                <button
+                  type="button"
+                  onClick={() => setInstantPreview(null)}
+                  className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs text-mist hover:bg-white/10 hover:text-white"
+                >
+                  清空预览
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <AnimatePresence mode="wait">
+              {instantGenerating && (
+                <motion.div
+                  key="gen"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={`${jitCardClass(sensitivity)} flex h-full min-h-[200px] flex-col justify-center !border-dashed !border-gold/40 !p-6`}
+                >
+                  <p className="text-sm font-medium text-white">AI 正在编排界面与路由…</p>
+                  <p className="mt-2 text-xs text-mist">生成模块图 · 布局草图 · 演示代码片段（模拟延迟 1.6s）</p>
+                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-gold via-mint to-gold"
+                      initial={{ width: '8%' }}
+                      animate={{ width: '92%' }}
+                      transition={{ duration: 1.5, ease: 'easeInOut' }}
+                    />
+                  </div>
+                </motion.div>
+              )}
+
+              {!instantGenerating && instantPreview && (
+                <motion.div
+                  key="prev"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-3"
+                >
+                  <div className={`${jitCardClass(sensitivity)} !p-4`}>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 已生成</p>
+                    <p className="mt-1 font-display text-lg font-semibold text-white md:text-xl">{instantPreview.productName}</p>
+                    <p className="text-sm text-mint">{instantPreview.tagline}</p>
+                    <p className="mt-2 text-[11px] text-mist">
+                      原始意图：<span className="text-white/90">「{instantPreview.userIntentEcho}」</span>
+                    </p>
+                    <p className="mt-1 text-[10px] text-mist/80">{instantPreview.etaLine}</p>
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {instantPreview.modules.map((m, i) => (
+                      <motion.div
+                        key={m.name}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.05 * i }}
+                        className={`${jitCardClass(sensitivity)} !p-3`}
+                      >
+                        <p className="text-xs font-semibold text-white">{m.name}</p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-mist">{m.desc}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className={`${jitCardClass(sensitivity)} !p-4`}>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 界面草图</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {instantPreview.screens.map((s) => (
+                        <div
+                          key={s.label}
+                          className={`flex min-h-[72px] min-w-[88px] flex-1 flex-col justify-between rounded-xl border px-3 py-2 text-xs font-medium ${screenTone(s.tone)}`}
+                        >
+                          <span>{s.label}</span>
+                          <span className="text-[10px] font-normal opacity-80">占位 UI</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex justify-center">
+                      <div className="relative w-[min(100%,220px)] rounded-[1.75rem] border border-white/15 bg-void/90 p-2 shadow-inner shadow-black/40 ring-1 ring-gold/20">
+                        <div className="mx-auto h-2 w-12 rounded-full bg-white/10" />
+                        <div className="mt-2 space-y-2 rounded-2xl border border-white/10 bg-night/80 p-3">
+                          <div className="h-2 w-3/5 rounded bg-gold/30" />
+                          <div className="h-16 rounded-lg bg-gradient-to-br from-white/10 to-white/5" />
+                          <div className="flex gap-2">
+                            <div className="h-8 flex-1 rounded-md bg-mint/20" />
+                            <div className="h-8 flex-1 rounded-md bg-white/10" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`${jitCardClass(sensitivity)} !p-0 overflow-hidden`}>
+                    <div className="border-b border-white/10 bg-black/40 px-4 py-2 text-[10px] text-mist">JIT · scaffold.ts（演示）</div>
+                    <pre className="max-h-40 overflow-auto p-4 text-[11px] leading-relaxed text-mint/90">
+                      {instantPreview.codeSnippet}
+                    </pre>
+                  </div>
+                </motion.div>
+              )}
+
+              {!instantGenerating && !instantPreview && (
+                <div
+                  key="empty"
+                  className={`flex min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-white/15 bg-white/[0.03] p-6 text-center text-sm text-mist`}
+                >
+                  在左侧输入想法并点击「即刻生成」，这里会以 JIT 卡片逐层展开预览。
+                </div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
