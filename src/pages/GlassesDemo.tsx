@@ -2,7 +2,86 @@ import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ApiError, API_BASE_URL } from '../lib/apiClient'
 import { generateInsight } from '../lib/ai'
-import { generateInstantAppPreview, type InstantAppPreview } from '../lib/mockInstantApp'
+import {
+  generateInstantAppPreview,
+  type InstantAppPreview,
+  type InstantAppScreen,
+  type InstantChatUi,
+  type InstantMapUi,
+} from '../lib/mockInstantApp'
+
+function InstantChatVisual({ data }: { data: InstantChatUi }) {
+  return (
+    <div className="flex max-h-[min(52vh,440px)] min-h-[200px] flex-col overflow-hidden rounded-xl border border-white/12 bg-[#0b1220] shadow-inner">
+      <div className="flex items-center gap-3 border-b border-white/10 px-3 py-2.5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-mint/50 to-mint/10 text-sm font-semibold text-mint ring-2 ring-white/15">
+          {data.peerName.slice(0, 1)}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-white">{data.peerName}</p>
+          <p className="text-[10px] text-mint">{data.peerStatus}</p>
+        </div>
+        <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-mist">社交</span>
+      </div>
+      <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+        {data.bubbles.map((b, i) => (
+          <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
+            <div
+              className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
+                b.role === 'me'
+                  ? 'bg-gold/25 text-white ring-1 ring-gold/40'
+                  : 'bg-white/10 text-mist ring-1 ring-white/10'
+              }`}
+            >
+              {b.text}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex gap-2 border-t border-white/10 p-2">
+        <div className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-mist">输入消息…</div>
+        <button type="button" className="rounded-xl bg-gold px-4 text-xs font-semibold text-night">
+          发送
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function InstantMapVisual({ data }: { data: InstantMapUi }) {
+  return (
+    <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-xl border border-mint/35 bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#0a1420]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-35"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.14) 1px, transparent 0)',
+          backgroundSize: '22px 22px',
+        }}
+      />
+      <p className="absolute left-3 top-2 z-20 text-[11px] font-semibold text-white drop-shadow-md">{data.headline}</p>
+      <svg className="relative z-10 h-[200px] w-full md:h-[min(240px,28vh)]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-hidden>
+        <path
+          d="M 48 170 Q 130 36 272 52"
+          fill="none"
+          stroke="rgba(52,211,191,0.95)"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          strokeDasharray="8 6"
+        />
+        <circle cx="48" cy="170" r="9" fill="#d4a853" stroke="rgba(255,255,255,0.9)" strokeWidth="2" />
+        <circle cx="272" cy="52" r="11" fill="#fb7185" stroke="rgba(255,255,255,0.9)" strokeWidth="2" />
+      </svg>
+      <div className="absolute bottom-2 left-2 right-2 z-20 flex flex-wrap items-center justify-between gap-2 text-[10px]">
+        <span className="rounded-lg bg-black/55 px-2 py-1 text-mist ring-1 ring-white/10">{data.fromLabel}</span>
+        <span className="rounded-lg bg-mint/20 px-2 py-1 font-medium text-mint ring-1 ring-mint/30">
+          {data.travelMode} · 约 {data.minutes} 分钟
+        </span>
+        <span className="rounded-lg bg-black/55 px-2 py-1 text-white ring-1 ring-white/10">{data.toLabel}</span>
+      </div>
+    </div>
+  )
+}
 
 type Person = { id: string; name: string; verified: boolean; x: string; y: string }
 
@@ -133,7 +212,7 @@ export function GlassesDemo() {
     }, 1600)
   }
 
-  const screenTone = (tone: InstantAppPreview['screens'][number]['tone']) => {
+  const screenTone = (tone: InstantAppScreen['tone']) => {
     if (tone === 'mint') return 'border-mint/45 bg-mint/10 text-mint'
     if (tone === 'rose') return 'border-rose/45 bg-rose/10 text-rose'
     return 'border-gold/45 bg-gold/15 text-gold'
@@ -345,8 +424,8 @@ export function GlassesDemo() {
             >
               {instantGenerating && (
                 <div className="flex flex-1 flex-col justify-center p-6">
-                  <p className="text-sm font-medium text-white">AI 正在编排界面与路由…</p>
-                  <p className="mt-2 text-xs text-mist">模块 · 界面草图 · 演示脚手架（前端模拟，约 1.6s）</p>
+                  <p className="text-sm font-medium text-white">正在理解意图并渲染界面…</p>
+                  <p className="mt-2 text-xs text-mist">若为聊天 / 地图类需求，将直接弹出拟真 UI（前端模拟，约 1.6s）</p>
                   <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
                     <motion.div
                       className="h-full bg-gradient-to-r from-gold via-mint to-gold"
@@ -375,56 +454,73 @@ export function GlassesDemo() {
                   </div>
                   <div className="min-h-0 flex-1 overflow-y-auto p-4">
                     <p className="text-[11px] text-mist">
-                      意图：<span className="text-white/90">「{instantPreview.userIntentEcho}」</span>
+                      你的说法：<span className="text-white/90">「{instantPreview.userIntentEcho}」</span>
                     </p>
-                    <p className="mt-1 text-[10px] text-mist/70">{instantPreview.etaLine}</p>
-                    <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                      {instantPreview.modules.map((m, i) => (
-                        <motion.div
-                          key={m.name}
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.04 * i }}
-                          className={`${jitCardClass(sensitivity)} !p-3`}
-                        >
-                          <p className="text-xs font-semibold text-white">{m.name}</p>
-                          <p className="mt-1 text-[11px] leading-relaxed text-mist">{m.desc}</p>
-                        </motion.div>
-                      ))}
-                    </div>
-                    <div className="mt-4">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">界面草图</p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {instantPreview.screens.map((s) => (
-                          <div
-                            key={s.label}
-                            className={`flex min-h-[64px] min-w-[76px] flex-1 flex-col justify-between rounded-xl border px-2 py-2 text-[11px] font-medium ${screenTone(s.tone)}`}
-                          >
-                            <span>{s.label}</span>
-                            <span className="text-[9px] font-normal opacity-80">占位</span>
-                          </div>
-                        ))}
+                    <p className="mt-1 text-[10px] text-mint/90">{instantPreview.etaLine}</p>
+
+                    {(instantPreview.uiMode === 'chat' || instantPreview.uiMode === 'map' || instantPreview.uiMode === 'split') && (
+                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-gold">即时界面预览</p>
+                    )}
+
+                    {instantPreview.uiMode === 'chat' && instantPreview.chatUi && (
+                      <div className="mt-3">
+                        <InstantChatVisual data={instantPreview.chatUi} />
                       </div>
-                      <div className="mt-3 flex justify-center">
-                        <div className="relative w-[min(100%,200px)] rounded-[1.5rem] border border-white/15 bg-void/90 p-2 ring-1 ring-gold/25">
-                          <div className="mx-auto h-1.5 w-10 rounded-full bg-white/10" />
-                          <div className="mt-2 space-y-2 rounded-xl border border-white/10 bg-night/80 p-2.5">
-                            <div className="h-1.5 w-3/5 rounded bg-gold/30" />
-                            <div className="h-12 rounded-lg bg-gradient-to-br from-white/10 to-white/5" />
-                            <div className="flex gap-1.5">
-                              <div className="h-6 flex-1 rounded bg-mint/20" />
-                              <div className="h-6 flex-1 rounded bg-white/10" />
-                            </div>
+                    )}
+
+                    {instantPreview.uiMode === 'map' && instantPreview.mapUi && (
+                      <div className="mt-3">
+                        <InstantMapVisual data={instantPreview.mapUi} />
+                      </div>
+                    )}
+
+                    {instantPreview.uiMode === 'split' && instantPreview.chatUi && instantPreview.mapUi && (
+                      <div className="mt-3 grid min-h-0 gap-3 md:grid-cols-2 md:items-stretch">
+                        <InstantChatVisual data={instantPreview.chatUi} />
+                        <InstantMapVisual data={instantPreview.mapUi} />
+                      </div>
+                    )}
+
+                    {instantPreview.uiMode === 'scaffold' && instantPreview.modules && instantPreview.screens && (
+                      <>
+                        <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                          {instantPreview.modules.map((m, i) => (
+                            <motion.div
+                              key={m.name}
+                              initial={{ opacity: 0, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.04 * i }}
+                              className={`${jitCardClass(sensitivity)} !p-3`}
+                            >
+                              <p className="text-xs font-semibold text-white">{m.name}</p>
+                              <p className="mt-1 text-[11px] leading-relaxed text-mist">{m.desc}</p>
+                            </motion.div>
+                          ))}
+                        </div>
+                        <div className="mt-4">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">结构示意（非聊天/地图类）</p>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {instantPreview.screens.map((s) => (
+                              <div
+                                key={s.label}
+                                className={`flex min-h-[56px] min-w-[72px] flex-1 flex-col justify-between rounded-xl border px-2 py-2 text-[11px] font-medium ${screenTone(s.tone)}`}
+                              >
+                                <span>{s.label}</span>
+                                <span className="text-[9px] font-normal opacity-80">占位</span>
+                              </div>
+                            ))}
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className={`${jitCardClass(sensitivity)} mt-4 !p-0 !ring-0 overflow-hidden`}>
-                      <div className="border-b border-white/10 bg-black/40 px-3 py-1.5 text-[10px] text-mist">scaffold.ts（演示）</div>
-                      <pre className="max-h-36 overflow-auto p-3 text-[10px] leading-relaxed text-mint/90">
-                        {instantPreview.codeSnippet}
-                      </pre>
-                    </div>
+                        {instantPreview.codeSnippet && (
+                          <div className={`${jitCardClass(sensitivity)} mt-4 !p-0 !ring-0 overflow-hidden`}>
+                            <div className="border-b border-white/10 bg-black/40 px-3 py-1.5 text-[10px] text-mist">routes（演示）</div>
+                            <pre className="max-h-28 overflow-auto p-3 text-[10px] leading-relaxed text-mint/90">
+                              {instantPreview.codeSnippet}
+                            </pre>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               )}
@@ -442,7 +538,7 @@ export function GlassesDemo() {
                 onChange={(e) => setInstantIntent(e.target.value)}
                 rows={2}
                 className="mt-1.5 w-full resize-none rounded-xl border border-white/10 bg-void/70 px-3 py-2 text-[12px] text-white outline-none ring-gold/30 focus:ring-1 md:text-sm"
-                placeholder="用一句话说你想做的软件（演示：前端模拟生成）"
+                placeholder="例如：给妈妈发消息我想吃糖醋排骨 / 带我去图书馆并生成地图（演示：前端按意图弹出聊天或地图 UI）"
               />
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
