@@ -67,13 +67,14 @@ body {
   font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Consolas', monospace;
 }
 
+/* 默认 HUD：光学玻璃，避免 100% 纯黑挡路（真眼镜场景） */
 .jit-field {
-  --jit-void: #0a0908;
-  --jit-surface: #11100e;
-  --jit-elevated: #1a1815;
+  --jit-void: rgba(12, 11, 10, 0.4);
+  --jit-surface: rgba(17, 16, 14, 0.35);
+  --jit-elevated: rgba(26, 24, 21, 0.45);
   --jit-rail: #24211c;
   --jit-line: rgba(251, 191, 36, 0.28);
-  --jit-line-soft: rgba(245, 245, 244, 0.08);
+  --jit-line-soft: rgba(245, 245, 244, 0.1);
   --jit-text: #ebe8e2;
   --jit-muted: #7c756c;
   --jit-phosphor: #5eead4;
@@ -81,11 +82,13 @@ body {
   position: relative;
   color: var(--jit-text);
   background: var(--jit-void);
+  backdrop-filter: blur(22px) saturate(1.18);
+  -webkit-backdrop-filter: blur(22px) saturate(1.18);
   box-shadow:
-    0 0 0 1px var(--jit-line-soft),
-    0 0 0 2px var(--jit-void),
-    0 0 0 3px rgba(94, 234, 212, 0.12),
-    0 24px 80px rgba(0, 0, 0, 0.65);
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px rgba(94, 234, 212, 0.1),
+    0 28px 72px rgba(0, 0, 0, 0.35);
 }
 
 .jit-field::before {
@@ -98,10 +101,10 @@ body {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.045) 2px,
-    rgba(0, 0, 0, 0.045) 3px
+    rgba(255, 255, 255, 0.018) 2px,
+    rgba(255, 255, 255, 0.018) 3px
   );
-  opacity: 0.5;
+  opacity: 0.55;
   z-index: 1;
 }
 
@@ -111,8 +114,8 @@ body {
 }
 
 .jit-field--paper {
-  --jit-void: #f3f0e8;
-  --jit-surface: #faf8f3;
+  --jit-void: rgba(243, 240, 232, 0.92);
+  --jit-surface: rgba(250, 248, 243, 0.88);
   --jit-elevated: #ffffff;
   --jit-rail: #e7e2d9;
   --jit-line: rgba(180, 83, 9, 0.35);
@@ -121,11 +124,14 @@ body {
   --jit-muted: #78716c;
   --jit-phosphor: #0d9488;
   --jit-signal: #b45309;
+  background: var(--jit-void);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
   box-shadow:
     0 0 0 1px var(--jit-line-soft),
-    0 0 0 2px #f3f0e8,
-    0 0 0 3px rgba(13, 148, 136, 0.15),
-    0 24px 80px rgba(28, 25, 23, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 0 0 1px rgba(13, 148, 136, 0.12),
+    0 24px 64px rgba(28, 25, 23, 0.14);
 }
 
 .jit-field--paper::before {
@@ -162,10 +168,19 @@ body {
   animation: glasses-fpv-drift 18s ease-in-out infinite;
 }
 
+/* 提亮骑行底图，接近白天公路观感（再叠镜片上较弱压暗） */
+.glasses-fpv-daylight {
+  filter: brightness(1.3) contrast(1.06) saturate(1.12);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .glasses-fpv-drift {
     animation: none;
     background-position: 50% 56%;
+  }
+
+  .glasses-fpv-daylight {
+    filter: brightness(1.15) contrast(1.04) saturate(1.06);
   }
 }
 

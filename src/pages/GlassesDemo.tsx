@@ -115,7 +115,7 @@ function JitWindowChrome({
           className={
             variant === 'paper'
               ? 'flex h-12 shrink-0 items-center gap-3 border-b border-stone-300/80 bg-[#ebe6dc] px-3'
-              : 'flex h-12 shrink-0 items-center gap-3 border-b border-amber-500/15 bg-[#141311] px-3'
+              : 'flex h-12 shrink-0 items-center gap-3 border-b border-white/10 bg-stone-950/45 px-3 backdrop-blur-xl'
           }
         >
           <div className="flex items-center gap-2">
@@ -155,7 +155,7 @@ function JitWindowChrome({
             className={
               variant === 'paper'
                 ? 'shrink-0 border-b border-stone-300/60 bg-[#f0ebe3] px-4 py-2 font-jit-mono text-[10px] text-stone-600'
-                : 'shrink-0 border-b border-stone-700/80 bg-[#0f0e0c] px-4 py-2 font-jit-mono text-[10px] text-stone-500'
+                : 'shrink-0 border-b border-white/8 bg-stone-950/35 px-4 py-2 font-jit-mono text-[10px] text-stone-400 backdrop-blur-lg'
             }
           >
             <span className={variant === 'paper' ? 'text-teal-700/80' : 'text-teal-400/70'}>{'// '}</span>
@@ -166,7 +166,7 @@ function JitWindowChrome({
           className={
             variant === 'paper'
               ? 'relative min-h-0 flex-1 overflow-y-auto bg-[#faf8f3]'
-              : 'relative min-h-0 flex-1 overflow-y-auto bg-[#11100e]'
+              : 'relative min-h-0 flex-1 overflow-y-auto bg-transparent'
           }
         >
           {variant === 'hud' ? <JitInnerCorners /> : null}
@@ -177,7 +177,7 @@ function JitWindowChrome({
             className={
               variant === 'paper'
                 ? 'shrink-0 border-t border-stone-300/80 bg-[#ebe6dc] px-4 py-2 font-jit-mono text-[10px] text-stone-600'
-                : 'shrink-0 border-t border-stone-700/90 bg-[#0c0b0a] px-4 py-2 font-jit-mono text-[10px] text-stone-500'
+                : 'shrink-0 border-t border-white/10 bg-stone-950/42 px-4 py-2 font-jit-mono text-[10px] text-stone-400 backdrop-blur-xl'
             }
           >
             <div className="flex flex-wrap items-center justify-between gap-2">{footer}</div>
@@ -207,7 +207,7 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
   const gid = `jit-grid-${rid}`
   const vid = `jit-vig-${rid}`
   return (
-    <div className="relative min-h-[220px] flex-1 bg-[#0a1210] md:min-h-[280px]">
+    <div className="relative min-h-[220px] flex-1 bg-emerald-950/20 backdrop-blur-md md:min-h-[280px]">
       <svg className="absolute inset-0 h-full w-full opacity-95" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden>
         <defs>
           <pattern id={gid} width="16" height="16" patternUnits="userSpaceOnUse">
@@ -215,10 +215,10 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
           </pattern>
           <radialGradient id={vid} cx="50%" cy="45%" r="70%">
             <stop offset="0%" stopColor="rgba(20,35,32,0)" />
-            <stop offset="100%" stopColor="rgba(0,0,0,0.45)" />
+            <stop offset="100%" stopColor="rgba(0,0,0,0.22)" />
           </radialGradient>
         </defs>
-        <rect width="100%" height="100%" fill="#0c1614" />
+        <rect width="100%" height="100%" fill="rgba(12, 22, 20, 0.42)" />
         <rect width="100%" height="100%" fill={`url(#${gid})`} />
         <rect width="100%" height="100%" fill={`url(#${vid})`} />
         <path
@@ -232,7 +232,7 @@ function BigMapCanvas({ data }: { data: InstantMapUi }) {
         <circle cx="48" cy="180" r="6" fill="none" stroke="rgba(94,234,212,0.9)" strokeWidth="2" />
         <circle cx="340" cy="56" r="6" fill="rgba(251,191,36,0.25)" stroke="rgba(251,191,36,0.8)" strokeWidth="1.5" />
       </svg>
-      <div className="absolute left-3 top-3 max-w-[min(100%,280px)] border border-teal-500/25 bg-stone-950/75 px-2.5 py-1.5 font-jit-mono text-[10px] leading-snug text-teal-100/90 shadow-[0_0_24px_rgba(45,212,191,0.08)] backdrop-blur-sm">
+      <div className="absolute left-3 top-3 max-w-[min(100%,280px)] border border-teal-400/35 bg-stone-950/50 px-2.5 py-1.5 font-jit-mono text-[10px] leading-snug text-teal-50 shadow-[0_0_24px_rgba(45,212,191,0.06)] backdrop-blur-md">
         <span className="text-amber-300/90">{t('glasses.mapBadge')}</span>
         {data.headline}
       </div>
@@ -246,7 +246,7 @@ function JitMapPage({ preview }: { preview: InstantAppPreview }) {
   return (
     <div className="relative z-[1] flex h-full min-h-[320px] flex-col md:flex-row">
       <BigMapCanvas data={m} />
-      <aside className="flex w-full shrink-0 flex-col gap-0 border-t border-amber-500/15 bg-[#141311] p-0 md:w-[300px] md:border-l md:border-t-0">
+      <aside className="flex w-full shrink-0 flex-col gap-0 border-t border-white/10 bg-stone-950/35 p-0 backdrop-blur-lg md:w-[300px] md:border-l md:border-t-0">
         <div className="border-b border-stone-700/80 px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.2em] text-amber-200/50">
           {t('glasses.routeSpec')}
         </div>
@@ -255,7 +255,7 @@ function JitMapPage({ preview }: { preview: InstantAppPreview }) {
             {'>'} {m.fromLabel}{' '}
             <span className="text-amber-400/70">{t('glasses.routeArrow')}</span> {m.toLabel}
           </p>
-          <div className="space-y-1.5 border border-stone-700/60 bg-[#0f0e0c] p-3 font-jit-mono text-[11px] text-stone-400">
+          <div className="space-y-1.5 border border-white/10 bg-black/25 p-3 font-jit-mono text-[11px] text-stone-300 backdrop-blur-sm">
             <p>
               <span className="text-stone-600">{t('glasses.mode')}</span>{' '}
               <span className="text-[#ebe8e2]">{m.travelMode}</span>
@@ -266,7 +266,7 @@ function JitMapPage({ preview }: { preview: InstantAppPreview }) {
               <span className="text-stone-500"> {t('glasses.min')}</span>
             </p>
           </div>
-          <div className="border border-dashed border-amber-500/20 bg-stone-950/40 p-3 text-[11px] leading-relaxed text-stone-500">
+          <div className="border border-dashed border-amber-400/25 bg-black/20 p-3 text-[11px] leading-relaxed text-stone-400 backdrop-blur-sm">
             <p className="mb-1 font-jit-mono text-[9px] uppercase tracking-wider text-stone-600">{t('glasses.intentEchoBlock')}</p>
             <p className="text-stone-400">{preview.userIntentEcho}</p>
           </div>
@@ -280,8 +280,8 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
   const { t } = useI18n()
   const c = preview.chatUi!
   return (
-    <div className="relative z-[1] flex h-full min-h-[360px] flex-col bg-[#11100e]">
-      <header className="flex items-center gap-3 border-b border-stone-700/80 bg-[#0c0b0a] px-4 py-3">
+    <div className="relative z-[1] flex h-full min-h-[360px] flex-col bg-transparent">
+      <header className="flex items-center gap-3 border-b border-white/10 bg-stone-950/45 px-4 py-3 backdrop-blur-xl">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-amber-500/30 bg-amber-950/40 font-jit-mono text-xs font-bold text-amber-200">
           {c.peerName.slice(0, 1)}
         </div>
@@ -291,14 +291,14 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
         </div>
         <span className="hidden font-jit-mono text-[9px] text-stone-600 sm:inline">{t('glasses.chatChan')}</span>
       </header>
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-[#0a0908] px-3 py-4">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-black/10 px-3 py-4 backdrop-blur-[2px]">
         {c.bubbles.map((b, i) => (
           <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={
                 b.role === 'me'
-                  ? 'max-w-[88%] border border-teal-500/25 bg-teal-950/35 px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-teal-50'
-                  : 'max-w-[88%] border border-stone-600/50 bg-[#141311] px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-stone-300'
+                  ? 'max-w-[88%] border border-teal-400/35 bg-teal-950/30 px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-teal-50 backdrop-blur-md'
+                  : 'max-w-[88%] border border-white/12 bg-stone-950/45 px-3 py-2 font-jit-mono text-[12px] leading-relaxed text-stone-200 backdrop-blur-md'
               }
             >
               <span className={b.role === 'me' ? 'text-teal-500/80' : 'text-amber-500/70'}>
@@ -309,8 +309,8 @@ function JitChatAppPage({ preview }: { preview: InstantAppPreview }) {
           </div>
         ))}
       </div>
-      <div className="border-t border-stone-700/80 bg-[#0c0b0a] px-3 py-2.5">
-        <div className="flex items-center gap-2 border border-stone-700/60 bg-[#141311] px-3 py-2 font-jit-mono text-[11px] text-stone-500">
+      <div className="border-t border-white/10 bg-stone-950/45 px-3 py-2.5 backdrop-blur-xl">
+        <div className="flex items-center gap-2 border border-white/12 bg-black/25 px-3 py-2 font-jit-mono text-[11px] text-stone-400 backdrop-blur-sm">
           <span className="text-teal-500/80">{'>'}</span>
           <span className="jit-cursor-blink text-amber-200/90">▍</span>
           <span className="ml-2 text-stone-600">{t('glasses.compose')}</span>
@@ -327,8 +327,8 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
   const m = preview.mapUi!
   return (
     <div className="relative z-[1] grid min-h-[400px] grid-cols-1 divide-y divide-amber-500/10 md:grid-cols-2 md:divide-x md:divide-y-0">
-      <div className="flex min-h-[280px] flex-col bg-[#11100e] md:min-h-0">
-        <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
+      <div className="flex min-h-[280px] flex-col bg-transparent md:min-h-0">
+        <div className="shrink-0 border-b border-white/10 bg-stone-950/45 px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/55 backdrop-blur-xl">
           {t('glasses.paneMessage')}
         </div>
         <header className="flex items-center gap-3 border-b border-stone-700/60 px-3 py-2">
@@ -340,14 +340,14 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
             <p className="truncate font-jit-mono text-[9px] text-teal-500/65">{c.peerStatus}</p>
           </div>
         </header>
-        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-[#0a0908] px-3 py-3">
+        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-black/10 px-3 py-3 backdrop-blur-sm">
           {c.bubbles.map((b, i) => (
             <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={
                   b.role === 'me'
-                    ? 'max-w-[90%] border border-teal-500/20 bg-teal-950/30 px-2.5 py-1.5 font-jit-mono text-[11px] text-teal-50'
-                    : 'max-w-[90%] border border-stone-600/45 bg-[#141311] px-2.5 py-1.5 font-jit-mono text-[11px] text-stone-300'
+                    ? 'max-w-[90%] border border-teal-400/30 bg-teal-950/28 px-2.5 py-1.5 font-jit-mono text-[11px] text-teal-50 backdrop-blur-md'
+                    : 'max-w-[90%] border border-white/12 bg-stone-950/45 px-2.5 py-1.5 font-jit-mono text-[11px] text-stone-200 backdrop-blur-md'
                 }
               >
                 <span className={b.role === 'me' ? 'text-teal-500/75' : 'text-amber-500/65'}>
@@ -360,12 +360,12 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
         </div>
       </div>
       <div className="flex min-h-[280px] flex-col md:min-h-0">
-        <div className="shrink-0 border-b border-stone-700/80 bg-[#0c0b0a] px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/45">
+        <div className="shrink-0 border-b border-white/10 bg-stone-950/45 px-3 py-2 font-jit-mono text-[9px] uppercase tracking-[0.25em] text-amber-200/55 backdrop-blur-xl">
           {t('glasses.paneNav')}
         </div>
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
           <BigMapCanvas data={m} />
-          <aside className="flex w-full shrink-0 flex-col justify-center gap-2 border-t border-amber-500/10 bg-[#141311] p-3 font-jit-mono text-[11px] text-stone-400 md:w-[188px] md:border-l md:border-t-0">
+          <aside className="flex w-full shrink-0 flex-col justify-center gap-2 border-t border-white/10 bg-stone-950/35 p-3 font-jit-mono text-[11px] text-stone-300 backdrop-blur-lg md:w-[188px] md:border-l md:border-t-0">
             <p className="text-amber-200/80">
               {m.fromLabel} <span className="text-teal-500/60">{t('glasses.routeArrow')}</span> {m.toLabel}
             </p>
@@ -380,9 +380,9 @@ function JitSplitPage({ preview }: { preview: InstantAppPreview }) {
 }
 
 const toneClass: Record<string, string> = {
-  gold: 'border-amber-500/35 bg-amber-950/40 text-amber-100',
-  mint: 'border-teal-500/35 bg-teal-950/35 text-teal-50',
-  rose: 'border-rose-500/35 bg-rose-950/35 text-rose-100',
+  gold: 'border-amber-500/35 bg-amber-950/35 text-amber-100 backdrop-blur-sm',
+  mint: 'border-teal-500/35 bg-teal-950/32 text-teal-50 backdrop-blur-sm',
+  rose: 'border-rose-500/35 bg-rose-950/32 text-rose-100 backdrop-blur-sm',
 }
 
 function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
@@ -391,14 +391,14 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
   const modules = preview.modules ?? []
   return (
     <div className="relative z-[1] flex min-h-[380px] flex-col md:flex-row">
-      <nav className="flex shrink-0 gap-1 border-b border-stone-700/80 bg-[#0c0b0a] p-2 font-jit-mono md:w-52 md:flex-col md:border-b-0 md:border-r md:border-stone-700/80">
+      <nav className="flex shrink-0 gap-1 border-b border-white/10 bg-stone-950/45 p-2 font-jit-mono backdrop-blur-xl md:w-52 md:flex-col md:border-b-0 md:border-r md:border-white/10">
         <p className="hidden px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-stone-600 md:block">{t('glasses.stackNav')}</p>
         {screens.length ? (
           screens.map((s, i) => (
             <button
               key={s.label}
               type="button"
-              className={`border px-3 py-2 text-left text-[11px] md:text-xs ${toneClass[s.tone] ?? 'border-stone-700 bg-stone-900 text-stone-300'}`}
+              className={`border px-3 py-2 text-left text-[11px] backdrop-blur-sm md:text-xs ${toneClass[s.tone] ?? 'border-white/12 bg-stone-950/50 text-stone-200'}`}
             >
               <span className="text-stone-600">[{i + 1}]</span> {s.label}
             </button>
@@ -407,7 +407,7 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
           <span className="px-2 py-2 text-[10px] text-stone-600">{t('glasses.stackRoot')}</span>
         )}
       </nav>
-      <main className="min-w-0 flex-1 bg-[#11100e] p-4">
+      <main className="min-w-0 flex-1 bg-transparent p-4">
         <p className="mb-4 border-l-2 border-teal-500/40 pl-3 font-jit-mono text-[11px] leading-relaxed text-stone-500">
           {preview.tagline}
         </p>
@@ -415,7 +415,7 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
           {modules.map((m) => (
             <li
               key={m.name}
-              className="border border-stone-700/60 bg-[#0f0e0c] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+              className="border border-white/10 bg-black/22 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-sm"
             >
               <p className="font-jit-mono text-[11px] font-medium uppercase tracking-wide text-amber-200/85">{m.name}</p>
               <p className="mt-2 font-jit-mono text-[11px] leading-relaxed text-stone-500">{m.desc}</p>
@@ -423,7 +423,7 @@ function JitScaffoldPage({ preview }: { preview: InstantAppPreview }) {
           ))}
         </ul>
         {preview.codeSnippet ? (
-          <pre className="mt-4 overflow-x-auto border border-teal-900/40 bg-[#050807] p-3 font-jit-mono text-[10px] leading-relaxed text-teal-200/90">
+          <pre className="mt-4 overflow-x-auto border border-teal-500/25 bg-black/40 p-3 font-jit-mono text-[10px] leading-relaxed text-teal-100/95 backdrop-blur-md">
             {preview.codeSnippet}
           </pre>
         ) : null}
@@ -532,7 +532,7 @@ export function GlassesDemo() {
       <div className="glasses-frame-bezel glasses-frame-bezel--walk flex min-h-0 flex-1 flex-col p-2 md:p-3">
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_12px_48px_rgba(28,25,23,0.18)] ring-1 ring-stone-900/10">
           <div
-            className="glasses-fpv-drift absolute inset-0 scale-[1.1] bg-cover bg-center"
+            className="glasses-fpv-drift glasses-fpv-daylight absolute inset-0 scale-[1.1] bg-cover bg-center"
             style={{
               backgroundImage: `url(${FPV_IMAGE})`,
             }}
@@ -544,9 +544,9 @@ export function GlassesDemo() {
             className="absolute inset-0 z-[1]"
             style={{
               background: [
-                /* 上：天光与远景略压暗；中：主视野（路面纵深）更透；下：车把区域略提对比 */
-                'linear-gradient(180deg, rgba(12,10,8,0.48) 0%, rgba(12,10,8,0.04) 26%, rgba(12,10,8,0) 42%, rgba(12,10,8,0.08) 68%, rgba(12,10,8,0.55) 100%)',
-                'radial-gradient(ellipse 95% 85% at 50% 40%, rgba(0,0,0,0) 0%, rgba(12,10,8,0.18) 100%)',
+                /* 白天感：整体压暗更轻，保留路面与车把可读 */
+                'linear-gradient(180deg, rgba(12,10,8,0.22) 0%, rgba(12,10,8,0.02) 28%, rgba(12,10,8,0) 45%, rgba(12,10,8,0.05) 72%, rgba(12,10,8,0.28) 100%)',
+                'radial-gradient(ellipse 96% 88% at 50% 38%, rgba(0,0,0,0) 0%, rgba(12,10,8,0.1) 100%)',
               ].join(', '),
             }}
             aria-hidden
@@ -580,7 +580,7 @@ export function GlassesDemo() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="absolute inset-0 z-20 cursor-default border-0 bg-black/45 backdrop-blur-[3px]"
+                    className="absolute inset-0 z-20 cursor-default border-0 bg-stone-900/30 backdrop-blur-[2px]"
                     onClick={closePanel}
                   />
                 ) : null}
@@ -651,7 +651,7 @@ export function GlassesDemo() {
                           </div>
                         }
                       >
-                        <div className="relative z-[1] border-b border-amber-500/15 bg-[#0f0e0c] px-4 py-2.5 font-jit-mono text-[11px] leading-relaxed text-stone-500">
+                        <div className="relative z-[1] border-b border-white/10 bg-stone-950/40 px-4 py-2.5 font-jit-mono text-[11px] leading-relaxed text-stone-300 backdrop-blur-lg">
                           <span className="text-teal-500/70">{t('glasses.intentEchoPrefix')}</span>
                           <span className="text-stone-400">{panel.preview.userIntentEcho}</span>
                         </div>
