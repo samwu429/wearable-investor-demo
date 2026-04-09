@@ -12,42 +12,36 @@ import {
 
 function InstantChatVisual({ data }: { data: InstantChatUi }) {
   return (
-    <div className="flex max-h-[min(52vh,440px)] min-h-[200px] flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/95 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_8px_24px_rgba(15,23,42,0.06)] ring-1 ring-blue-100/60">
-      <div className="flex items-center gap-3 border-b border-slate-200/80 bg-white/80 px-3 py-2.5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-mint/30 to-blue-100 text-sm font-semibold text-mint ring-2 ring-slate-200/70 shadow-sm">
-          {data.peerName.slice(0, 1)}
+    <div className="glasses-tui-panel flex max-h-[min(52vh,440px)] min-h-[200px] flex-col overflow-hidden !p-0">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-2 border-b border-sky-500/35 px-2 py-1.5 text-sky-200">
+        <div>
+          <span className="text-sky-500">#</span> CHAT <span className="text-sky-600">::</span>{' '}
+          <span className="text-sky-100">{data.peerName}</span>
         </div>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-ink">{data.peerName}</p>
-          <p className="text-[10px] text-mint">{data.peerStatus}</p>
-        </div>
-        <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-mist ring-1 ring-slate-200/80">社交</span>
+        <div className="text-[10px] text-mint">{data.peerStatus}</div>
+        <span className="text-[10px] text-sky-500/90">[SOC]</span>
       </div>
-      <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+      <div className="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 py-2">
         {data.bubbles.map((b, i) => (
-          <div key={i} className={`flex ${b.role === 'me' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
-                b.role === 'me'
-                  ? 'bg-gradient-to-b from-blue-500 to-blue-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] ring-1 ring-blue-400/50'
-                  : 'bg-white text-mist ring-1 ring-slate-200/90 shadow-sm'
-              }`}
-            >
-              {b.text}
-            </div>
-          </div>
+          <p key={i} className="break-words text-sky-100/95">
+            <span className={b.role === 'me' ? 'text-sky-400' : 'text-sky-500'}>{b.role === 'me' ? 'you>' : 'peer>'}</span>{' '}
+            {b.text}
+          </p>
         ))}
       </div>
-      <div className="flex gap-2 border-t border-slate-200/80 bg-slate-50/90 p-2">
-        <div className="flex-1 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs text-mist shadow-inner">
-          输入消息…
+      <div className="border-t border-sky-500/35 px-2 py-1.5 text-sky-400">
+        <div className="text-sky-500">
+          &gt; <span className="text-sky-600/80">_</span>
         </div>
-        <button
-          type="button"
-          className="rounded-xl bg-gradient-to-b from-blue-500 to-blue-600 px-4 text-xs font-semibold text-white shadow-sm ring-1 ring-blue-400/40"
-        >
-          发送
-        </button>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <span className="text-[10px] text-sky-500/80">[缓冲区: 输入消息…]</span>
+          <button
+            type="button"
+            className="rounded-sm border border-sky-400/60 bg-sky-500/25 px-2 py-0.5 text-[10px] font-medium text-sky-100 hover:bg-sky-500/40"
+          >
+            SEND
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -55,34 +49,41 @@ function InstantChatVisual({ data }: { data: InstantChatUi }) {
 
 function InstantMapVisual({ data }: { data: InstantMapUi }) {
   return (
-    <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-xl border border-mint/30 bg-gradient-to-br from-sky-50 via-white to-emerald-50/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_6px_20px_rgba(5,150,105,0.08)] ring-1 ring-slate-200/70">
+    <div className="glasses-tui-panel relative min-h-[200px] flex-1 overflow-hidden !p-0">
+      <div className="border-b border-sky-500/35 px-2 py-1 text-sky-300">
+        MAP <span className="text-sky-600">::</span> {data.headline}
+      </div>
       <div
-        className="pointer-events-none absolute inset-0 opacity-40"
+        className="pointer-events-none absolute inset-0 top-7 opacity-25"
         style={{
-          backgroundImage:
-            'radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)',
-          backgroundSize: '22px 22px',
+          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(56,189,248,0.5) 1px, transparent 0)',
+          backgroundSize: '10px 10px',
         }}
       />
-      <p className="absolute left-3 top-2 z-20 text-[11px] font-semibold text-ink drop-shadow-sm">{data.headline}</p>
       <svg className="relative z-10 h-[200px] w-full md:h-[min(240px,28vh)]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-hidden>
         <path
           d="M 48 170 Q 130 36 272 52"
           fill="none"
-          stroke="rgba(5,150,105,0.85)"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeDasharray="8 6"
+          stroke="rgba(52,211,153,0.9)"
+          strokeWidth="2"
+          strokeLinecap="square"
+          strokeDasharray="6 4"
         />
-        <circle cx="48" cy="170" r="9" fill="#2563eb" stroke="rgba(255,255,255,0.95)" strokeWidth="2" />
-        <circle cx="272" cy="52" r="11" fill="#fb7185" stroke="rgba(255,255,255,0.95)" strokeWidth="2" />
+        <rect x="39" y="161" width="18" height="18" fill="none" stroke="rgba(56,189,248,0.95)" strokeWidth="2" />
+        <rect x="263" y="43" width="18" height="18" fill="none" stroke="rgba(251,113,133,0.95)" strokeWidth="2" />
       </svg>
-      <div className="absolute bottom-2 left-2 right-2 z-20 flex flex-wrap items-center justify-between gap-2 text-[10px]">
-        <span className="rounded-lg bg-white/95 px-2 py-1 text-mist shadow-sm ring-1 ring-slate-200/80">{data.fromLabel}</span>
-        <span className="rounded-lg bg-mint/15 px-2 py-1 font-medium text-mint ring-1 ring-mint/30 shadow-sm">
-          {data.travelMode} · 约 {data.minutes} 分钟
-        </span>
-        <span className="rounded-lg bg-white/95 px-2 py-1 text-ink shadow-sm ring-1 ring-slate-200/80">{data.toLabel}</span>
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-sky-500/35 bg-slate-950/55 px-2 py-1 text-[10px] text-sky-200">
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <span className="text-sky-400">[A]</span>
+          <span className="text-sky-100/90">{data.fromLabel}</span>
+        </div>
+        <div className="text-center text-mint">
+          {data.travelMode} ~ {data.minutes} min
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <span className="text-sky-400">[B]</span>
+          <span className="text-sky-100/90">{data.toLabel}</span>
+        </div>
       </div>
     </div>
   )
@@ -107,7 +108,7 @@ const CLAUSES: Record<
     tag: '7.2 交付',
     body: (
       <>
-        第 7.2 条：若乙方延迟交付超过 <strong className="text-gold">14</strong> 个自然日，甲方有权终止协议并要求按日计违约金。
+        第 7.2 条：若乙方延迟交付超过 <strong className="text-sky-300">14</strong> 个自然日，甲方有权终止协议并要求按日计违约金。
       </>
     ),
     risk: '现金流与交付节奏',
@@ -127,7 +128,7 @@ const CLAUSES: Record<
     tag: '11 终止',
     body: (
       <>
-        第 11 条：任一方重大违约且未在 <strong className="text-gold">30</strong> 日内补救的，守约方可书面终止；已交付成果按里程碑结算。
+        第 11 条：任一方重大违约且未在 <strong className="text-sky-300">30</strong> 日内补救的，守约方可书面终止；已交付成果按里程碑结算。
       </>
     ),
     risk: '退出路径与残值',
@@ -143,8 +144,8 @@ const JIT_QUEUE_SEED: JitQueueItem[] = [
 ]
 
 function jitCardClass(intensity: number) {
-  const glow = 10 + intensity * 22
-  return `rounded-2xl border border-blue-200/70 bg-white/90 p-4 shadow-[0_0_${glow}px_rgba(37,99,235,0.14),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-md ring-1 ring-slate-200/55`
+  const glow = 6 + intensity * 16
+  return `glasses-tui-panel rounded-sm p-3 shadow-[0_0_${glow}px_rgba(56,189,248,0.12)] md:p-4`
 }
 
 export function GlassesDemo() {
@@ -218,24 +219,24 @@ export function GlassesDemo() {
   }
 
   const screenTone = (tone: InstantAppScreen['tone']) => {
-    if (tone === 'mint') return 'border-mint/45 bg-mint/10 text-mint'
-    if (tone === 'rose') return 'border-rose/45 bg-rose/10 text-rose'
-    return 'border-gold/45 bg-gold/15 text-gold'
+    if (tone === 'mint') return 'rounded-sm border border-mint/50 bg-slate-950/30 text-mint'
+    if (tone === 'rose') return 'rounded-sm border border-rose/50 bg-slate-950/30 text-rose'
+    return 'rounded-sm border border-sky-500/45 bg-sky-500/10 text-sky-200'
   }
 
   return (
     <div className="mx-auto max-w-[min(100%,1400px)] px-4 py-6 md:px-6 md:py-8">
       {/* 外：金属镜框 · 内：亮镜片视野 */}
-      <div className="glasses-frame-bezel relative rounded-[2.25rem] p-[10px] shadow-[0_28px_64px_rgba(37,99,235,0.1)] md:p-3">
-        <div className="glasses-lens-field relative min-h-[min(88vh,940px)] w-full overflow-hidden rounded-[1.85rem] border border-blue-100/90 shadow-[inset_0_2px_20px_rgba(255,255,255,0.85)] md:rounded-[1.95rem]">
+      <div className="glasses-frame-bezel relative p-2 shadow-[0_20px_48px_rgba(56,189,248,0.12)] md:p-2.5">
+        <div className="glasses-lens-field relative min-h-[min(88vh,940px)] w-full overflow-hidden border border-sky-300/50 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
         <div
-          className="pointer-events-none absolute inset-0 opacity-90"
+          className="pointer-events-none absolute inset-0 opacity-95"
           style={{
             backgroundImage:
-              'radial-gradient(ellipse at 22% 16%, rgba(37,99,235,0.1), transparent 52%), radial-gradient(ellipse at 82% 72%, rgba(5,150,105,0.12), transparent 48%)',
+              'radial-gradient(ellipse at 20% 14%, rgba(125,211,252,0.2), transparent 52%), radial-gradient(ellipse at 80% 74%, rgba(52,211,153,0.1), transparent 48%)',
           }}
         />
-        <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%232563eb\' fill-opacity=\'0.04\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-70" />
+        <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%230ea5e9\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-60" />
 
         {/* HUD frame */}
         {[
@@ -244,31 +245,31 @@ export function GlassesDemo() {
           'left-5 bottom-5 border-l-2 border-b-2',
           'right-5 bottom-5 border-r-2 border-b-2',
         ].map((c) => (
-          <div key={c} className={`pointer-events-none absolute h-12 w-12 border-blue-400/55 ${c}`} aria-hidden />
+          <div key={c} className={`pointer-events-none absolute h-10 w-10 border-sky-400/45 ${c}`} aria-hidden />
         ))}
 
         {/* 顶栏：标题 + 敏感度 + 会话状态（全部在同一视野框内） */}
         <div className="absolute left-3 right-3 top-3 z-30 flex flex-wrap items-center justify-between gap-3 md:left-5 md:right-5 md:top-4">
-          <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">穿戴视野 · 单一 JIT 画布</p>
-            <h1 className="font-display text-lg font-bold leading-tight text-ink md:text-2xl">Part 2 · 眼镜即时界面</h1>
-            <p className="mt-0.5 hidden max-w-lg text-[11px] text-mist md:block">
-              合同、口述生成、AI 解释、队列均在同一视野中叠加——模拟真实眼镜上的连续 JIT。
+          <div className="glasses-tui min-w-0 text-sky-950 drop-shadow-sm">
+            <p className="text-[10px] font-medium uppercase tracking-wider text-sky-600">[HUD] 单画布 JIT</p>
+            <h1 className="text-base font-bold leading-tight md:text-lg">Part 2 · 眼镜 · TUI 叠显</h1>
+            <p className="mt-0.5 hidden max-w-lg text-[10px] text-sky-800/90 md:block">
+              文本线框界面 · 余光可读 · 模拟走路时仍要看路
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <span className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-ink'}>
-              <span className="text-gold">JIT</span> 会话
+            <span className={jitCardClass(sensitivity) + ' !py-1.5 !px-2 text-[10px] text-sky-100'}>
+              <span className="text-sky-400">JIT</span> SESS
             </span>
             <button
               type="button"
               onClick={() => setHideUnverified((v) => !v)}
-              className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-mist hover:text-ink'}
+              className={jitCardClass(sensitivity) + ' !py-1.5 !px-2 text-[10px] text-sky-300 hover:text-sky-100'}
             >
               {hideUnverified ? '显示未验证' : '隐藏未验证'}
             </button>
-            <div className={jitCardClass(sensitivity) + ' !flex !w-[140px] !flex-col !py-2 !px-3'}>
-              <p className="text-[9px] font-semibold uppercase tracking-wider text-gold">光晕</p>
+            <div className={jitCardClass(sensitivity) + ' !flex !w-[128px] !flex-col !py-1.5 !px-2'}>
+              <p className="text-[9px] uppercase tracking-wider text-sky-500">光晕</p>
               <input
                 type="range"
                 min={0}
@@ -291,18 +292,18 @@ export function GlassesDemo() {
             style={{ left: p.x, top: p.y }}
           >
             <div
-              className={`flex h-16 w-16 items-center justify-center rounded-full border-2 bg-white/95 text-sm font-medium shadow-sm backdrop-blur ${
-                p.verified ? 'border-mint text-mint shadow-[0_0_24px_rgba(5,150,105,0.35)]' : 'border-slate-300/90 text-mist'
+              className={`glasses-tui flex h-14 w-14 items-center justify-center border-2 bg-slate-950/45 text-xs text-sky-100 shadow-sm backdrop-blur-sm ${
+                p.verified ? 'border-mint text-mint' : 'border-sky-500/40 text-sky-500'
               }`}
             >
-              {p.verified ? '真人' : '?'}
+              {p.verified ? 'OK' : '?'}
             </div>
-            <span className="max-w-[120px] text-center text-[11px] text-mist">{p.name}</span>
+            <span className="glasses-tui max-w-[120px] text-center text-[10px] text-sky-950/90">{p.name}</span>
           </div>
         ))}
 
         <motion.div
-          className="pointer-events-none absolute z-10 h-4 w-4 rounded-full bg-rose/90 shadow-lg shadow-rose/40 ring-2 ring-white/90"
+          className="pointer-events-none absolute z-10 h-3 w-3 rounded-sm border border-rose-300 bg-rose-500/90 shadow-md shadow-rose-500/30"
           initial={{ left: '50%', top: '50%' }}
           animate={{ left: ['46%', '58%', '50%'], top: ['46%', '42%', '50%'] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
@@ -316,27 +317,27 @@ export function GlassesDemo() {
               initial={{ opacity: 0, y: 24, scale: 0.94 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 16 }}
-              className={`absolute left-1/2 top-[24%] z-30 w-[min(96%,600px)] -translate-x-1/2 md:top-[26%] ${jitCardClass(sensitivity)} !p-5 md:!p-7`}
+              className={`absolute left-1/2 top-[24%] z-30 w-[min(96%,600px)] -translate-x-1/2 md:top-[26%] ${jitCardClass(sensitivity)} !p-4 md:!p-5`}
               role="dialog"
               aria-label="即时合同浮窗"
             >
-              <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-sky-500/30 pb-2">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gold">JIT · 合同要点</p>
-                  <h2 className="mt-2 font-display text-xl font-semibold text-ink md:text-2xl">{clauseData.title}</h2>
-                  <p className="mt-1 text-xs text-mint">风险域：{clauseData.risk}</p>
+                  <p className="text-[10px] uppercase tracking-wider text-sky-500">[CONTRACT]</p>
+                  <h2 className="mt-1 text-base font-semibold text-sky-100 md:text-lg">{clauseData.title}</h2>
+                  <p className="mt-0.5 text-[10px] text-mint">RISK: {clauseData.risk}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setJitVisible(false)}
-                  className="rounded-xl border border-slate-200/90 bg-white/80 px-3 py-1.5 text-xs text-mist shadow-sm hover:bg-white"
+                  className="rounded-sm border border-sky-500/40 bg-slate-950/40 px-2 py-1 text-[10px] text-sky-300 hover:bg-slate-950/60"
                   aria-label="关闭主浮窗"
                 >
-                  收起
+                  [ESC]
                 </button>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-1">
                 {(Object.keys(CLAUSES) as ClauseKey[]).map((key) => (
                   <button
                     key={key}
@@ -346,10 +347,10 @@ export function GlassesDemo() {
                       setHighlight(false)
                       setSigned(false)
                     }}
-                    className={`rounded-full px-4 py-2 text-xs font-semibold ring-1 transition-colors ${
+                    className={`rounded-sm border px-2 py-1 text-[10px] transition-colors ${
                       clause === key
-                        ? 'bg-blue-100/90 text-gold ring-blue-300/70 shadow-sm'
-                        : 'bg-slate-100/90 text-mist ring-slate-200/80 hover:bg-white hover:text-ink'
+                        ? 'border-sky-400 bg-sky-500/20 text-sky-100'
+                        : 'border-sky-500/25 text-sky-400 hover:border-sky-400/50 hover:text-sky-200'
                     }`}
                   >
                     {CLAUSES[key].tag}
@@ -358,23 +359,23 @@ export function GlassesDemo() {
               </div>
 
               <p
-                className={`mt-5 text-base leading-relaxed text-mist md:text-lg ${highlight ? 'rounded-xl bg-blue-50/95 p-4 text-ink ring-1 ring-blue-200/70 shadow-sm' : ''}`}
+                className={`mt-4 leading-relaxed text-sky-200/95 ${highlight ? 'rounded-sm border border-sky-400/40 bg-slate-950/50 p-3 text-sky-50' : ''}`}
               >
                 {clauseData.body}
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => setHighlight((h) => !h)}
-                  className="rounded-full border border-slate-200/90 bg-white/90 px-5 py-2.5 text-sm font-medium text-ink shadow-sm ring-1 ring-slate-100 hover:bg-slate-50"
+                  className="rounded-sm border border-sky-500/40 bg-slate-950/35 px-3 py-1.5 text-[11px] text-sky-200 hover:bg-slate-950/55"
                 >
                   {highlight ? '取消高亮' : '高亮风险句'}
                 </button>
                 <button
                   type="button"
                   onClick={startVoiceDemo}
-                  className="rounded-full border border-slate-200/90 bg-white/90 px-5 py-2.5 text-sm font-medium text-ink shadow-sm ring-1 ring-slate-100 hover:bg-slate-50"
+                  className="rounded-sm border border-sky-500/40 bg-slate-950/35 px-3 py-1.5 text-[11px] text-sky-200 hover:bg-slate-950/55"
                 >
                   {voicePlaying ? '停止语音示意' : '语音解释（示意）'}
                 </button>
@@ -382,24 +383,24 @@ export function GlassesDemo() {
                   type="button"
                   onClick={() => setSigned(true)}
                   disabled={signed}
-                  className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] hover:from-blue-600 hover:to-blue-700 disabled:cursor-default disabled:opacity-60"
+                  className="rounded-sm border border-sky-400/60 bg-sky-500/30 px-3 py-1.5 text-[11px] font-medium text-sky-50 hover:bg-sky-500/45 disabled:cursor-default disabled:opacity-60"
                 >
                   {signed ? '已请求戒指确认' : '发起签署'}
                 </button>
               </div>
               {voicePlaying && (
-                <div className="mt-4">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-slate-200/90">
+                <div className="mt-3">
+                  <div className="h-1 overflow-hidden rounded-sm bg-slate-900/80">
                     <div
                       className="h-full bg-mint transition-[width] duration-75 ease-linear"
                       style={{ width: `${voiceProgress * 100}%` }}
                     />
                   </div>
-                  <p className="mt-2 text-[11px] text-mist">演示用 TTS 进度条 · 非真实语音合成</p>
+                  <p className="mt-1 text-[10px] text-sky-500">TTS 进度 · 演示</p>
                 </div>
               )}
               {signed && (
-                <p className="mt-4 text-sm text-mint">已推送至 Signet · 请在戒指上完成阻尼确认（演示）</p>
+                <p className="mt-3 text-[11px] text-mint">&gt; 已推送 Signet · 戒指阻尼确认（演示）</p>
               )}
             </motion.div>
           )}
@@ -412,7 +413,7 @@ export function GlassesDemo() {
               setJitVisible(true)
               setSigned(false)
             }}
-            className="absolute bottom-[5.5rem] left-1/2 z-30 -translate-x-1/2 rounded-full border border-blue-300/80 bg-gradient-to-b from-blue-500 to-blue-600 px-6 py-2.5 text-xs font-semibold text-white shadow-[0_8px_28px_rgba(37,99,235,0.35)] md:px-8 md:py-3 md:text-sm"
+            className="glasses-tui absolute bottom-[5.5rem] left-1/2 z-30 -translate-x-1/2 rounded-sm border border-sky-400/70 bg-sky-500/35 px-4 py-2 text-[11px] font-medium text-sky-50 shadow-md backdrop-blur-sm md:px-6 md:text-xs"
           >
             重新打开 JIT 主浮窗
           </button>
@@ -426,15 +427,15 @@ export function GlassesDemo() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 12 }}
-              className="absolute inset-x-3 bottom-[5.75rem] top-[30%] z-40 flex flex-col overflow-hidden rounded-2xl border border-blue-200/90 bg-white/96 shadow-[0_0_40px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-md ring-1 ring-slate-200/60 md:inset-x-6 md:bottom-[6rem] md:top-[28%]"
+              className="absolute inset-x-3 bottom-[5.75rem] top-[30%] z-40 flex flex-col overflow-hidden rounded-sm border border-sky-500/45 bg-slate-950/52 shadow-[0_0_28px_rgba(56,189,248,0.12)] backdrop-blur-md md:inset-x-6 md:bottom-[6rem] md:top-[28%]"
             >
               {instantGenerating && (
-                <div className="flex flex-1 flex-col justify-center p-6">
-                  <p className="text-sm font-medium text-ink">正在理解意图并渲染界面…</p>
-                  <p className="mt-2 text-xs text-mist">若为聊天 / 地图类需求，将直接弹出拟真 UI（前端模拟，约 1.6s）</p>
-                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-200/90">
+                <div className="glasses-tui flex flex-1 flex-col justify-center p-4 text-sky-100">
+                  <p className="text-sky-200">&gt; 解析意图…</p>
+                  <p className="mt-2 text-[10px] text-sky-500">聊天/地图 → TUI 预览 · ~1.6s</p>
+                  <div className="mt-3 h-1 overflow-hidden rounded-sm bg-slate-900/90">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-gold via-mint to-gold"
+                      className="h-full bg-gradient-to-r from-sky-400 via-mint to-sky-400"
                       initial={{ width: '6%' }}
                       animate={{ width: '94%' }}
                       transition={{ duration: 1.5, ease: 'easeInOut' }}
@@ -444,28 +445,28 @@ export function GlassesDemo() {
               )}
               {!instantGenerating && instantPreview && (
                 <div className="flex min-h-0 flex-1 flex-col">
-                  <div className="flex shrink-0 items-center justify-between gap-2 border-b border-slate-200/90 bg-slate-50/80 px-4 py-3">
-                    <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 口述即产品</p>
-                      <p className="truncate font-display text-base font-semibold text-ink md:text-lg">{instantPreview.productName}</p>
-                      <p className="text-xs text-mint">{instantPreview.tagline}</p>
+                  <div className="flex shrink-0 items-center justify-between gap-2 border-b border-sky-500/35 px-3 py-2">
+                    <div className="glasses-tui min-w-0 text-sky-100">
+                      <p className="text-[10px] uppercase tracking-wider text-sky-500">[GEN] 口述即产品</p>
+                      <p className="truncate text-sm font-semibold text-sky-50 md:text-base">{instantPreview.productName}</p>
+                      <p className="text-[10px] text-mint">{instantPreview.tagline}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setInstantPreview(null)}
-                      className="shrink-0 rounded-lg border border-slate-200/90 bg-white px-3 py-1.5 text-[11px] text-mist shadow-sm hover:bg-slate-50 hover:text-ink"
+                      className="glasses-tui shrink-0 rounded-sm border border-sky-500/40 px-2 py-1 text-[10px] text-sky-300 hover:bg-slate-950/40"
                     >
-                      关闭
+                      [X]
                     </button>
                   </div>
-                  <div className="min-h-0 flex-1 overflow-y-auto p-4">
-                    <p className="text-[11px] text-mist">
-                      你的说法：<span className="text-ink">「{instantPreview.userIntentEcho}」</span>
+                  <div className="glasses-tui min-h-0 flex-1 overflow-y-auto p-3 text-sky-200">
+                    <p className="text-[10px] text-sky-500">
+                      输入 <span className="text-sky-200">「{instantPreview.userIntentEcho}」</span>
                     </p>
-                    <p className="mt-1 text-[10px] text-mint/90">{instantPreview.etaLine}</p>
+                    <p className="mt-1 text-[10px] text-mint">{instantPreview.etaLine}</p>
 
                     {(instantPreview.uiMode === 'chat' || instantPreview.uiMode === 'map' || instantPreview.uiMode === 'split') && (
-                      <p className="mt-3 text-[10px] font-semibold uppercase tracking-wider text-gold">即时界面预览</p>
+                      <p className="mt-3 text-[10px] uppercase tracking-wider text-sky-500">--- TUI 预览 ---</p>
                     )}
 
                     {instantPreview.uiMode === 'chat' && instantPreview.chatUi && (
@@ -498,18 +499,18 @@ export function GlassesDemo() {
                               transition={{ delay: 0.04 * i }}
                               className={`${jitCardClass(sensitivity)} !p-3`}
                             >
-                              <p className="text-xs font-semibold text-ink">{m.name}</p>
-                              <p className="mt-1 text-[11px] leading-relaxed text-mist">{m.desc}</p>
+                              <p className="text-[11px] font-semibold text-sky-100">{m.name}</p>
+                              <p className="mt-1 text-[10px] leading-relaxed text-sky-400">{m.desc}</p>
                             </motion.div>
                           ))}
                         </div>
                         <div className="mt-4">
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">结构示意（非聊天/地图类）</p>
-                          <div className="mt-2 flex flex-wrap gap-2">
+                          <p className="text-[10px] uppercase tracking-wider text-sky-500">[SCAFFOLD] 屏结构</p>
+                          <div className="mt-2 flex flex-wrap gap-1">
                             {instantPreview.screens.map((s) => (
                               <div
                                 key={s.label}
-                                className={`flex min-h-[56px] min-w-[72px] flex-1 flex-col justify-between rounded-xl border px-2 py-2 text-[11px] font-medium ${screenTone(s.tone)}`}
+                                className={`flex min-h-[52px] min-w-[68px] flex-1 flex-col justify-between border px-2 py-1.5 text-[10px] font-medium ${screenTone(s.tone)}`}
                               >
                                 <span>{s.label}</span>
                                 <span className="text-[9px] font-normal opacity-80">占位</span>
@@ -518,9 +519,9 @@ export function GlassesDemo() {
                           </div>
                         </div>
                         {instantPreview.codeSnippet && (
-                          <div className={`${jitCardClass(sensitivity)} mt-4 !p-0 !ring-0 overflow-hidden`}>
-                            <div className="border-b border-slate-200/90 bg-slate-100/95 px-3 py-1.5 text-[10px] text-mist">routes（演示）</div>
-                            <pre className="max-h-28 overflow-auto bg-slate-50/80 p-3 text-[10px] leading-relaxed text-mint">
+                          <div className={`${jitCardClass(sensitivity)} mt-3 !p-0 overflow-hidden`}>
+                            <div className="border-b border-sky-500/30 px-2 py-1 text-[10px] text-sky-500">routes.ts</div>
+                            <pre className="max-h-28 overflow-auto bg-slate-950/50 p-2 text-[10px] leading-relaxed text-mint">
                               {instantPreview.codeSnippet}
                             </pre>
                           </div>
@@ -536,15 +537,15 @@ export function GlassesDemo() {
 
         {/* 底栏：口述输入（同一视野框最下层） */}
         <div className="absolute bottom-3 left-3 right-3 z-30 md:left-5 md:right-5">
-          <div className={`${jitCardClass(sensitivity)} !flex !flex-col gap-2 !p-3 md:!flex-row md:!items-end`}>
+          <div className={`${jitCardClass(sensitivity)} !flex !flex-col gap-2 !p-2.5 md:!flex-row md:!items-end`}>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 口述需求</p>
+              <p className="text-[10px] uppercase tracking-wider text-sky-500">[CMD] 口述需求</p>
               <textarea
                 value={instantIntent}
                 onChange={(e) => setInstantIntent(e.target.value)}
                 rows={2}
-                className="mt-1.5 w-full resize-none rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-[12px] text-ink shadow-inner outline-none ring-blue-200/50 focus:ring-2 md:text-sm"
-                placeholder="例如：给妈妈发消息我想吃糖醋排骨 / 带我去图书馆并生成地图（演示：前端按意图弹出聊天或地图 UI）"
+                className="glasses-tui mt-1 w-full resize-none rounded-sm border border-sky-500/35 bg-slate-950/50 px-2 py-1.5 text-[11px] text-sky-100 placeholder:text-sky-600 outline-none focus:border-sky-400/60 md:text-xs"
+                placeholder="例: 发消息… / 导航到…"
               />
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
@@ -552,9 +553,9 @@ export function GlassesDemo() {
                 type="button"
                 disabled={instantGenerating || instantIntent.trim().length < 6}
                 onClick={runInstantAppDemo}
-                className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:from-blue-600 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-sm border border-sky-400/60 bg-sky-500/35 px-4 py-2 text-[10px] font-medium text-sky-50 hover:bg-sky-500/50 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {instantGenerating ? '生成中…' : '即刻生成'}
+                {instantGenerating ? '…' : 'RUN'}
               </button>
             </div>
           </div>
@@ -562,23 +563,23 @@ export function GlassesDemo() {
 
         {/* JIT queue — right rail inside viewport */}
         <div className="absolute bottom-[5.75rem] right-3 z-20 flex w-[min(100%,240px)] flex-col gap-2 md:right-5 md:w-[min(100%,260px)]">
-          <div className={jitCardClass(sensitivity) + ' !p-3'}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 队列</p>
-            <p className="mt-1 text-[11px] text-mist">点击固定到主浮窗上下文（演示）。</p>
-            <ul className="mt-3 space-y-2">
+          <div className={jitCardClass(sensitivity) + ' !p-2.5'}>
+            <p className="text-[10px] uppercase tracking-wider text-sky-500">[QUEUE]</p>
+            <p className="mt-1 text-[10px] text-sky-500">固定 → 主上下文</p>
+            <ul className="mt-2 space-y-1">
               {queue.map((item) => (
                 <li key={item.id}>
                   <button
                     type="button"
                     onClick={() => togglePin(item.id)}
-                    className={`flex w-full flex-col rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
+                    className={`flex w-full flex-col rounded-sm border px-2 py-1.5 text-left text-[10px] transition-colors ${
                       pinnedId === item.id
-                        ? 'border-blue-300/80 bg-blue-50/95 text-ink shadow-sm'
-                        : 'border-slate-200/90 bg-white/90 text-mist hover:border-blue-200/80 hover:text-ink'
+                        ? 'border-sky-400 bg-sky-500/15 text-sky-50'
+                        : 'border-sky-500/25 text-sky-400 hover:border-sky-400/50 hover:text-sky-200'
                     }`}
                   >
-                    <span className="font-medium text-ink">{item.label}</span>
-                    <span className="text-[10px] text-mist">{item.sub}</span>
+                    <span className="font-medium text-sky-100">{item.label}</span>
+                    <span className="text-[9px] text-sky-500">{item.sub}</span>
                   </button>
                 </li>
               ))}
@@ -589,16 +590,16 @@ export function GlassesDemo() {
         {/* JIT AI — bottom left inside viewport（与底栏错开） */}
         <div className="absolute bottom-[5.75rem] left-3 z-20 w-[min(100%,min(92vw,340px))] md:left-5 md:max-w-[380px]">
           <div className={jitCardClass(sensitivity)}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · AI 解释</p>
-            <p className="mt-1 text-[11px] text-mist">实时调用后端，不暴露密钥。Endpoint: {API_BASE_URL}/v1/ai/generate</p>
+            <p className="text-[10px] uppercase tracking-wider text-sky-500">[AI] LLM</p>
+            <p className="mt-1 break-all text-[9px] text-sky-500">{API_BASE_URL}/v1/ai/generate</p>
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               rows={3}
-              className="mt-3 w-full rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs text-ink shadow-inner outline-none ring-blue-200/50 focus:ring-2"
-              placeholder="输入希望 AI 解释的条款或问题"
+              className="glasses-tui mt-2 w-full rounded-sm border border-sky-500/35 bg-slate-950/50 px-2 py-1.5 text-[10px] text-sky-100 placeholder:text-sky-600 outline-none focus:border-sky-400/60"
+              placeholder="条款/问题…"
             />
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-1">
               <button
                 type="button"
                 disabled={aiLoading || prompt.trim().length < 8}
@@ -616,9 +617,9 @@ export function GlassesDemo() {
                     setAiLoading(false)
                   }
                 }}
-                className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:from-blue-600 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-sm border border-sky-400/60 bg-sky-500/30 px-3 py-1 text-[10px] font-medium text-sky-50 hover:bg-sky-500/45 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {aiLoading ? '生成中…' : '实时解释'}
+                {aiLoading ? '…' : 'REQ'}
               </button>
               <button
                 type="button"
@@ -626,15 +627,15 @@ export function GlassesDemo() {
                 onClick={async () => {
                   await navigator.clipboard.writeText(aiResult)
                 }}
-                className="rounded-full border border-slate-200/90 bg-white px-4 py-2 text-xs font-medium text-ink shadow-sm hover:bg-slate-50 disabled:opacity-40"
+                className="rounded-sm border border-sky-500/40 px-3 py-1 text-[10px] text-sky-300 hover:bg-slate-950/40 disabled:opacity-40"
               >
-                复制
+                CP
               </button>
             </div>
-            {aiMeta && <p className="mt-2 text-[10px] text-mint">{aiMeta}</p>}
-            {aiError && <p className="mt-2 rounded-lg bg-rose/10 p-2 text-xs text-rose">{aiError}</p>}
+            {aiMeta && <p className="mt-2 text-[9px] text-mint">{aiMeta}</p>}
+            {aiError && <p className="mt-2 rounded-sm border border-rose-500/40 bg-rose-950/30 p-1.5 text-[10px] text-rose-300">{aiError}</p>}
             {aiResult && (
-              <div className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-slate-200/90 bg-slate-50/95 p-3 text-xs leading-relaxed text-ink">
+              <div className="mt-2 max-h-36 overflow-y-auto rounded-sm border border-sky-500/25 bg-slate-950/40 p-2 text-[10px] leading-relaxed text-sky-100">
                 {aiResult}
               </div>
             )}
@@ -643,21 +644,21 @@ export function GlassesDemo() {
 
         {/* JIT trust + pupil — 顶角（避开顶栏） */}
         <div className="absolute left-3 top-[7.5rem] z-20 hidden max-w-[190px] md:left-5 md:top-[8.25rem] md:block">
-          <div className={jitCardClass(sensitivity) + ' !p-3'}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 信任圈</p>
-            <p className="mt-2 text-[11px] leading-relaxed text-mist">
-              绿环：人源认证链路。灰问号：未验证，信息克制展示，降低冒充风险。
+          <div className={jitCardClass(sensitivity) + ' !p-2.5'}>
+            <p className="text-[10px] uppercase tracking-wider text-sky-500">[TRUST]</p>
+            <p className="mt-1 text-[10px] leading-relaxed text-sky-400">
+              OK=人源链 · ?=未验证 · 少信息降冒充
             </p>
           </div>
         </div>
         <div className="absolute right-3 top-[8.5rem] z-20 hidden w-48 md:right-5 md:top-[9rem] md:block">
-          <div className={jitCardClass(sensitivity) + ' !p-3'}>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 生物采样</p>
-            <svg viewBox="0 0 280 56" className="mt-2 h-14 w-full" aria-hidden>
-              <path d={pupilPath} fill="none" stroke="rgba(52,211,191,0.9)" strokeWidth="2" />
-              <line x1="0" y1="28" x2="280" y2="28" stroke="rgba(148,163,184,0.35)" strokeWidth="1" />
+          <div className={jitCardClass(sensitivity) + ' !p-2.5'}>
+            <p className="text-[10px] uppercase tracking-wider text-sky-500">[BIO]</p>
+            <svg viewBox="0 0 280 56" className="mt-1 h-12 w-full" aria-hidden>
+              <path d={pupilPath} fill="none" stroke="rgba(52,211,153,0.85)" strokeWidth="1.5" />
+              <line x1="0" y1="28" x2="280" y2="28" stroke="rgba(56,189,248,0.25)" strokeWidth="1" />
             </svg>
-            <p className="mt-1 text-[10px] text-mist">瞳孔波形仅为隐喻 · 非医学数据</p>
+            <p className="mt-1 text-[9px] text-sky-500">波形示意 · 非医学</p>
           </div>
         </div>
         </div>

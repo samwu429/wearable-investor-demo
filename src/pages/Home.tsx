@@ -21,7 +21,7 @@ export function Home() {
         <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink md:text-5xl lg:text-6xl">
           分布式穿戴 + AIOS
           <br />
-          <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-mint bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-sky-500 via-sky-400 to-mint bg-clip-text text-transparent">
             把「真实的人」锁进关键动作
           </span>
         </h1>
@@ -31,13 +31,13 @@ export function Home() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             to="/watch"
-            className="inline-flex min-w-[200px] items-center justify-center rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_8px_28px_rgba(37,99,235,0.35)] transition hover:from-blue-600 hover:to-blue-700"
+            className="inline-flex min-w-[200px] items-center justify-center rounded-sm bg-gradient-to-b from-sky-400 to-sky-500 px-8 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_6px_22px_rgba(14,165,233,0.3)] transition hover:from-sky-500 hover:to-sky-600"
           >
             Part 1 · 手表中枢
           </Link>
           <Link
             to="/glasses"
-            className="metallic-surface inline-flex min-w-[200px] items-center justify-center rounded-full px-8 py-3.5 text-sm font-semibold text-ink transition hover:ring-2 hover:ring-mint/30"
+            className="metallic-surface inline-flex min-w-[200px] items-center justify-center rounded-sm px-8 py-3.5 text-sm font-semibold text-ink transition hover:ring-2 hover:ring-sky-300/60"
           >
             Part 2 · 眼镜 AR
           </Link>
@@ -61,7 +61,7 @@ export function Home() {
         ].map((c) => (
           <motion.article
             key={c.t}
-            className="metallic-surface rounded-2xl p-6 ring-1 ring-slate-200/80"
+            className="metallic-surface rounded-sm p-6 ring-1 ring-sky-200/70"
             {...fade}
           >
             <h2 className="font-display text-xl font-semibold text-gold">{c.t}</h2>
@@ -71,7 +71,7 @@ export function Home() {
       </section>
 
       <motion.section
-        className="metallic-surface mt-20 rounded-3xl p-8 ring-1 ring-blue-200/60 md:p-12"
+        className="metallic-surface mt-20 rounded-sm p-8 ring-1 ring-sky-200/80 md:p-12"
         {...fade}
       >
         <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">演示怎么讲（30 秒版）</h2>
