@@ -18,10 +18,10 @@ export function Home() {
         transition={{ duration: 0.5 }}
       >
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-gold">Investor walkthrough</p>
-        <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
+        <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink md:text-5xl lg:text-6xl">
           分布式穿戴 + AIOS
           <br />
-          <span className="bg-gradient-to-r from-gold to-mint bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-mint bg-clip-text text-transparent">
             把「真实的人」锁进关键动作
           </span>
         </h1>
@@ -31,13 +31,13 @@ export function Home() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             to="/watch"
-            className="inline-flex min-w-[200px] items-center justify-center rounded-full bg-gold px-8 py-3.5 text-sm font-semibold text-night shadow-lg shadow-gold/20 transition hover:bg-gold-dim"
+            className="inline-flex min-w-[200px] items-center justify-center rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_8px_28px_rgba(37,99,235,0.35)] transition hover:from-blue-600 hover:to-blue-700"
           >
             Part 1 · 手表中枢
           </Link>
           <Link
             to="/glasses"
-            className="inline-flex min-w-[200px] items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+            className="metallic-surface inline-flex min-w-[200px] items-center justify-center rounded-full px-8 py-3.5 text-sm font-semibold text-ink transition hover:ring-2 hover:ring-mint/30"
           >
             Part 2 · 眼镜 AR
           </Link>
@@ -61,7 +61,7 @@ export function Home() {
         ].map((c) => (
           <motion.article
             key={c.t}
-            className="rounded-2xl border border-white/10 bg-night/80 p-6 shadow-xl shadow-black/40"
+            className="metallic-surface rounded-2xl p-6 ring-1 ring-slate-200/80"
             {...fade}
           >
             <h2 className="font-display text-xl font-semibold text-gold">{c.t}</h2>
@@ -70,8 +70,11 @@ export function Home() {
         ))}
       </section>
 
-      <motion.section className="mt-20 rounded-3xl border border-gold/20 bg-gradient-to-br from-night to-slate p-8 md:p-12" {...fade}>
-        <h2 className="font-display text-2xl font-bold text-white md:text-3xl">演示怎么讲（30 秒版）</h2>
+      <motion.section
+        className="metallic-surface mt-20 rounded-3xl p-8 ring-1 ring-blue-200/60 md:p-12"
+        {...fade}
+      >
+        <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">演示怎么讲（30 秒版）</h2>
         <ol className="mt-6 list-decimal space-y-3 pl-5 text-mist marker:text-gold">
           <li>先打开「手表演示」，走一遍 PEH 握手：光刺激 → 瞳孔 → 心血管相位 → SE 签名。</li>
           <li>再打开「眼镜演示」，看 JIT 合同浮窗与信任圈：谁被认证、谁是未知。</li>

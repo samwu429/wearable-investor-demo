@@ -12,16 +12,16 @@ import {
 
 function InstantChatVisual({ data }: { data: InstantChatUi }) {
   return (
-    <div className="flex max-h-[min(52vh,440px)] min-h-[200px] flex-col overflow-hidden rounded-xl border border-white/12 bg-[#0b1220] shadow-inner">
-      <div className="flex items-center gap-3 border-b border-white/10 px-3 py-2.5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-mint/50 to-mint/10 text-sm font-semibold text-mint ring-2 ring-white/15">
+    <div className="flex max-h-[min(52vh,440px)] min-h-[200px] flex-col overflow-hidden rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/95 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_8px_24px_rgba(15,23,42,0.06)] ring-1 ring-blue-100/60">
+      <div className="flex items-center gap-3 border-b border-slate-200/80 bg-white/80 px-3 py-2.5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-mint/30 to-blue-100 text-sm font-semibold text-mint ring-2 ring-slate-200/70 shadow-sm">
           {data.peerName.slice(0, 1)}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-white">{data.peerName}</p>
+          <p className="truncate text-sm font-semibold text-ink">{data.peerName}</p>
           <p className="text-[10px] text-mint">{data.peerStatus}</p>
         </div>
-        <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-mist">社交</span>
+        <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-mist ring-1 ring-slate-200/80">社交</span>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
         {data.bubbles.map((b, i) => (
@@ -29,8 +29,8 @@ function InstantChatVisual({ data }: { data: InstantChatUi }) {
             <div
               className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
                 b.role === 'me'
-                  ? 'bg-gold/25 text-white ring-1 ring-gold/40'
-                  : 'bg-white/10 text-mist ring-1 ring-white/10'
+                  ? 'bg-gradient-to-b from-blue-500 to-blue-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] ring-1 ring-blue-400/50'
+                  : 'bg-white text-mist ring-1 ring-slate-200/90 shadow-sm'
               }`}
             >
               {b.text}
@@ -38,9 +38,14 @@ function InstantChatVisual({ data }: { data: InstantChatUi }) {
           </div>
         ))}
       </div>
-      <div className="flex gap-2 border-t border-white/10 p-2">
-        <div className="flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-mist">输入消息…</div>
-        <button type="button" className="rounded-xl bg-gold px-4 text-xs font-semibold text-night">
+      <div className="flex gap-2 border-t border-slate-200/80 bg-slate-50/90 p-2">
+        <div className="flex-1 rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs text-mist shadow-inner">
+          输入消息…
+        </div>
+        <button
+          type="button"
+          className="rounded-xl bg-gradient-to-b from-blue-500 to-blue-600 px-4 text-xs font-semibold text-white shadow-sm ring-1 ring-blue-400/40"
+        >
           发送
         </button>
       </div>
@@ -50,34 +55,34 @@ function InstantChatVisual({ data }: { data: InstantChatUi }) {
 
 function InstantMapVisual({ data }: { data: InstantMapUi }) {
   return (
-    <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-xl border border-mint/35 bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#0a1420]">
+    <div className="relative min-h-[200px] flex-1 overflow-hidden rounded-xl border border-mint/30 bg-gradient-to-br from-sky-50 via-white to-emerald-50/90 shadow-[inset_0_1px_0_rgba(255,255,255,1),0_6px_20px_rgba(5,150,105,0.08)] ring-1 ring-slate-200/70">
       <div
-        className="pointer-events-none absolute inset-0 opacity-35"
+        className="pointer-events-none absolute inset-0 opacity-40"
         style={{
           backgroundImage:
-            'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.14) 1px, transparent 0)',
+            'radial-gradient(circle at 1px 1px, rgba(37,99,235,0.12) 1px, transparent 0)',
           backgroundSize: '22px 22px',
         }}
       />
-      <p className="absolute left-3 top-2 z-20 text-[11px] font-semibold text-white drop-shadow-md">{data.headline}</p>
+      <p className="absolute left-3 top-2 z-20 text-[11px] font-semibold text-ink drop-shadow-sm">{data.headline}</p>
       <svg className="relative z-10 h-[200px] w-full md:h-[min(240px,28vh)]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet" aria-hidden>
         <path
           d="M 48 170 Q 130 36 272 52"
           fill="none"
-          stroke="rgba(52,211,191,0.95)"
+          stroke="rgba(5,150,105,0.85)"
           strokeWidth="3.5"
           strokeLinecap="round"
           strokeDasharray="8 6"
         />
-        <circle cx="48" cy="170" r="9" fill="#d4a853" stroke="rgba(255,255,255,0.9)" strokeWidth="2" />
-        <circle cx="272" cy="52" r="11" fill="#fb7185" stroke="rgba(255,255,255,0.9)" strokeWidth="2" />
+        <circle cx="48" cy="170" r="9" fill="#2563eb" stroke="rgba(255,255,255,0.95)" strokeWidth="2" />
+        <circle cx="272" cy="52" r="11" fill="#fb7185" stroke="rgba(255,255,255,0.95)" strokeWidth="2" />
       </svg>
       <div className="absolute bottom-2 left-2 right-2 z-20 flex flex-wrap items-center justify-between gap-2 text-[10px]">
-        <span className="rounded-lg bg-black/55 px-2 py-1 text-mist ring-1 ring-white/10">{data.fromLabel}</span>
-        <span className="rounded-lg bg-mint/20 px-2 py-1 font-medium text-mint ring-1 ring-mint/30">
+        <span className="rounded-lg bg-white/95 px-2 py-1 text-mist shadow-sm ring-1 ring-slate-200/80">{data.fromLabel}</span>
+        <span className="rounded-lg bg-mint/15 px-2 py-1 font-medium text-mint ring-1 ring-mint/30 shadow-sm">
           {data.travelMode} · 约 {data.minutes} 分钟
         </span>
-        <span className="rounded-lg bg-black/55 px-2 py-1 text-white ring-1 ring-white/10">{data.toLabel}</span>
+        <span className="rounded-lg bg-white/95 px-2 py-1 text-ink shadow-sm ring-1 ring-slate-200/80">{data.toLabel}</span>
       </div>
     </div>
   )
@@ -138,8 +143,8 @@ const JIT_QUEUE_SEED: JitQueueItem[] = [
 ]
 
 function jitCardClass(intensity: number) {
-  const glow = 12 + intensity * 28
-  return `rounded-2xl border border-gold/35 bg-night/88 p-4 shadow-[0_0_${glow}px_rgba(212,168,83,0.18)] backdrop-blur-md ring-1 ring-white/10`
+  const glow = 10 + intensity * 22
+  return `rounded-2xl border border-blue-200/70 bg-white/90 p-4 shadow-[0_0_${glow}px_rgba(37,99,235,0.14),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-md ring-1 ring-slate-200/55`
 }
 
 export function GlassesDemo() {
@@ -220,16 +225,17 @@ export function GlassesDemo() {
 
   return (
     <div className="mx-auto max-w-[min(100%,1400px)] px-4 py-6 md:px-6 md:py-8">
-      {/* 穿戴演示：仅保留单一视野框，所有 JIT（合同 / 口述生成 / AI / 队列）均在框内 */}
-      <div className="relative min-h-[min(88vh,940px)] w-full overflow-hidden rounded-[2rem] border-2 border-gold/25 bg-gradient-to-br from-[#1a2030] via-[#0f141c] to-[#070b14] shadow-[0_0_80px_rgba(212,168,83,0.12)]">
+      {/* 外：金属镜框 · 内：亮镜片视野 */}
+      <div className="glasses-frame-bezel relative rounded-[2.25rem] p-[10px] shadow-[0_28px_64px_rgba(37,99,235,0.1)] md:p-3">
+        <div className="glasses-lens-field relative min-h-[min(88vh,940px)] w-full overflow-hidden rounded-[1.85rem] border border-blue-100/90 shadow-[inset_0_2px_20px_rgba(255,255,255,0.85)] md:rounded-[1.95rem]">
         <div
-          className="pointer-events-none absolute inset-0 opacity-50"
+          className="pointer-events-none absolute inset-0 opacity-90"
           style={{
             backgroundImage:
-              'radial-gradient(ellipse at 25% 18%, rgba(52,211,191,0.2), transparent 55%), radial-gradient(ellipse at 78% 70%, rgba(212,168,83,0.18), transparent 50%)',
+              'radial-gradient(ellipse at 22% 16%, rgba(37,99,235,0.1), transparent 52%), radial-gradient(ellipse at 82% 72%, rgba(5,150,105,0.12), transparent 48%)',
           }}
         />
-        <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.03\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-80" />
+        <div className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%232563eb\' fill-opacity=\'0.04\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-70" />
 
         {/* HUD frame */}
         {[
@@ -238,26 +244,26 @@ export function GlassesDemo() {
           'left-5 bottom-5 border-l-2 border-b-2',
           'right-5 bottom-5 border-r-2 border-b-2',
         ].map((c) => (
-          <div key={c} className={`pointer-events-none absolute h-12 w-12 border-gold/60 ${c}`} aria-hidden />
+          <div key={c} className={`pointer-events-none absolute h-12 w-12 border-blue-400/55 ${c}`} aria-hidden />
         ))}
 
         {/* 顶栏：标题 + 敏感度 + 会话状态（全部在同一视野框内） */}
         <div className="absolute left-3 right-3 top-3 z-30 flex flex-wrap items-center justify-between gap-3 md:left-5 md:right-5 md:top-4">
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">穿戴视野 · 单一 JIT 画布</p>
-            <h1 className="font-display text-lg font-bold leading-tight text-white md:text-2xl">Part 2 · 眼镜即时界面</h1>
+            <h1 className="font-display text-lg font-bold leading-tight text-ink md:text-2xl">Part 2 · 眼镜即时界面</h1>
             <p className="mt-0.5 hidden max-w-lg text-[11px] text-mist md:block">
               合同、口述生成、AI 解释、队列均在同一视野中叠加——模拟真实眼镜上的连续 JIT。
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-end gap-2">
-            <span className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-white'}>
+            <span className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-ink'}>
               <span className="text-gold">JIT</span> 会话
             </span>
             <button
               type="button"
               onClick={() => setHideUnverified((v) => !v)}
-              className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-mist hover:text-white'}
+              className={jitCardClass(sensitivity) + ' !py-1.5 !px-3 text-[11px] text-mist hover:text-ink'}
             >
               {hideUnverified ? '显示未验证' : '隐藏未验证'}
             </button>
@@ -285,8 +291,8 @@ export function GlassesDemo() {
             style={{ left: p.x, top: p.y }}
           >
             <div
-              className={`flex h-16 w-16 items-center justify-center rounded-full border-2 bg-night/85 text-sm font-medium backdrop-blur ${
-                p.verified ? 'border-mint text-mint shadow-[0_0_28px_rgba(52,211,191,0.45)]' : 'border-mist/50 text-mist'
+              className={`flex h-16 w-16 items-center justify-center rounded-full border-2 bg-white/95 text-sm font-medium shadow-sm backdrop-blur ${
+                p.verified ? 'border-mint text-mint shadow-[0_0_24px_rgba(5,150,105,0.35)]' : 'border-slate-300/90 text-mist'
               }`}
             >
               {p.verified ? '真人' : '?'}
@@ -296,7 +302,7 @@ export function GlassesDemo() {
         ))}
 
         <motion.div
-          className="pointer-events-none absolute z-10 h-4 w-4 rounded-full bg-rose/90 shadow-lg shadow-rose/50 ring-2 ring-white/40"
+          className="pointer-events-none absolute z-10 h-4 w-4 rounded-full bg-rose/90 shadow-lg shadow-rose/40 ring-2 ring-white/90"
           initial={{ left: '50%', top: '50%' }}
           animate={{ left: ['46%', '58%', '50%'], top: ['46%', '42%', '50%'] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
@@ -317,13 +323,13 @@ export function GlassesDemo() {
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-gold">JIT · 合同要点</p>
-                  <h2 className="mt-2 font-display text-xl font-semibold text-white md:text-2xl">{clauseData.title}</h2>
+                  <h2 className="mt-2 font-display text-xl font-semibold text-ink md:text-2xl">{clauseData.title}</h2>
                   <p className="mt-1 text-xs text-mint">风险域：{clauseData.risk}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setJitVisible(false)}
-                  className="rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-mist hover:bg-white/10"
+                  className="rounded-xl border border-slate-200/90 bg-white/80 px-3 py-1.5 text-xs text-mist shadow-sm hover:bg-white"
                   aria-label="关闭主浮窗"
                 >
                   收起
@@ -342,8 +348,8 @@ export function GlassesDemo() {
                     }}
                     className={`rounded-full px-4 py-2 text-xs font-semibold ring-1 transition-colors ${
                       clause === key
-                        ? 'bg-gold/20 text-gold ring-gold/50'
-                        : 'bg-white/5 text-mist ring-white/10 hover:bg-white/10 hover:text-white'
+                        ? 'bg-blue-100/90 text-gold ring-blue-300/70 shadow-sm'
+                        : 'bg-slate-100/90 text-mist ring-slate-200/80 hover:bg-white hover:text-ink'
                     }`}
                   >
                     {CLAUSES[key].tag}
@@ -352,7 +358,7 @@ export function GlassesDemo() {
               </div>
 
               <p
-                className={`mt-5 text-base leading-relaxed text-mist md:text-lg ${highlight ? 'rounded-xl bg-gold/10 p-4 text-white ring-1 ring-gold/35' : ''}`}
+                className={`mt-5 text-base leading-relaxed text-mist md:text-lg ${highlight ? 'rounded-xl bg-blue-50/95 p-4 text-ink ring-1 ring-blue-200/70 shadow-sm' : ''}`}
               >
                 {clauseData.body}
               </p>
@@ -361,14 +367,14 @@ export function GlassesDemo() {
                 <button
                   type="button"
                   onClick={() => setHighlight((h) => !h)}
-                  className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/15 hover:bg-white/15"
+                  className="rounded-full border border-slate-200/90 bg-white/90 px-5 py-2.5 text-sm font-medium text-ink shadow-sm ring-1 ring-slate-100 hover:bg-slate-50"
                 >
                   {highlight ? '取消高亮' : '高亮风险句'}
                 </button>
                 <button
                   type="button"
                   onClick={startVoiceDemo}
-                  className="rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white ring-1 ring-white/15 hover:bg-white/15"
+                  className="rounded-full border border-slate-200/90 bg-white/90 px-5 py-2.5 text-sm font-medium text-ink shadow-sm ring-1 ring-slate-100 hover:bg-slate-50"
                 >
                   {voicePlaying ? '停止语音示意' : '语音解释（示意）'}
                 </button>
@@ -376,14 +382,14 @@ export function GlassesDemo() {
                   type="button"
                   onClick={() => setSigned(true)}
                   disabled={signed}
-                  className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-night hover:bg-gold-dim disabled:cursor-default disabled:opacity-60"
+                  className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] hover:from-blue-600 hover:to-blue-700 disabled:cursor-default disabled:opacity-60"
                 >
                   {signed ? '已请求戒指确认' : '发起签署'}
                 </button>
               </div>
               {voicePlaying && (
                 <div className="mt-4">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div className="h-1.5 overflow-hidden rounded-full bg-slate-200/90">
                     <div
                       className="h-full bg-mint transition-[width] duration-75 ease-linear"
                       style={{ width: `${voiceProgress * 100}%` }}
@@ -406,7 +412,7 @@ export function GlassesDemo() {
               setJitVisible(true)
               setSigned(false)
             }}
-            className="absolute bottom-[5.5rem] left-1/2 z-30 -translate-x-1/2 rounded-full border border-gold/40 bg-gold/90 px-6 py-2.5 text-xs font-semibold text-night shadow-lg shadow-gold/20 md:px-8 md:py-3 md:text-sm"
+            className="absolute bottom-[5.5rem] left-1/2 z-30 -translate-x-1/2 rounded-full border border-blue-300/80 bg-gradient-to-b from-blue-500 to-blue-600 px-6 py-2.5 text-xs font-semibold text-white shadow-[0_8px_28px_rgba(37,99,235,0.35)] md:px-8 md:py-3 md:text-sm"
           >
             重新打开 JIT 主浮窗
           </button>
@@ -420,13 +426,13 @@ export function GlassesDemo() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 12 }}
-              className="absolute inset-x-3 bottom-[5.75rem] top-[30%] z-40 flex flex-col overflow-hidden rounded-2xl border border-gold/40 bg-night/95 shadow-[0_0_48px_rgba(212,168,83,0.2)] backdrop-blur-md ring-1 ring-white/10 md:inset-x-6 md:bottom-[6rem] md:top-[28%]"
+              className="absolute inset-x-3 bottom-[5.75rem] top-[30%] z-40 flex flex-col overflow-hidden rounded-2xl border border-blue-200/90 bg-white/96 shadow-[0_0_40px_rgba(37,99,235,0.12),inset_0_1px_0_rgba(255,255,255,1)] backdrop-blur-md ring-1 ring-slate-200/60 md:inset-x-6 md:bottom-[6rem] md:top-[28%]"
             >
               {instantGenerating && (
                 <div className="flex flex-1 flex-col justify-center p-6">
-                  <p className="text-sm font-medium text-white">正在理解意图并渲染界面…</p>
+                  <p className="text-sm font-medium text-ink">正在理解意图并渲染界面…</p>
                   <p className="mt-2 text-xs text-mist">若为聊天 / 地图类需求，将直接弹出拟真 UI（前端模拟，约 1.6s）</p>
-                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-200/90">
                     <motion.div
                       className="h-full bg-gradient-to-r from-gold via-mint to-gold"
                       initial={{ width: '6%' }}
@@ -438,23 +444,23 @@ export function GlassesDemo() {
               )}
               {!instantGenerating && instantPreview && (
                 <div className="flex min-h-0 flex-1 flex-col">
-                  <div className="flex shrink-0 items-center justify-between gap-2 border-b border-white/10 px-4 py-3">
+                  <div className="flex shrink-0 items-center justify-between gap-2 border-b border-slate-200/90 bg-slate-50/80 px-4 py-3">
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 口述即产品</p>
-                      <p className="truncate font-display text-base font-semibold text-white md:text-lg">{instantPreview.productName}</p>
+                      <p className="truncate font-display text-base font-semibold text-ink md:text-lg">{instantPreview.productName}</p>
                       <p className="text-xs text-mint">{instantPreview.tagline}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setInstantPreview(null)}
-                      className="shrink-0 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] text-mist hover:bg-white/10 hover:text-white"
+                      className="shrink-0 rounded-lg border border-slate-200/90 bg-white px-3 py-1.5 text-[11px] text-mist shadow-sm hover:bg-slate-50 hover:text-ink"
                     >
                       关闭
                     </button>
                   </div>
                   <div className="min-h-0 flex-1 overflow-y-auto p-4">
                     <p className="text-[11px] text-mist">
-                      你的说法：<span className="text-white/90">「{instantPreview.userIntentEcho}」</span>
+                      你的说法：<span className="text-ink">「{instantPreview.userIntentEcho}」</span>
                     </p>
                     <p className="mt-1 text-[10px] text-mint/90">{instantPreview.etaLine}</p>
 
@@ -492,7 +498,7 @@ export function GlassesDemo() {
                               transition={{ delay: 0.04 * i }}
                               className={`${jitCardClass(sensitivity)} !p-3`}
                             >
-                              <p className="text-xs font-semibold text-white">{m.name}</p>
+                              <p className="text-xs font-semibold text-ink">{m.name}</p>
                               <p className="mt-1 text-[11px] leading-relaxed text-mist">{m.desc}</p>
                             </motion.div>
                           ))}
@@ -513,8 +519,8 @@ export function GlassesDemo() {
                         </div>
                         {instantPreview.codeSnippet && (
                           <div className={`${jitCardClass(sensitivity)} mt-4 !p-0 !ring-0 overflow-hidden`}>
-                            <div className="border-b border-white/10 bg-black/40 px-3 py-1.5 text-[10px] text-mist">routes（演示）</div>
-                            <pre className="max-h-28 overflow-auto p-3 text-[10px] leading-relaxed text-mint/90">
+                            <div className="border-b border-slate-200/90 bg-slate-100/95 px-3 py-1.5 text-[10px] text-mist">routes（演示）</div>
+                            <pre className="max-h-28 overflow-auto bg-slate-50/80 p-3 text-[10px] leading-relaxed text-mint">
                               {instantPreview.codeSnippet}
                             </pre>
                           </div>
@@ -537,7 +543,7 @@ export function GlassesDemo() {
                 value={instantIntent}
                 onChange={(e) => setInstantIntent(e.target.value)}
                 rows={2}
-                className="mt-1.5 w-full resize-none rounded-xl border border-white/10 bg-void/70 px-3 py-2 text-[12px] text-white outline-none ring-gold/30 focus:ring-1 md:text-sm"
+                className="mt-1.5 w-full resize-none rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-[12px] text-ink shadow-inner outline-none ring-blue-200/50 focus:ring-2 md:text-sm"
                 placeholder="例如：给妈妈发消息我想吃糖醋排骨 / 带我去图书馆并生成地图（演示：前端按意图弹出聊天或地图 UI）"
               />
             </div>
@@ -546,7 +552,7 @@ export function GlassesDemo() {
                 type="button"
                 disabled={instantGenerating || instantIntent.trim().length < 6}
                 onClick={runInstantAppDemo}
-                className="rounded-full bg-gold px-5 py-2.5 text-xs font-semibold text-night hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:from-blue-600 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {instantGenerating ? '生成中…' : '即刻生成'}
               </button>
@@ -567,11 +573,11 @@ export function GlassesDemo() {
                     onClick={() => togglePin(item.id)}
                     className={`flex w-full flex-col rounded-xl border px-3 py-2 text-left text-xs transition-colors ${
                       pinnedId === item.id
-                        ? 'border-gold/50 bg-gold/10 text-white'
-                        : 'border-white/10 bg-white/5 text-mist hover:border-white/20 hover:text-white'
+                        ? 'border-blue-300/80 bg-blue-50/95 text-ink shadow-sm'
+                        : 'border-slate-200/90 bg-white/90 text-mist hover:border-blue-200/80 hover:text-ink'
                     }`}
                   >
-                    <span className="font-medium text-white">{item.label}</span>
+                    <span className="font-medium text-ink">{item.label}</span>
                     <span className="text-[10px] text-mist">{item.sub}</span>
                   </button>
                 </li>
@@ -589,7 +595,7 @@ export function GlassesDemo() {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               rows={3}
-              className="mt-3 w-full rounded-xl border border-white/10 bg-void/70 px-3 py-2 text-xs text-white outline-none ring-gold/40 focus:ring-1"
+              className="mt-3 w-full rounded-xl border border-slate-200/90 bg-white px-3 py-2 text-xs text-ink shadow-inner outline-none ring-blue-200/50 focus:ring-2"
               placeholder="输入希望 AI 解释的条款或问题"
             />
             <div className="mt-3 flex flex-wrap gap-2">
@@ -610,7 +616,7 @@ export function GlassesDemo() {
                     setAiLoading(false)
                   }
                 }}
-                className="rounded-full bg-gold px-4 py-2 text-xs font-semibold text-night hover:bg-gold-dim disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full bg-gradient-to-b from-blue-500 to-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:from-blue-600 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {aiLoading ? '生成中…' : '实时解释'}
               </button>
@@ -620,7 +626,7 @@ export function GlassesDemo() {
                 onClick={async () => {
                   await navigator.clipboard.writeText(aiResult)
                 }}
-                className="rounded-full bg-white/10 px-4 py-2 text-xs font-medium text-white ring-1 ring-white/15 hover:bg-white/15 disabled:opacity-40"
+                className="rounded-full border border-slate-200/90 bg-white px-4 py-2 text-xs font-medium text-ink shadow-sm hover:bg-slate-50 disabled:opacity-40"
               >
                 复制
               </button>
@@ -628,7 +634,7 @@ export function GlassesDemo() {
             {aiMeta && <p className="mt-2 text-[10px] text-mint">{aiMeta}</p>}
             {aiError && <p className="mt-2 rounded-lg bg-rose/10 p-2 text-xs text-rose">{aiError}</p>}
             {aiResult && (
-              <div className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-white/10 bg-void/80 p-3 text-xs leading-relaxed text-white">
+              <div className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-slate-200/90 bg-slate-50/95 p-3 text-xs leading-relaxed text-ink">
                 {aiResult}
               </div>
             )}
@@ -649,10 +655,11 @@ export function GlassesDemo() {
             <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">JIT · 生物采样</p>
             <svg viewBox="0 0 280 56" className="mt-2 h-14 w-full" aria-hidden>
               <path d={pupilPath} fill="none" stroke="rgba(52,211,191,0.9)" strokeWidth="2" />
-              <line x1="0" y1="28" x2="280" y2="28" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+              <line x1="0" y1="28" x2="280" y2="28" stroke="rgba(148,163,184,0.35)" strokeWidth="1" />
             </svg>
             <p className="mt-1 text-[10px] text-mist">瞳孔波形仅为隐喻 · 非医学数据</p>
           </div>
+        </div>
         </div>
       </div>
     </div>
